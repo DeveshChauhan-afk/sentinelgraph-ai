@@ -1,13 +1,14 @@
 from fastapi import FastAPI
 
 from app.core.config import settings
+from app.core.logger import setup_logger
 
+setup_logger()
 app = FastAPI(
     title=settings.API_TITLE,
     description=settings.API_DESCRIPTION,
     version=settings.VERSION,
 )
-
 
 @app.get("/")
 async def root():
