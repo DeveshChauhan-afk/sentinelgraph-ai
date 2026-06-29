@@ -1,3 +1,45 @@
 2026-06-29 19:39:46.716 | INFO     | logger:setup_logger:65 - Logger initialized.
 2026-06-29 19:40:31.456 | INFO     | logger:setup_logger:65 - Logger initialized.
 2026-06-29 19:41:20.895 | INFO     | logger:setup_logger:65 - Logger initialized.
+2026-06-29 22:43:29.728 | INFO     | logger:setup_logger:65 - Logger initialized.
+2026-06-29 22:43:30.626 | INFO     | logger:setup_logger:65 - Logger initialized.
+2026-06-29 23:24:24.175 | INFO     | logger:setup_logger:65 - Logger initialized.
+2026-06-29 23:24:24.175 | INFO     | events:startup:17 - 
+==================================================
+SentinelGraph AI - Digital Public Safety Platform
+Status: ONLINE
+==================================================
+
+2026-06-29 23:24:24.175 | INFO     | events:startup:18 - Configuration validation complete.
+2026-06-29 23:24:24.176 | INFO     | events:startup:19 - Application ready.
+2026-06-29 23:24:28.986 | INFO     | middleware:dispatch:23 - RID: 0613d5a0-c237-4663-b1b4-7afbbefe5919 | GET / | Status: 404 | Duration: 5.34 ms | Client: 127.0.0.1
+2026-06-29 23:25:24.375 | INFO     | middleware:dispatch:23 - RID: 3c1f80dc-4dab-4648-bf01-7e42edf4ce2e | GET /docs | Status: 200 | Duration: 0.52 ms | Client: 127.0.0.1
+2026-06-29 23:25:24.590 | INFO     | middleware:dispatch:23 - RID: c6186809-7ac9-4658-86a8-e2a2425a8892 | GET /api/v1/openapi.json | Status: 200 | Duration: 7.15 ms | Client: 127.0.0.1
+2026-06-29 23:25:53.780 | INFO     | middleware:dispatch:23 - RID: e1de2b8d-f249-4bbf-a23b-557aa33403b3 | GET /api/v1/health/ | Status: 200 | Duration: 11.95 ms | Client: 127.0.0.1
+2026-06-29 23:26:07.913 | INFO     | middleware:dispatch:23 - RID: 9f9dc408-bca9-4fa4-a451-e507cf365618 | GET /api/v1/version/ | Status: 200 | Duration: 1.86 ms | Client: 127.0.0.1
+2026-06-29 23:26:16.774 | INFO     | middleware:dispatch:23 - RID: f8591534-a8a7-4b8a-b802-0b2dc47bc9cb | GET /api/v1/auth/ | Status: 200 | Duration: 0.90 ms | Client: 127.0.0.1
+2026-06-29 23:27:37.890 | INFO     | events:shutdown:23 - SentinelGraph AI shutting down...
+2026-06-29 23:27:37.891 | INFO     | events:shutdown:24 - Shutdown complete.
+2026-06-29 23:27:39.557 | INFO     | logger:setup_logger:65 - Logger initialized.
+2026-06-29 23:27:39.558 | INFO     | events:startup:17 - 
+==================================================
+SentinelGraph AI - Digital Public Safety Platform
+Status: ONLINE
+==================================================
+
+2026-06-29 23:27:39.558 | INFO     | events:startup:18 - Configuration validation complete.
+2026-06-29 23:27:39.559 | INFO     | events:startup:19 - Application ready.
+2026-06-29 23:27:49.319 | INFO     | middleware:dispatch:23 - RID: dd223a4d-1439-4b13-94c1-dd289c8b6133 | GET /api/v1/health/crash | Status: 500 | Duration: 1.97 ms | Client: 127.0.0.1
+2026-06-29 23:31:00.234 | INFO     | events:shutdown:23 - SentinelGraph AI shutting down...
+2026-06-29 23:31:00.235 | INFO     | events:shutdown:24 - Shutdown complete.
+2026-06-29 23:31:01.833 | INFO     | logger:setup_logger:65 - Logger initialized.
+2026-06-29 23:31:01.834 | INFO     | events:startup:17 - 
+==================================================
+SentinelGraph AI - Digital Public Safety Platform
+Status: ONLINE
+==================================================
+
+2026-06-29 23:31:01.835 | INFO     | events:startup:18 - Configuration validation complete.
+2026-06-29 23:31:01.836 | INFO     | events:startup:19 - Application ready.
+2026-06-29 23:31:02.119 | INFO     | events:shutdown:23 - SentinelGraph AI shutting down...
+2026-06-29 23:31:02.120 | INFO     | events:shutdown:24 - Shutdown complete.
