@@ -76,6 +76,17 @@ class Settings(BaseSettings):
         extra="ignore",
         case_sensitive=False,
     )
+    @computed_field
+    @property
+    def SYNC_DATABASE_URL(self) -> str:
+        """
+        Constructs the synchronous PostgreSQL URL for Alembic.
+        Uses psycopg2 driver for migration compatibility.
+        """
+        return (
+            f"postgresql+psycopg2://{self.DATABASE_USER}:{self.DATABASE_PASSWORD.get_secret_value()}"
+            f"@{self.DATABASE_HOST}:{self.DATABASE_PORT}/{self.DATABASE_NAME}"
+        )
 
 @lru_cache()
 def get_settings() -> Settings:
@@ -84,15 +95,5 @@ def get_settings() -> Settings:
     """
     return Settings()
 
-
-@computed_field
-@property
-def SYNC_DATABASE_URL(self) -> str:
-    return (
-        f"postgresql+psycopg2://{self.DATABASE_USER}:"
-        f"{self.DATABASE_PASSWORD.get_secret_value()}"
-        f"@{self.DATABASE_HOST}:{self.DATABASE_PORT}/"
-        f"{self.DATABASE_NAME}"
-    )
 
 settings = get_settings()
