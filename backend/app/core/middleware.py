@@ -6,11 +6,12 @@ from fastapi import Request
 from starlette.middleware.base import BaseHTTPMiddleware
 from loguru import logger
 
+
 class RequestLoggingMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         request_id = str(uuid.uuid4())
         request.state.request_id = request_id
-        
+
         start_time = time.perf_counter()
         response = None
         try:
@@ -29,4 +30,3 @@ class RequestLoggingMiddleware(BaseHTTPMiddleware):
             )
             if response:
                 response.headers["X-Request-ID"] = request_id
-        

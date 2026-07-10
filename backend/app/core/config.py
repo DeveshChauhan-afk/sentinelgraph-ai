@@ -14,6 +14,7 @@ from functools import lru_cache
 from pydantic import Field, SecretStr, computed_field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+
 class Settings(BaseSettings):
     # =========================
     # Project
@@ -37,7 +38,7 @@ class Settings(BaseSettings):
     DATABASE_NAME: str
     DATABASE_USER: str
     DATABASE_PASSWORD: SecretStr
-    
+
     DB_POOL_SIZE: int = Field(default=10, ge=1)
     DB_MAX_OVERFLOW: int = Field(default=20, ge=0)
     DB_POOL_TIMEOUT: int = Field(default=30, ge=0)
@@ -76,6 +77,7 @@ class Settings(BaseSettings):
         extra="ignore",
         case_sensitive=False,
     )
+
     @computed_field
     @property
     def SYNC_DATABASE_URL(self) -> str:
@@ -87,6 +89,7 @@ class Settings(BaseSettings):
             f"postgresql+psycopg2://{self.DATABASE_USER}:{self.DATABASE_PASSWORD.get_secret_value()}"
             f"@{self.DATABASE_HOST}:{self.DATABASE_PORT}/{self.DATABASE_NAME}"
         )
+
 
 @lru_cache()
 def get_settings() -> Settings:

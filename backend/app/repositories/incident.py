@@ -14,6 +14,7 @@ from app.models.incident import Incident
 from app.models.enums import IncidentStatus, Priority, ScamCategory
 from app.repositories.base import BaseRepository
 
+
 class IncidentRepository(BaseRepository[Incident]):
     """
     Repository for Incident operations, extending BaseRepository with domain-specific queries.
@@ -23,35 +24,38 @@ class IncidentRepository(BaseRepository[Incident]):
         super().__init__(Incident, session)
 
     async def get_by_status(
-        self, 
-        status: IncidentStatus, 
-        skip: int = 0, 
-        limit: int = 100
+        self, status: IncidentStatus, skip: int = 0, limit: int = 100
     ) -> list[Incident]:
         """Fetch incidents filtered by status with pagination."""
-        stmt = select(Incident).where(Incident.status == status).offset(skip).limit(limit)
+        stmt = (
+            select(Incident).where(Incident.status == status).offset(skip).limit(limit)
+        )
         result = await self.session.execute(stmt)
         return list(result.scalars().all())
 
     async def get_by_priority(
-        self, 
-        priority: Priority, 
-        skip: int = 0, 
-        limit: int = 100
+        self, priority: Priority, skip: int = 0, limit: int = 100
     ) -> list[Incident]:
         """Fetch incidents filtered by priority with pagination."""
-        stmt = select(Incident).where(Incident.priority == priority).offset(skip).limit(limit)
+        stmt = (
+            select(Incident)
+            .where(Incident.priority == priority)
+            .offset(skip)
+            .limit(limit)
+        )
         result = await self.session.execute(stmt)
         return list(result.scalars().all())
 
     async def get_by_scam_category(
-        self, 
-        category: ScamCategory, 
-        skip: int = 0, 
-        limit: int = 100
+        self, category: ScamCategory, skip: int = 0, limit: int = 100
     ) -> list[Incident]:
         """Fetch incidents filtered by scam category with pagination."""
-        stmt = select(Incident).where(Incident.scam_category == category).offset(skip).limit(limit)
+        stmt = (
+            select(Incident)
+            .where(Incident.scam_category == category)
+            .offset(skip)
+            .limit(limit)
+        )
         result = await self.session.execute(stmt)
         return list(result.scalars().all())
 
@@ -77,10 +81,7 @@ class IncidentRepository(BaseRepository[Incident]):
         return list(result.scalars().all())
 
     async def get_high_risk(
-        self, 
-        threshold: float = 0.8, 
-        skip: int = 0, 
-        limit: int = 100
+        self, threshold: float = 0.8, skip: int = 0, limit: int = 100
     ) -> list[Incident]:
         """Fetch high-risk incidents, excluding NULLs and supporting pagination."""
         stmt = (
@@ -94,10 +95,7 @@ class IncidentRepository(BaseRepository[Incident]):
         return list(result.scalars().all())
 
     async def search(
-        self, 
-        query: str, 
-        skip: int = 0, 
-        limit: int = 100
+        self, query: str, skip: int = 0, limit: int = 100
     ) -> list[Incident]:
         """Search incidents with relevance-based (newest first) ordering."""
         stmt = (

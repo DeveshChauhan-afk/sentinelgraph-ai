@@ -1,2 +1,168 @@
-2026-06-30 19:46:51.440 | INFO     | events:shutdown:23 - SentinelGraph AI shutting down...
-2026-06-30 19:46:51.441 | INFO     | events:shutdown:24 - Shutdown complete.
+2026-07-10 20:52:10.544 | INFO     | logger:setup_logger:65 - Logger initialized.
+2026-07-10 20:52:10.545 | INFO     | events:startup:17 - 
+==================================================
+SentinelGraph AI - Digital Public Safety Platform
+Status: ONLINE
+==================================================
+
+2026-07-10 20:52:10.546 | INFO     | events:startup:18 - Configuration validation complete.
+2026-07-10 20:52:10.556 | INFO     | events:startup:19 - Application ready.
+2026-07-10 20:52:16.587 | INFO     | middleware:dispatch:24 - RID: a4c6376f-11a1-46a9-b5de-31bac82817e5 | GET / | Status: 404 | Duration: 9.67 ms | Client: 127.0.0.1
+2026-07-10 20:52:23.232 | INFO     | middleware:dispatch:24 - RID: e5ac77e6-b149-45c4-8b69-64ff48920c82 | GET /docs | Status: 200 | Duration: 0.51 ms | Client: 127.0.0.1
+2026-07-10 20:52:23.861 | INFO     | middleware:dispatch:24 - RID: 05202a75-e3cc-4433-992c-630cb87fa359 | GET /api/v1/openapi.json | Status: 200 | Duration: 51.76 ms | Client: 127.0.0.1
+2026-07-10 20:57:08.508 | INFO     | events:shutdown:23 - SentinelGraph AI shutting down...
+2026-07-10 20:57:08.509 | INFO     | events:shutdown:24 - Shutdown complete.
+2026-07-10 20:57:11.726 | INFO     | logger:setup_logger:65 - Logger initialized.
+2026-07-10 20:57:11.727 | INFO     | events:startup:17 - 
+==================================================
+SentinelGraph AI - Digital Public Safety Platform
+Status: ONLINE
+==================================================
+
+2026-07-10 20:57:11.728 | INFO     | events:startup:18 - Configuration validation complete.
+2026-07-10 20:57:11.729 | INFO     | events:startup:19 - Application ready.
+2026-07-10 20:57:15.711 | INFO     | events:shutdown:23 - SentinelGraph AI shutting down...
+2026-07-10 20:57:15.718 | INFO     | events:shutdown:24 - Shutdown complete.
+2026-07-10 20:57:19.772 | INFO     | logger:setup_logger:65 - Logger initialized.
+2026-07-10 20:57:19.777 | INFO     | events:startup:17 - 
+==================================================
+SentinelGraph AI - Digital Public Safety Platform
+Status: ONLINE
+==================================================
+
+2026-07-10 20:57:19.783 | INFO     | events:startup:18 - Configuration validation complete.
+2026-07-10 20:57:19.785 | INFO     | events:startup:19 - Application ready.
+2026-07-10 20:57:24.253 | INFO     | events:shutdown:23 - SentinelGraph AI shutting down...
+2026-07-10 20:57:24.292 | INFO     | events:shutdown:24 - Shutdown complete.
+2026-07-10 20:57:27.524 | INFO     | logger:setup_logger:65 - Logger initialized.
+2026-07-10 20:57:27.525 | INFO     | events:startup:17 - 
+==================================================
+SentinelGraph AI - Digital Public Safety Platform
+Status: ONLINE
+==================================================
+
+2026-07-10 20:57:27.526 | INFO     | events:startup:18 - Configuration validation complete.
+2026-07-10 20:57:27.527 | INFO     | events:startup:19 - Application ready.
+2026-07-10 20:58:22.422 | INFO     | events:shutdown:23 - SentinelGraph AI shutting down...
+2026-07-10 20:58:22.422 | INFO     | events:shutdown:24 - Shutdown complete.
+2026-07-10 20:58:36.234 | INFO     | logger:setup_logger:65 - Logger initialized.
+2026-07-10 20:58:36.234 | INFO     | events:startup:17 - 
+==================================================
+SentinelGraph AI - Digital Public Safety Platform
+Status: ONLINE
+==================================================
+
+2026-07-10 20:58:36.235 | INFO     | events:startup:18 - Configuration validation complete.
+2026-07-10 20:58:36.236 | INFO     | events:startup:19 - Application ready.
+2026-07-10 20:58:36.577 | INFO     | events:shutdown:23 - SentinelGraph AI shutting down...
+2026-07-10 20:58:36.580 | INFO     | events:shutdown:24 - Shutdown complete.
+2026-07-10 20:58:38.989 | INFO     | logger:setup_logger:65 - Logger initialized.
+2026-07-10 20:58:38.992 | INFO     | events:startup:17 - 
+==================================================
+SentinelGraph AI - Digital Public Safety Platform
+Status: ONLINE
+==================================================
+
+2026-07-10 20:58:38.994 | INFO     | events:startup:18 - Configuration validation complete.
+2026-07-10 20:58:38.994 | INFO     | events:startup:19 - Application ready.
+2026-07-10 20:58:42.820 | INFO     | events:shutdown:23 - SentinelGraph AI shutting down...
+2026-07-10 20:58:42.821 | INFO     | events:shutdown:24 - Shutdown complete.
+2026-07-10 20:58:45.341 | INFO     | logger:setup_logger:65 - Logger initialized.
+2026-07-10 20:58:45.341 | INFO     | events:startup:17 - 
+==================================================
+SentinelGraph AI - Digital Public Safety Platform
+Status: ONLINE
+==================================================
+
+2026-07-10 20:58:45.342 | INFO     | events:startup:18 - Configuration validation complete.
+2026-07-10 20:58:45.342 | INFO     | events:startup:19 - Application ready.
+2026-07-10 21:00:22.358 | INFO     | events:shutdown:23 - SentinelGraph AI shutting down...
+2026-07-10 21:00:22.359 | INFO     | events:shutdown:24 - Shutdown complete.
+2026-07-10 21:00:24.782 | INFO     | logger:setup_logger:65 - Logger initialized.
+2026-07-10 21:00:24.783 | INFO     | events:startup:17 - 
+==================================================
+SentinelGraph AI - Digital Public Safety Platform
+Status: ONLINE
+==================================================
+
+2026-07-10 21:00:24.788 | INFO     | events:startup:18 - Configuration validation complete.
+2026-07-10 21:00:24.788 | INFO     | events:startup:19 - Application ready.
+2026-07-10 21:00:27.373 | INFO     | events:shutdown:23 - SentinelGraph AI shutting down...
+2026-07-10 21:00:27.374 | INFO     | events:shutdown:24 - Shutdown complete.
+2026-07-10 21:00:30.393 | INFO     | logger:setup_logger:65 - Logger initialized.
+2026-07-10 21:00:30.393 | INFO     | events:startup:17 - 
+==================================================
+SentinelGraph AI - Digital Public Safety Platform
+Status: ONLINE
+==================================================
+
+2026-07-10 21:00:30.394 | INFO     | events:startup:18 - Configuration validation complete.
+2026-07-10 21:00:30.394 | INFO     | events:startup:19 - Application ready.
+2026-07-10 21:00:45.784 | INFO     | events:shutdown:23 - SentinelGraph AI shutting down...
+2026-07-10 21:00:45.787 | INFO     | events:shutdown:24 - Shutdown complete.
+2026-07-10 21:00:49.428 | INFO     | logger:setup_logger:65 - Logger initialized.
+2026-07-10 21:00:49.430 | INFO     | events:startup:17 - 
+==================================================
+SentinelGraph AI - Digital Public Safety Platform
+Status: ONLINE
+==================================================
+
+2026-07-10 21:00:49.430 | INFO     | events:startup:18 - Configuration validation complete.
+2026-07-10 21:00:49.431 | INFO     | events:startup:19 - Application ready.
+2026-07-10 21:02:56.846 | INFO     | events:shutdown:23 - SentinelGraph AI shutting down...
+2026-07-10 21:02:56.847 | INFO     | events:shutdown:24 - Shutdown complete.
+2026-07-10 21:03:14.668 | INFO     | logger:setup_logger:65 - Logger initialized.
+2026-07-10 21:03:14.669 | INFO     | events:startup:17 - 
+==================================================
+SentinelGraph AI - Digital Public Safety Platform
+Status: ONLINE
+==================================================
+
+2026-07-10 21:03:14.670 | INFO     | events:startup:18 - Configuration validation complete.
+2026-07-10 21:03:14.670 | INFO     | events:startup:19 - Application ready.
+2026-07-10 21:03:14.786 | INFO     | events:shutdown:23 - SentinelGraph AI shutting down...
+2026-07-10 21:03:14.787 | INFO     | events:shutdown:24 - Shutdown complete.
+2026-07-10 21:03:16.800 | INFO     | logger:setup_logger:65 - Logger initialized.
+2026-07-10 21:03:16.801 | INFO     | events:startup:17 - 
+==================================================
+SentinelGraph AI - Digital Public Safety Platform
+Status: ONLINE
+==================================================
+
+2026-07-10 21:03:16.803 | INFO     | events:startup:18 - Configuration validation complete.
+2026-07-10 21:03:16.804 | INFO     | events:startup:19 - Application ready.
+2026-07-10 21:03:22.011 | INFO     | events:shutdown:23 - SentinelGraph AI shutting down...
+2026-07-10 21:03:22.013 | INFO     | events:shutdown:24 - Shutdown complete.
+2026-07-10 21:03:25.089 | INFO     | logger:setup_logger:65 - Logger initialized.
+2026-07-10 21:03:25.091 | INFO     | events:startup:17 - 
+==================================================
+SentinelGraph AI - Digital Public Safety Platform
+Status: ONLINE
+==================================================
+
+2026-07-10 21:03:25.093 | INFO     | events:startup:18 - Configuration validation complete.
+2026-07-10 21:03:25.094 | INFO     | events:startup:19 - Application ready.
+2026-07-10 21:03:25.517 | INFO     | events:shutdown:23 - SentinelGraph AI shutting down...
+2026-07-10 21:03:25.518 | INFO     | events:shutdown:24 - Shutdown complete.
+2026-07-10 21:03:27.617 | INFO     | logger:setup_logger:65 - Logger initialized.
+2026-07-10 21:03:27.618 | INFO     | events:startup:17 - 
+==================================================
+SentinelGraph AI - Digital Public Safety Platform
+Status: ONLINE
+==================================================
+
+2026-07-10 21:03:27.619 | INFO     | events:startup:18 - Configuration validation complete.
+2026-07-10 21:03:27.619 | INFO     | events:startup:19 - Application ready.
+2026-07-10 21:03:37.345 | INFO     | events:shutdown:23 - SentinelGraph AI shutting down...
+2026-07-10 21:03:37.347 | INFO     | events:shutdown:24 - Shutdown complete.
+2026-07-10 21:03:41.529 | INFO     | logger:setup_logger:65 - Logger initialized.
+2026-07-10 21:03:41.530 | INFO     | events:startup:17 - 
+==================================================
+SentinelGraph AI - Digital Public Safety Platform
+Status: ONLINE
+==================================================
+
+2026-07-10 21:03:41.533 | INFO     | events:startup:18 - Configuration validation complete.
+2026-07-10 21:03:41.534 | INFO     | events:startup:19 - Application ready.
+2026-07-10 21:04:16.638 | INFO     | events:shutdown:23 - SentinelGraph AI shutting down...
+2026-07-10 21:04:16.639 | INFO     | events:shutdown:24 - Shutdown complete.

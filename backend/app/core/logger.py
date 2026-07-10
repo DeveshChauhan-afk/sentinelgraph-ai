@@ -64,6 +64,7 @@ def setup_logger() -> None:
 
     loguru_logger.info("Logger initialized.")
 
+
 def get_logger(module_name: str) -> Any:
     """
     Returns a logger instance bound to a specific module name.

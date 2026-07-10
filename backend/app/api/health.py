@@ -10,6 +10,7 @@ from app.core.logger import get_logger
 logger = get_logger(__name__)
 router = APIRouter()
 
+
 @router.get(
     "/",
     summary="Application health check",
@@ -18,7 +19,7 @@ router = APIRouter()
 async def health_check(db: AsyncSession = Depends(get_db)):
     """
     Perform a liveness and readiness check.
-    
+
     Verifies PostgreSQL connectivity. If database is unreachable,
     returns 503 Service Unavailable.
     """
@@ -28,12 +29,12 @@ async def health_check(db: AsyncSession = Depends(get_db)):
         return {
             "status": "healthy",
             "database": "connected",
-            "service": settings.PROJECT_NAME
+            "service": settings.PROJECT_NAME,
         }
     except Exception:
         # Log the full traceback for operational debugging
         logger.exception("Database health check failed.")
-        
+
         # Raise 503 Service Unavailable for orchestrators (Kubernetes/Docker)
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,

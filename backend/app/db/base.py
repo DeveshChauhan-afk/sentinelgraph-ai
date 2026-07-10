@@ -16,6 +16,7 @@ convention = {
 # Centralized metadata registry
 metadata = MetaData(naming_convention=convention)
 
+
 class Base(DeclarativeBase):
     """
     SQLAlchemy declarative base.
@@ -29,4 +30,5 @@ class Base(DeclarativeBase):
     will be introduced separately and inherited by models
     as the project evolves.
     """
+
     metadata = metadata

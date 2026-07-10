@@ -7,9 +7,13 @@ This module provides:
 - Async session factory
 - FastAPI database dependency
 
-Transaction management is intentionally delegated
-to the service layer.
+Database session management is provided here.
+
+Transaction boundaries are intentionally managed by higher application
+layers to support multi-step business operations and future
+cross-resource coordination.
 """
+
 # app/db/database.py
 
 from typing import AsyncGenerator
@@ -38,11 +42,12 @@ AsyncSessionLocal = async_sessionmaker(
     autoflush=False,
 )
 
+
 async def get_db() -> AsyncGenerator[AsyncSession, None]:
     """
     Yield an async database session.
 
-    Transaction management (commit/rollback) is explicitly handled by 
+    Transaction management (commit/rollback) is explicitly handled by
     the service layer to ensure data consistency across multi-resource operations.
     """
     async with AsyncSessionLocal() as session:
