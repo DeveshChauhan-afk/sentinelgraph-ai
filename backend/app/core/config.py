@@ -56,7 +56,7 @@ class Settings(BaseSettings):
     # AI / LLM Settings
     # =========================
     GEMINI_API_KEY: SecretStr
-    GEMINI_MODEL: str = "gemini-2.5-flash"
+    GEMINI_MODEL: str = "gemini-flash-latest"
     LLM_TEMPERATURE: float = Field(default=0.2, ge=0.0, le=2.0)
     LLM_MAX_TOKENS: int = Field(default=2048, ge=1)
 
