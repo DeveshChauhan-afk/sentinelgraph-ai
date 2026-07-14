@@ -21,6 +21,13 @@ from app.core.exceptions import (
 )
 from loguru import logger
 
+from app.ai.exceptions import AIError
+from app.graph.exceptions import GraphError
+from app.graph.service import GraphService
+from app.services.entity_extraction_service import (
+    EntityExtractionService,
+)
+from sqlalchemy.ext.asyncio import AsyncSession
 
 class IncidentService(BaseService[IncidentRepository]):
     """
@@ -31,14 +38,33 @@ class IncidentService(BaseService[IncidentRepository]):
     notifications, and audit logging.
     """
 
-    def __init__(self, repository: IncidentRepository) -> None:
+    def __init__(
+        self,
+        repository: IncidentRepository,
+        entity_extraction_service: EntityExtractionService,
+        session: AsyncSession,
+        graph_service: GraphService,
+    ) -> None:
         """
         Initialize the IncidentService.
 
         Args:
-            repository: Repository for Incident persistence operations.
+            repository:
+                Repository for incident persistence.
+
+            entity_extraction_service:
+                AI-powered entity extraction service.
+
+            graph_service:
+                Fraud graph service.
         """
         super().__init__(repository)
+        self._session = session
+
+        self._entity_extraction_service = (
+            entity_extraction_service
+        )
+        self._graph_service = graph_service
 
     async def _get_required_incident(
         self,
@@ -53,30 +79,93 @@ class IncidentService(BaseService[IncidentRepository]):
 
         return incident
 
-    async def create_incident(self, incident_data: IncidentCreate) -> Incident:
+    async def create_incident(
+        self,
+        incident_data: IncidentCreate,
+    ) -> Incident:
         """
         Create a new incident.
 
+        The incident is first persisted to PostgreSQL. After the
+        transaction succeeds, AI-powered entity extraction and graph
+        persistence are executed. Failures in downstream AI processing
+        are logged without affecting the successfully created incident.
+
         Args:
-            incident_data: Incident creation payload.
+            incident_data:
+                Incident creation payload.
 
         Returns:
-            Newly created Incident.
+            Newly created incident.
         """
         if incident_data.case_reference:
             existing = await self._repository.get_by_case_reference(
-                incident_data.case_reference
+                incident_data.case_reference,
             )
+
             if existing:
                 raise DuplicateCaseReferenceError(
-                    f"Case reference '{incident_data.case_reference}' already exists."
+                    (
+                        "Case reference "
+                        f"'{incident_data.case_reference}' "
+                        "already exists."
+                    )
                 )
+
         logger.info(
             "Creating incident with case reference: {}",
             incident_data.case_reference or "N/A",
         )
-        return await self._repository.create(incident_data)
 
+        try:
+            incident = await self._repository.create(
+                incident_data,
+            )
+
+            await self._session.commit()
+
+        except Exception:
+            await self._session.rollback()
+            raise
+        await self._session.commit()
+
+        try:
+            entities = (
+                await self._entity_extraction_service.extract_entities(
+                    incident.description,
+                )
+            )
+
+            result = await self._graph_service.build_and_persist(
+                complaint_id=incident.id,
+                entities=entities,
+            )
+
+            logger.info(
+                (
+                    "Graph persisted for incident '{}' "
+                    "(nodes={}, relationships={}, {:.2f} ms)."
+                ),
+                incident.id,
+                result.nodes_persisted,
+                result.relationships_persisted,
+                result.duration_ms,
+            )
+
+        except AIError:
+            logger.exception(
+                "Entity extraction failed for incident '{}'.",
+                incident.id,
+            )
+
+        except GraphError:
+            logger.exception(
+                "Graph persistence failed for incident '{}'.",
+                incident.id,
+            )
+
+        return incident
+    
     async def get_incident(self, incident_id: UUID) -> Incident | None:
         """
         Retrieve an incident by its unique identifier.

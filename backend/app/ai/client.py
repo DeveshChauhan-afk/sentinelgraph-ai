@@ -1,3 +1,4 @@
+# app/ai/client.py
 """
 Gemini AI client implementation.
 

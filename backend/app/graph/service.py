@@ -27,20 +27,16 @@ class GraphService:
 
     def __init__(
         self,
-        builder: GraphBuilder,
         repository: GraphRepository,
     ) -> None:
         """
-        Initialize the graph service.
+    Initialize the graph service.
 
-        Args:
-            builder:
-                Graph builder.
-
-            repository:
-                Graph repository.
-        """
-        self._builder = builder
+    Args:
+        repository:
+            Graph repository.
+    """
+        self._builder = GraphBuilder()
         self._repository = repository
 
     async def build_and_persist(

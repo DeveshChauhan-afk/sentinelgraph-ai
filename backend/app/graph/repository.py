@@ -14,7 +14,7 @@ from loguru import logger
 from neo4j import AsyncDriver
 from neo4j.exceptions import Neo4jError
 
-from app.graph.database import get_neo4j_driver
+from app.db.neo4j import get_neo4j_driver
 from app.graph.exceptions import (
     GraphConnectionError,
     GraphPersistenceError,

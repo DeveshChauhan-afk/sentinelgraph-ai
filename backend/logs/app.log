@@ -1,168 +1,672 @@
-2026-07-10 20:52:10.544 | INFO     | logger:setup_logger:65 - Logger initialized.
-2026-07-10 20:52:10.545 | INFO     | events:startup:17 - 
+2026-07-14 23:11:24.023 | INFO     | logger:setup_logger:65 - Logger initialized.
+2026-07-14 23:11:24.024 | INFO     | neo4j:connect_neo4j:26 - Connecting to Neo4j...
+2026-07-14 23:11:25.497 | SUCCESS  | neo4j:connect_neo4j:38 - Connected to Neo4j.
+2026-07-14 23:11:25.497 | INFO     | events:startup:18 - 
 ==================================================
 SentinelGraph AI - Digital Public Safety Platform
 Status: ONLINE
 ==================================================
 
-2026-07-10 20:52:10.546 | INFO     | events:startup:18 - Configuration validation complete.
-2026-07-10 20:52:10.556 | INFO     | events:startup:19 - Application ready.
-2026-07-10 20:52:16.587 | INFO     | middleware:dispatch:24 - RID: a4c6376f-11a1-46a9-b5de-31bac82817e5 | GET / | Status: 404 | Duration: 9.67 ms | Client: 127.0.0.1
-2026-07-10 20:52:23.232 | INFO     | middleware:dispatch:24 - RID: e5ac77e6-b149-45c4-8b69-64ff48920c82 | GET /docs | Status: 200 | Duration: 0.51 ms | Client: 127.0.0.1
-2026-07-10 20:52:23.861 | INFO     | middleware:dispatch:24 - RID: 05202a75-e3cc-4433-992c-630cb87fa359 | GET /api/v1/openapi.json | Status: 200 | Duration: 51.76 ms | Client: 127.0.0.1
-2026-07-10 20:57:08.508 | INFO     | events:shutdown:23 - SentinelGraph AI shutting down...
-2026-07-10 20:57:08.509 | INFO     | events:shutdown:24 - Shutdown complete.
-2026-07-10 20:57:11.726 | INFO     | logger:setup_logger:65 - Logger initialized.
-2026-07-10 20:57:11.727 | INFO     | events:startup:17 - 
-==================================================
-SentinelGraph AI - Digital Public Safety Platform
-Status: ONLINE
-==================================================
+2026-07-14 23:11:25.498 | INFO     | events:startup:19 - Configuration validation complete.
+2026-07-14 23:11:25.498 | INFO     | events:startup:20 - Application ready.
+2026-07-14 23:11:48.633 | INFO     | middleware:dispatch:24 - RID: 1a3746a7-f647-4e69-a84b-a4b82a9f569a | GET / | Status: 404 | Duration: 11.63 ms | Client: 127.0.0.1
+2026-07-14 23:11:48.788 | INFO     | middleware:dispatch:24 - RID: 410c71ea-0b9e-4e7d-99fb-d551ba9172d1 | GET /favicon.ico | Status: 404 | Duration: 0.71 ms | Client: 127.0.0.1
+2026-07-14 23:11:52.995 | INFO     | middleware:dispatch:24 - RID: 862bbde3-c997-47dd-9b35-c290a66acfb6 | GET /docs | Status: 200 | Duration: 0.44 ms | Client: 127.0.0.1
+2026-07-14 23:11:53.536 | INFO     | middleware:dispatch:24 - RID: eed8e6c4-b085-4a6b-a4d2-26a67327190c | GET /api/v1/openapi.json | Status: 200 | Duration: 33.33 ms | Client: 127.0.0.1
+2026-07-14 23:13:16.476 | INFO     | middleware:dispatch:24 - RID: 9f46d05a-c2e0-47b4-b264-55b919c21f65 | POST /api/v1/complaints/ | Status: 422 | Duration: 705.66 ms | Client: 127.0.0.1
+2026-07-14 23:13:44.531 | INFO     | middleware:dispatch:24 - RID: 923fbf4d-e1d3-475e-8475-d354a2f544ef | GET /docs | Status: 200 | Duration: 0.63 ms | Client: 127.0.0.1
+2026-07-14 23:13:44.972 | INFO     | middleware:dispatch:24 - RID: 59cf79a8-a935-4cd9-930e-85eed602d3d1 | GET /api/v1/openapi.json | Status: 200 | Duration: 1.68 ms | Client: 127.0.0.1
+2026-07-14 23:14:06.644 | INFO     | middleware:dispatch:24 - RID: a1c4c850-2403-45b7-b873-a28874cc8c0f | POST /api/v1/complaints/ | Status: 422 | Duration: 1864.25 ms | Client: 127.0.0.1
+2026-07-14 23:16:05.849 | INFO     | middleware:dispatch:24 - RID: 1b870f8e-76eb-4f96-a75f-76258fff0bf5 | GET /docs | Status: 200 | Duration: 0.53 ms | Client: 127.0.0.1
+2026-07-14 23:16:06.598 | INFO     | middleware:dispatch:24 - RID: fcf73c90-d476-4a8e-9248-31967d6d2c17 | GET /api/v1/openapi.json | Status: 200 | Duration: 0.65 ms | Client: 127.0.0.1
+2026-07-14 23:16:40.604 | INFO     | incident_service:create_incident:115 - Creating incident with case reference: string
+2026-07-14 23:16:40.634 | INFO     | entity_extraction_service:extract_entities:41 - Starting entity extraction.
+2026-07-14 23:16:40.635 | INFO     | client:generate_content:83 - Sending request to Gemini (model=gemini-flash-latest, prompt_length=761)
+2026-07-14 23:19:04.935 | ERROR    | client:_translate_exception:118 - Gemini request failed.
+Traceback (most recent call last):
 
-2026-07-10 20:57:11.728 | INFO     | events:startup:18 - Configuration validation complete.
-2026-07-10 20:57:11.729 | INFO     | events:startup:19 - Application ready.
-2026-07-10 20:57:15.711 | INFO     | events:shutdown:23 - SentinelGraph AI shutting down...
-2026-07-10 20:57:15.718 | INFO     | events:shutdown:24 - Shutdown complete.
-2026-07-10 20:57:19.772 | INFO     | logger:setup_logger:65 - Logger initialized.
-2026-07-10 20:57:19.777 | INFO     | events:startup:17 - 
-==================================================
-SentinelGraph AI - Digital Public Safety Platform
-Status: ONLINE
-==================================================
+  File "<string>", line 1, in <module>
+  File "C:\Python314\Lib\multiprocessing\spawn.py", line 122, in spawn_main
+    exitcode = _main(fd, parent_sentinel)
+               │     │   └ 340
+               │     └ 3
+               └ <function _main at 0x0000018DB5A74250>
+  File "C:\Python314\Lib\multiprocessing\spawn.py", line 135, in _main
+    return self._bootstrap(parent_sentinel)
+           │    │          └ 340
+           │    └ <function BaseProcess._bootstrap at 0x0000018DB592E1F0>
+           └ <SpawnProcess name='SpawnProcess-1' parent=17764 started>
+  File "C:\Python314\Lib\multiprocessing\process.py", line 320, in _bootstrap
+    self.run()
+    │    └ <function BaseProcess.run at 0x0000018DB592D590>
+    └ <SpawnProcess name='SpawnProcess-1' parent=17764 started>
+  File "C:\Python314\Lib\multiprocessing\process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+    │    │        │    │        │    └ {'config': <uvicorn.config.Config object at 0x0000018DB8535160>, 'target': <bound method Server.run of <uvicorn.server.Server...
+    │    │        │    │        └ <SpawnProcess name='SpawnProcess-1' parent=17764 started>
+    │    │        │    └ ()
+    │    │        └ <SpawnProcess name='SpawnProcess-1' parent=17764 started>
+    │    └ <function subprocess_started at 0x0000018DB8565FE0>
+    └ <SpawnProcess name='SpawnProcess-1' parent=17764 started>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\uvicorn\_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+    │              └ [<socket.socket fd=584, family=2, type=1, proto=6, laddr=('127.0.0.1', 8000)>]
+    └ <bound method Server.run of <uvicorn.server.Server object at 0x0000018DB85352B0>>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\uvicorn\server.py", line 75, in run
+    return asyncio_run(self.serve(sockets=sockets), loop_factory=self.config.get_loop_factory())
+           │           │    │             │                      │    │      └ <function Config.get_loop_factory at 0x0000018DB84EA6C0>
+           │           │    │             │                      │    └ <uvicorn.config.Config object at 0x0000018DB8535160>
+           │           │    │             │                      └ <uvicorn.server.Server object at 0x0000018DB85352B0>
+           │           │    │             └ [<socket.socket fd=584, family=2, type=1, proto=6, laddr=('127.0.0.1', 8000)>]
+           │           │    └ <function Server.serve at 0x0000018DB8557A00>
+           │           └ <uvicorn.server.Server object at 0x0000018DB85352B0>
+           └ <function run at 0x0000018DB6399430>
+  File "C:\Python314\Lib\asyncio\runners.py", line 204, in run
+    return runner.run(main)
+           │      │   └ <coroutine object Server.serve at 0x0000018DB854AF20>
+           │      └ <function Runner.run at 0x0000018DB6399850>
+           └ <asyncio.runners.Runner object at 0x0000018DB8536120>
+  File "C:\Python314\Lib\asyncio\runners.py", line 127, in run
+    return self._loop.run_until_complete(task)
+           │    │     │                  └ <Task pending name='Task-1' coro=<Server.serve() running at C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\ba...
+           │    │     └ <function BaseEventLoop.run_until_complete at 0x0000018DB63A1BC0>
+           │    └ <_WindowsSelectorEventLoop running=True closed=False debug=False>
+           └ <asyncio.runners.Runner object at 0x0000018DB8536120>
+  File "C:\Python314\Lib\asyncio\base_events.py", line 706, in run_until_complete
+    self.run_forever()
+    │    └ <function BaseEventLoop.run_forever at 0x0000018DB63A1B10>
+    └ <_WindowsSelectorEventLoop running=True closed=False debug=False>
+  File "C:\Python314\Lib\asyncio\base_events.py", line 677, in run_forever
+    self._run_once()
+    │    └ <function BaseEventLoop._run_once at 0x0000018DB63A3C10>
+    └ <_WindowsSelectorEventLoop running=True closed=False debug=False>
+  File "C:\Python314\Lib\asyncio\base_events.py", line 2057, in _run_once
+    handle._run()
+    │      └ <function Handle._run at 0x0000018DB60B38A0>
+    └ <Handle Task.task_wakeup()>
+  File "C:\Python314\Lib\asyncio\events.py", line 94, in _run
+    self._context.run(self._callback, *self._args)
+    │    │            │    │           │    └ <member '_args' of 'Handle' objects>
+    │    │            │    │           └ <Handle Task.task_wakeup()>
+    │    │            │    └ <member '_callback' of 'Handle' objects>
+    │    │            └ <Handle Task.task_wakeup()>
+    │    └ <member '_context' of 'Handle' objects>
+    └ <Handle Task.task_wakeup()>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\anyio\_core\_tasks.py", line 278, in _run_coro
+    retval = await self._coro
+                   │    └ <member '_coro' of 'TaskHandle' objects>
+                   └ <TaskHandle pending name='starlette.middleware.base.BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.coro' coro=<corou...
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\starlette\middleware\base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+          │    │   │      │                      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.send_no_error at 0x0000018DBFEFE4B0>
+          │    │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x0000018DBFEFDE80>
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <starlette.middleware.exceptions.ExceptionMiddleware object at 0x0000018DBFD8DA90>
+          └ <app.core.middleware.RequestLoggingMiddleware object at 0x0000018DBFD8DBE0>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+          │                            │    │    │     │      │        └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.send_no_error at 0x0000018DBFEFE4B0>
+          │                            │    │    │     │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x0000018DBFEFDE80>
+          │                            │    │    │     └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │                            │    │    └ <starlette.requests.Request object at 0x0000018DBFEFE990>
+          │                            │    └ <fastapi.middleware.asyncexitstack.AsyncExitStackMiddleware object at 0x0000018DBFD8D940>
+          │                            └ <starlette.middleware.exceptions.ExceptionMiddleware object at 0x0000018DBFD8DA90>
+          └ <function wrap_app_handling_exceptions at 0x0000018DB9001640>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+          │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x0000018DBFEFDF30>
+          │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x0000018DBFEFDE80>
+          │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          └ <fastapi.middleware.asyncexitstack.AsyncExitStackMiddleware object at 0x0000018DBFD8D940>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+          │    │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x0000018DBFEFDF30>
+          │    │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x0000018DBFEFDE80>
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <fastapi.routing.APIRouter object at 0x0000018DBFE09480>
+          └ <fastapi.middleware.asyncexitstack.AsyncExitStackMiddleware object at 0x0000018DBFD8D940>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\starlette\routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+          │    │                │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x0000018DBFEFDF30>
+          │    │                │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x0000018DBFEFDE80>
+          │    │                └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <bound method APIRouter.app of <fastapi.routing.APIRouter object at 0x0000018DBFE09480>>
+          └ <fastapi.routing.APIRouter object at 0x0000018DBFE09480>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\fastapi\routing.py", line 2543, in app
+    await route.handle(scope, receive, send)
+          │     │      │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x0000018DBFEFDF30>
+          │     │      │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x0000018DBFEFDE80>
+          │     │      └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │     └ <function _IncludedRouter.handle at 0x0000018DB90562A0>
+          └ _IncludedRouter(original_router=<fastapi.routing.APIRouter object at 0x0000018DBB6106B0>, include_context=_RouterIncludeConte...
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\fastapi\routing.py", line 1700, in handle
+    await self.original_router.handle(scope, receive, send)
+          │    │               │      │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x0000018DBFEFDF30>
+          │    │               │      │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x0000018DBFEFDE80>
+          │    │               │      └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    │               └ <function APIRouter.handle at 0x0000018DB90762A0>
+          │    └ <fastapi.routing.APIRouter object at 0x0000018DBB6106B0>
+          └ _IncludedRouter(original_router=<fastapi.routing.APIRouter object at 0x0000018DBB6106B0>, include_context=_RouterIncludeConte...
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\fastapi\routing.py", line 2598, in handle
+    await included_router._handle_selected(scope, receive, send)
+          │               │                │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x0000018DBFEFDF30>
+          │               │                │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x0000018DBFEFDE80>
+          │               │                └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │               └ <function _IncludedRouter._handle_selected at 0x0000018DB9056400>
+          └ _IncludedRouter(original_router=<fastapi.routing.APIRouter object at 0x0000018DBB6106B0>, include_context=_RouterIncludeConte...
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\fastapi\routing.py", line 1711, in _handle_selected
+    await route.handle(scope, receive, send)
+          │     │      │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x0000018DBFEFDF30>
+          │     │      │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x0000018DBFEFDE80>
+          │     │      └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │     └ <function _IncludedRouter.handle at 0x0000018DB90562A0>
+          └ _IncludedRouter(original_router=<fastapi.routing.APIRouter object at 0x0000018DBFC78E90>, include_context=_RouterIncludeConte...
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\fastapi\routing.py", line 1700, in handle
+    await self.original_router.handle(scope, receive, send)
+          │    │               │      │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x0000018DBFEFDF30>
+          │    │               │      │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x0000018DBFEFDE80>
+          │    │               │      └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    │               └ <function APIRouter.handle at 0x0000018DB90762A0>
+          │    └ <fastapi.routing.APIRouter object at 0x0000018DBFC78E90>
+          └ _IncludedRouter(original_router=<fastapi.routing.APIRouter object at 0x0000018DBFC78E90>, include_context=_RouterIncludeConte...
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\fastapi\routing.py", line 2598, in handle
+    await included_router._handle_selected(scope, receive, send)
+          │               │                │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x0000018DBFEFDF30>
+          │               │                │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x0000018DBFEFDE80>
+          │               │                └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │               └ <function _IncludedRouter._handle_selected at 0x0000018DB9056400>
+          └ _IncludedRouter(original_router=<fastapi.routing.APIRouter object at 0x0000018DBFC78E90>, include_context=_RouterIncludeConte...
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\fastapi\routing.py", line 1720, in _handle_selected
+    await original_route.handle(scope, receive, send)
+          │              │      │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x0000018DBFEFDF30>
+          │              │      │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x0000018DBFEFDE80>
+          │              │      └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │              └ <function APIRoute.handle at 0x0000018DB9037320>
+          └ APIRoute(path='/', name='create_complaint', methods=['POST'])
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\fastapi\routing.py", line 1239, in handle
+    await app(scope, receive, send)
+          │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x0000018DBFEFDF30>
+          │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x0000018DBFEFDE80>
+          │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          └ <function request_response.<locals>.app at 0x0000018DBFE69DD0>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\fastapi\routing.py", line 150, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+          │                            │    │        │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x0000018DBFEFDF30>
+          │                            │    │        │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x0000018DBFEFDE80>
+          │                            │    │        └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │                            │    └ <starlette.requests.Request object at 0x0000018DBFE6AD00>
+          │                            └ <function request_response.<locals>.app.<locals>.app at 0x0000018DBFE6ADA0>
+          └ <function wrap_app_handling_exceptions at 0x0000018DB9001640>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+          │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x0000018DC130C670>
+          │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x0000018DBFEFDE80>
+          │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          └ <function request_response.<locals>.app.<locals>.app at 0x0000018DBFE6ADA0>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\fastapi\routing.py", line 136, in app
+    response = await f(request)
+                     │ └ <starlette.requests.Request object at 0x0000018DBFE6AD00>
+                     └ <function get_request_handler.<locals>.app at 0x0000018DBFEFEA30>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\fastapi\routing.py", line 690, in app
+    raw_response = await run_endpoint_function(
+                         └ <function run_endpoint_function at 0x0000018DB9035C70>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\fastapi\routing.py", line 344, in run_endpoint_function
+    return await dependant.call(**values)
+                 │         │      └ {'service': <app.services.incident_service.IncidentService object at 0x0000018DC13216D0>, 'complaint': IncidentCreate(title='...
+                 │         └ <function create_complaint at 0x0000018DBFCA5D20>
+                 └ Dependant(path_params=[], query_params=[], header_params=[], cookie_params=[], body_params=[ModelField(field_info=Body(Pydant...
 
-2026-07-10 20:57:19.783 | INFO     | events:startup:18 - Configuration validation complete.
-2026-07-10 20:57:19.785 | INFO     | events:startup:19 - Application ready.
-2026-07-10 20:57:24.253 | INFO     | events:shutdown:23 - SentinelGraph AI shutting down...
-2026-07-10 20:57:24.292 | INFO     | events:shutdown:24 - Shutdown complete.
-2026-07-10 20:57:27.524 | INFO     | logger:setup_logger:65 - Logger initialized.
-2026-07-10 20:57:27.525 | INFO     | events:startup:17 - 
-==================================================
-SentinelGraph AI - Digital Public Safety Platform
-Status: ONLINE
-==================================================
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\app\api\complaints.py", line 35, in create_complaint
+    incident = await service.create_incident(complaint)
+                     │       │               └ IncidentCreate(title='string', description='stringstringstringst', reporter_type=<ReporterType.CITIZEN: 'citizen'>, source=<I...
+                     │       └ <function IncidentService.create_incident at 0x0000018DBFCA4670>
+                     └ <app.services.incident_service.IncidentService object at 0x0000018DC13216D0>
 
-2026-07-10 20:57:27.526 | INFO     | events:startup:18 - Configuration validation complete.
-2026-07-10 20:57:27.527 | INFO     | events:startup:19 - Application ready.
-2026-07-10 20:58:22.422 | INFO     | events:shutdown:23 - SentinelGraph AI shutting down...
-2026-07-10 20:58:22.422 | INFO     | events:shutdown:24 - Shutdown complete.
-2026-07-10 20:58:36.234 | INFO     | logger:setup_logger:65 - Logger initialized.
-2026-07-10 20:58:36.234 | INFO     | events:startup:17 - 
-==================================================
-SentinelGraph AI - Digital Public Safety Platform
-Status: ONLINE
-==================================================
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\app\services\incident_service.py", line 134, in create_incident
+    await self._entity_extraction_service.extract_entities(
+          │    │                          └ <function EntityExtractionService.extract_entities at 0x0000018DBFC41A60>
+          │    └ <app.services.entity_extraction_service.EntityExtractionService object at 0x0000018DC13211D0>
+          └ <app.services.incident_service.IncidentService object at 0x0000018DC13216D0>
 
-2026-07-10 20:58:36.235 | INFO     | events:startup:18 - Configuration validation complete.
-2026-07-10 20:58:36.236 | INFO     | events:startup:19 - Application ready.
-2026-07-10 20:58:36.577 | INFO     | events:shutdown:23 - SentinelGraph AI shutting down...
-2026-07-10 20:58:36.580 | INFO     | events:shutdown:24 - Shutdown complete.
-2026-07-10 20:58:38.989 | INFO     | logger:setup_logger:65 - Logger initialized.
-2026-07-10 20:58:38.992 | INFO     | events:startup:17 - 
-==================================================
-SentinelGraph AI - Digital Public Safety Platform
-Status: ONLINE
-==================================================
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\app\services\entity_extraction_service.py", line 47, in extract_entities
+    response = await self._ai_client.generate_content(prompt)
+                     │    │          │                └ 'You are an expert cyber fraud intelligence analyst.\n\nYour task is to extract entities that are explicitly mentioned in the...
+                     │    │          └ <function GeminiClient.generate_content at 0x0000018DBDFCBB60>
+                     │    └ <app.ai.client.GeminiClient object at 0x0000018DC12FAAD0>
+                     └ <app.services.entity_extraction_service.EntityExtractionService object at 0x0000018DC13211D0>
 
-2026-07-10 20:58:38.994 | INFO     | events:startup:18 - Configuration validation complete.
-2026-07-10 20:58:38.994 | INFO     | events:startup:19 - Application ready.
-2026-07-10 20:58:42.820 | INFO     | events:shutdown:23 - SentinelGraph AI shutting down...
-2026-07-10 20:58:42.821 | INFO     | events:shutdown:24 - Shutdown complete.
-2026-07-10 20:58:45.341 | INFO     | logger:setup_logger:65 - Logger initialized.
-2026-07-10 20:58:45.341 | INFO     | events:startup:17 - 
-==================================================
-SentinelGraph AI - Digital Public Safety Platform
-Status: ONLINE
-==================================================
+> File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\app\ai\client.py", line 92, in generate_content
+    response = await asyncio.to_thread(
+                     │       └ <function to_thread at 0x0000018DB6305380>
+                     └ <module 'asyncio' from 'C:\\Python314\\Lib\\asyncio\\__init__.py'>
 
-2026-07-10 20:58:45.342 | INFO     | events:startup:18 - Configuration validation complete.
-2026-07-10 20:58:45.342 | INFO     | events:startup:19 - Application ready.
-2026-07-10 21:00:22.358 | INFO     | events:shutdown:23 - SentinelGraph AI shutting down...
-2026-07-10 21:00:22.359 | INFO     | events:shutdown:24 - Shutdown complete.
-2026-07-10 21:00:24.782 | INFO     | logger:setup_logger:65 - Logger initialized.
-2026-07-10 21:00:24.783 | INFO     | events:startup:17 - 
-==================================================
-SentinelGraph AI - Digital Public Safety Platform
-Status: ONLINE
-==================================================
+  File "C:\Python314\Lib\asyncio\threads.py", line 25, in to_thread
+    return await loop.run_in_executor(None, func_call)
+                 │    │                     └ functools.partial(<built-in method run of _contextvars.Context object at 0x0000018DBDB1DC00>, <bound method Models.generate_c...
+                 │    └ <function BaseEventLoop.run_in_executor at 0x0000018DB63A2560>
+                 └ <_WindowsSelectorEventLoop running=True closed=False debug=False>
+  File "C:\Python314\Lib\concurrent\futures\thread.py", line 86, in run
+    result = ctx.run(self.task)
+             │   │   └ None
+             │   └ <function WorkerContext.run at 0x0000018DBFE68E00>
+             └ <concurrent.futures.thread.WorkerContext object at 0x0000018DBFE78AD0>
+  File "C:\Python314\Lib\concurrent\futures\thread.py", line 73, in run
+    return fn(*args, **kwargs)
+           │   │       └ {}
+           │   └ ()
+           └ functools.partial(<built-in method run of _contextvars.Context object at 0x0000018DBDB1DC00>, <bound method Models.generate_c...
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\google\genai\models.py", line 6549, in generate_content
+    response = self._generate_content(
+               │    └ <function Models._generate_content at 0x0000018DBDEC6F00>
+               └ <google.genai.models.Models object at 0x0000018DC13207D0>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\google\genai\models.py", line 4977, in _generate_content
+    response = self._api_client.request(
+               │    │           └ <function BaseApiClient.request at 0x0000018DBDDDB7F0>
+               │    └ <google.genai._api_client.BaseApiClient object at 0x0000018DC12FAD50>
+               └ <google.genai.models.Models object at 0x0000018DC13207D0>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\google\genai\_api_client.py", line 1650, in request
+    response = self._request(http_request, http_options, stream=False)
+               │    │        │             └ None
+               │    │        └ HttpRequest(headers={'Content-Type': 'application/json', 'x-goog-api-key': 'AQ.Ab8RN6KETetL0EoP9rBt7drIUL-VWsMjGBqx-2miHdBBJx...
+               │    └ <function BaseApiClient._request at 0x0000018DBDDDB270>
+               └ <google.genai._api_client.BaseApiClient object at 0x0000018DC12FAD50>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\google\genai\_api_client.py", line 1443, in _request
+    return self._retry(self._request_once, http_request, stream)  # type: ignore[no-any-return]
+           │    │      │    │              │             └ False
+           │    │      │    │              └ HttpRequest(headers={'Content-Type': 'application/json', 'x-goog-api-key': 'AQ.Ab8RN6KETetL0EoP9rBt7drIUL-VWsMjGBqx-2miHdBBJx...
+           │    │      │    └ <function BaseApiClient._request_once at 0x0000018DBDDDB110>
+           │    │      └ <google.genai._api_client.BaseApiClient object at 0x0000018DC12FAD50>
+           │    └ <Retrying object at 0x18dc12fb890 (stop=<tenacity.stop.stop_after_attempt object at 0x0000018DC12FB750>, wait=<tenacity.wait....
+           └ <google.genai._api_client.BaseApiClient object at 0x0000018DC12FAD50>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\tenacity\__init__.py", line 470, in __call__
+    do = self.iter(retry_state=retry_state)
+         │    │                └ <RetryCallState 1708322092912: attempt #1; slept for 0.0; last result: failed (ServerError 503 UNAVAILABLE. {'error': {'code'...
+         │    └ <function BaseRetrying.iter at 0x0000018DBDD845C0>
+         └ <Retrying object at 0x18dc12fb890 (stop=<tenacity.stop.stop_after_attempt object at 0x0000018DC12FB750>, wait=<tenacity.wait....
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\tenacity\__init__.py", line 371, in iter
+    result = action(retry_state)
+             │      └ <RetryCallState 1708322092912: attempt #1; slept for 0.0; last result: failed (ServerError 503 UNAVAILABLE. {'error': {'code'...
+             └ <function BaseRetrying._post_stop_check_actions.<locals>.exc_check at 0x0000018DC130C510>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\tenacity\__init__.py", line 413, in exc_check
+    raise retry_exc.reraise()
+          │         └ <function RetryError.reraise at 0x0000018DBDD76E50>
+          └ RetryError(<Future at 0x18dbfee7620 state=finished raised ServerError>)
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\tenacity\__init__.py", line 184, in reraise
+    raise self.last_attempt.result()
+          │    │            └ <function Future.result at 0x0000018DB60328D0>
+          │    └ <Future at 0x18dbfee7620 state=finished raised ServerError>
+          └ RetryError(<Future at 0x18dbfee7620 state=finished raised ServerError>)
+  File "C:\Python314\Lib\concurrent\futures\_base.py", line 443, in result
+    return self.__get_result()
+           └ None
+  File "C:\Python314\Lib\concurrent\futures\_base.py", line 395, in __get_result
+    raise self._exception
+          └ None
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\tenacity\__init__.py", line 473, in __call__
+    result = fn(*args, **kwargs)
+             │   │       └ {}
+             │   └ (HttpRequest(headers={'Content-Type': 'application/json', 'x-goog-api-key': 'AQ.Ab8RN6KETetL0EoP9rBt7drIUL-VWsMjGBqx-2miHdBBJ...
+             └ <bound method BaseApiClient._request_once of <google.genai._api_client.BaseApiClient object at 0x0000018DC12FAD50>>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\google\genai\_api_client.py", line 1420, in _request_once
+    errors.APIError.raise_for_response(response)
+    │      │        │                  └ <Response [503 Service Unavailable]>
+    │      │        └ <classmethod(<function APIError.raise_for_response at 0x0000018DBDD956F0>)>
+    │      └ <class 'google.genai.errors.APIError'>
+    └ <module 'google.genai.errors' from 'C:\\Users\\ACER\\OneDrive\\Desktop\\Devesh Chauhan\\sentinelgraph-ai\\backend\\venv\\Lib\...
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\google\genai\errors.py", line 155, in raise_for_response
+    cls.raise_error(response.status_code, response_json, response)
+    │   │           │        │            │              └ <Response [503 Service Unavailable]>
+    │   │           │        │            └ {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary....
+    │   │           │        └ 503
+    │   │           └ <Response [503 Service Unavailable]>
+    │   └ <classmethod(<function APIError.raise_error at 0x0000018DBDD95850>)>
+    └ <class 'google.genai.errors.APIError'>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\google\genai\errors.py", line 186, in raise_error
+    raise ServerError(status_code, response_json, response)
+          │           │            │              └ <Response [503 Service Unavailable]>
+          │           │            └ {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary....
+          │           └ 503
+          └ <class 'google.genai.errors.ServerError'>
 
-2026-07-10 21:00:24.788 | INFO     | events:startup:18 - Configuration validation complete.
-2026-07-10 21:00:24.788 | INFO     | events:startup:19 - Application ready.
-2026-07-10 21:00:27.373 | INFO     | events:shutdown:23 - SentinelGraph AI shutting down...
-2026-07-10 21:00:27.374 | INFO     | events:shutdown:24 - Shutdown complete.
-2026-07-10 21:00:30.393 | INFO     | logger:setup_logger:65 - Logger initialized.
-2026-07-10 21:00:30.393 | INFO     | events:startup:17 - 
-==================================================
-SentinelGraph AI - Digital Public Safety Platform
-Status: ONLINE
-==================================================
+google.genai.errors.ServerError: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.', 'status': 'UNAVAILABLE'}}
+2026-07-14 23:19:05.664 | ERROR    | incident_service:create_incident:156 - Entity extraction failed for incident 'd5b11190-57ce-4695-875d-71ae93bae25d'.
+Traceback (most recent call last):
 
-2026-07-10 21:00:30.394 | INFO     | events:startup:18 - Configuration validation complete.
-2026-07-10 21:00:30.394 | INFO     | events:startup:19 - Application ready.
-2026-07-10 21:00:45.784 | INFO     | events:shutdown:23 - SentinelGraph AI shutting down...
-2026-07-10 21:00:45.787 | INFO     | events:shutdown:24 - Shutdown complete.
-2026-07-10 21:00:49.428 | INFO     | logger:setup_logger:65 - Logger initialized.
-2026-07-10 21:00:49.430 | INFO     | events:startup:17 - 
-==================================================
-SentinelGraph AI - Digital Public Safety Platform
-Status: ONLINE
-==================================================
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\app\ai\client.py", line 92, in generate_content
+    response = await asyncio.to_thread(
+                     │       └ <function to_thread at 0x0000018DB6305380>
+                     └ <module 'asyncio' from 'C:\\Python314\\Lib\\asyncio\\__init__.py'>
 
-2026-07-10 21:00:49.430 | INFO     | events:startup:18 - Configuration validation complete.
-2026-07-10 21:00:49.431 | INFO     | events:startup:19 - Application ready.
-2026-07-10 21:02:56.846 | INFO     | events:shutdown:23 - SentinelGraph AI shutting down...
-2026-07-10 21:02:56.847 | INFO     | events:shutdown:24 - Shutdown complete.
-2026-07-10 21:03:14.668 | INFO     | logger:setup_logger:65 - Logger initialized.
-2026-07-10 21:03:14.669 | INFO     | events:startup:17 - 
-==================================================
-SentinelGraph AI - Digital Public Safety Platform
-Status: ONLINE
-==================================================
+  File "C:\Python314\Lib\asyncio\threads.py", line 25, in to_thread
+    return await loop.run_in_executor(None, func_call)
+                 │    │                     └ functools.partial(<built-in method run of _contextvars.Context object at 0x0000018DBDB1DC00>, <bound method Models.generate_c...
+                 │    └ <function BaseEventLoop.run_in_executor at 0x0000018DB63A2560>
+                 └ <_WindowsSelectorEventLoop running=True closed=False debug=False>
+  File "C:\Python314\Lib\concurrent\futures\thread.py", line 86, in run
+    result = ctx.run(self.task)
+             │   │   └ None
+             │   └ <function WorkerContext.run at 0x0000018DBFE68E00>
+             └ <concurrent.futures.thread.WorkerContext object at 0x0000018DBFE78AD0>
+  File "C:\Python314\Lib\concurrent\futures\thread.py", line 73, in run
+    return fn(*args, **kwargs)
+           │   │       └ {}
+           │   └ ()
+           └ functools.partial(<built-in method run of _contextvars.Context object at 0x0000018DBDB1DC00>, <bound method Models.generate_c...
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\google\genai\models.py", line 6549, in generate_content
+    response = self._generate_content(
+               │    └ <function Models._generate_content at 0x0000018DBDEC6F00>
+               └ <google.genai.models.Models object at 0x0000018DC13207D0>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\google\genai\models.py", line 4977, in _generate_content
+    response = self._api_client.request(
+               │    │           └ <function BaseApiClient.request at 0x0000018DBDDDB7F0>
+               │    └ <google.genai._api_client.BaseApiClient object at 0x0000018DC12FAD50>
+               └ <google.genai.models.Models object at 0x0000018DC13207D0>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\google\genai\_api_client.py", line 1650, in request
+    response = self._request(http_request, http_options, stream=False)
+               │    │        │             └ None
+               │    │        └ HttpRequest(headers={'Content-Type': 'application/json', 'x-goog-api-key': 'AQ.Ab8RN6KETetL0EoP9rBt7drIUL-VWsMjGBqx-2miHdBBJx...
+               │    └ <function BaseApiClient._request at 0x0000018DBDDDB270>
+               └ <google.genai._api_client.BaseApiClient object at 0x0000018DC12FAD50>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\google\genai\_api_client.py", line 1443, in _request
+    return self._retry(self._request_once, http_request, stream)  # type: ignore[no-any-return]
+           │    │      │    │              │             └ False
+           │    │      │    │              └ HttpRequest(headers={'Content-Type': 'application/json', 'x-goog-api-key': 'AQ.Ab8RN6KETetL0EoP9rBt7drIUL-VWsMjGBqx-2miHdBBJx...
+           │    │      │    └ <function BaseApiClient._request_once at 0x0000018DBDDDB110>
+           │    │      └ <google.genai._api_client.BaseApiClient object at 0x0000018DC12FAD50>
+           │    └ <Retrying object at 0x18dc12fb890 (stop=<tenacity.stop.stop_after_attempt object at 0x0000018DC12FB750>, wait=<tenacity.wait....
+           └ <google.genai._api_client.BaseApiClient object at 0x0000018DC12FAD50>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\tenacity\__init__.py", line 470, in __call__
+    do = self.iter(retry_state=retry_state)
+         │    │                └ <RetryCallState 1708322092912: attempt #1; slept for 0.0; last result: failed (ServerError 503 UNAVAILABLE. {'error': {'code'...
+         │    └ <function BaseRetrying.iter at 0x0000018DBDD845C0>
+         └ <Retrying object at 0x18dc12fb890 (stop=<tenacity.stop.stop_after_attempt object at 0x0000018DC12FB750>, wait=<tenacity.wait....
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\tenacity\__init__.py", line 371, in iter
+    result = action(retry_state)
+             │      └ <RetryCallState 1708322092912: attempt #1; slept for 0.0; last result: failed (ServerError 503 UNAVAILABLE. {'error': {'code'...
+             └ <function BaseRetrying._post_stop_check_actions.<locals>.exc_check at 0x0000018DC130C510>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\tenacity\__init__.py", line 413, in exc_check
+    raise retry_exc.reraise()
+          │         └ <function RetryError.reraise at 0x0000018DBDD76E50>
+          └ RetryError(<Future at 0x18dbfee7620 state=finished raised ServerError>)
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\tenacity\__init__.py", line 184, in reraise
+    raise self.last_attempt.result()
+          │    │            └ <function Future.result at 0x0000018DB60328D0>
+          │    └ <Future at 0x18dbfee7620 state=finished raised ServerError>
+          └ RetryError(<Future at 0x18dbfee7620 state=finished raised ServerError>)
+  File "C:\Python314\Lib\concurrent\futures\_base.py", line 443, in result
+    return self.__get_result()
+           └ None
+  File "C:\Python314\Lib\concurrent\futures\_base.py", line 395, in __get_result
+    raise self._exception
+          └ None
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\tenacity\__init__.py", line 473, in __call__
+    result = fn(*args, **kwargs)
+             │   │       └ {}
+             │   └ (HttpRequest(headers={'Content-Type': 'application/json', 'x-goog-api-key': 'AQ.Ab8RN6KETetL0EoP9rBt7drIUL-VWsMjGBqx-2miHdBBJ...
+             └ <bound method BaseApiClient._request_once of <google.genai._api_client.BaseApiClient object at 0x0000018DC12FAD50>>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\google\genai\_api_client.py", line 1420, in _request_once
+    errors.APIError.raise_for_response(response)
+    │      │        │                  └ <Response [503 Service Unavailable]>
+    │      │        └ <classmethod(<function APIError.raise_for_response at 0x0000018DBDD956F0>)>
+    │      └ <class 'google.genai.errors.APIError'>
+    └ <module 'google.genai.errors' from 'C:\\Users\\ACER\\OneDrive\\Desktop\\Devesh Chauhan\\sentinelgraph-ai\\backend\\venv\\Lib\...
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\google\genai\errors.py", line 155, in raise_for_response
+    cls.raise_error(response.status_code, response_json, response)
+    │   │           │        │            │              └ <Response [503 Service Unavailable]>
+    │   │           │        │            └ {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary....
+    │   │           │        └ 503
+    │   │           └ <Response [503 Service Unavailable]>
+    │   └ <classmethod(<function APIError.raise_error at 0x0000018DBDD95850>)>
+    └ <class 'google.genai.errors.APIError'>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\google\genai\errors.py", line 186, in raise_error
+    raise ServerError(status_code, response_json, response)
+          │           │            │              └ <Response [503 Service Unavailable]>
+          │           │            └ {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary....
+          │           └ 503
+          └ <class 'google.genai.errors.ServerError'>
 
-2026-07-10 21:03:14.670 | INFO     | events:startup:18 - Configuration validation complete.
-2026-07-10 21:03:14.670 | INFO     | events:startup:19 - Application ready.
-2026-07-10 21:03:14.786 | INFO     | events:shutdown:23 - SentinelGraph AI shutting down...
-2026-07-10 21:03:14.787 | INFO     | events:shutdown:24 - Shutdown complete.
-2026-07-10 21:03:16.800 | INFO     | logger:setup_logger:65 - Logger initialized.
-2026-07-10 21:03:16.801 | INFO     | events:startup:17 - 
-==================================================
-SentinelGraph AI - Digital Public Safety Platform
-Status: ONLINE
-==================================================
+google.genai.errors.ServerError: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.', 'status': 'UNAVAILABLE'}}
 
-2026-07-10 21:03:16.803 | INFO     | events:startup:18 - Configuration validation complete.
-2026-07-10 21:03:16.804 | INFO     | events:startup:19 - Application ready.
-2026-07-10 21:03:22.011 | INFO     | events:shutdown:23 - SentinelGraph AI shutting down...
-2026-07-10 21:03:22.013 | INFO     | events:shutdown:24 - Shutdown complete.
-2026-07-10 21:03:25.089 | INFO     | logger:setup_logger:65 - Logger initialized.
-2026-07-10 21:03:25.091 | INFO     | events:startup:17 - 
-==================================================
-SentinelGraph AI - Digital Public Safety Platform
-Status: ONLINE
-==================================================
 
-2026-07-10 21:03:25.093 | INFO     | events:startup:18 - Configuration validation complete.
-2026-07-10 21:03:25.094 | INFO     | events:startup:19 - Application ready.
-2026-07-10 21:03:25.517 | INFO     | events:shutdown:23 - SentinelGraph AI shutting down...
-2026-07-10 21:03:25.518 | INFO     | events:shutdown:24 - Shutdown complete.
-2026-07-10 21:03:27.617 | INFO     | logger:setup_logger:65 - Logger initialized.
-2026-07-10 21:03:27.618 | INFO     | events:startup:17 - 
-==================================================
-SentinelGraph AI - Digital Public Safety Platform
-Status: ONLINE
-==================================================
+The above exception was the direct cause of the following exception:
 
-2026-07-10 21:03:27.619 | INFO     | events:startup:18 - Configuration validation complete.
-2026-07-10 21:03:27.619 | INFO     | events:startup:19 - Application ready.
-2026-07-10 21:03:37.345 | INFO     | events:shutdown:23 - SentinelGraph AI shutting down...
-2026-07-10 21:03:37.347 | INFO     | events:shutdown:24 - Shutdown complete.
-2026-07-10 21:03:41.529 | INFO     | logger:setup_logger:65 - Logger initialized.
-2026-07-10 21:03:41.530 | INFO     | events:startup:17 - 
-==================================================
-SentinelGraph AI - Digital Public Safety Platform
-Status: ONLINE
-==================================================
 
-2026-07-10 21:03:41.533 | INFO     | events:startup:18 - Configuration validation complete.
-2026-07-10 21:03:41.534 | INFO     | events:startup:19 - Application ready.
-2026-07-10 21:04:16.638 | INFO     | events:shutdown:23 - SentinelGraph AI shutting down...
-2026-07-10 21:04:16.639 | INFO     | events:shutdown:24 - Shutdown complete.
+Traceback (most recent call last):
+
+  File "<string>", line 1, in <module>
+  File "C:\Python314\Lib\multiprocessing\spawn.py", line 122, in spawn_main
+    exitcode = _main(fd, parent_sentinel)
+               │     │   └ 340
+               │     └ 3
+               └ <function _main at 0x0000018DB5A74250>
+  File "C:\Python314\Lib\multiprocessing\spawn.py", line 135, in _main
+    return self._bootstrap(parent_sentinel)
+           │    │          └ 340
+           │    └ <function BaseProcess._bootstrap at 0x0000018DB592E1F0>
+           └ <SpawnProcess name='SpawnProcess-1' parent=17764 started>
+  File "C:\Python314\Lib\multiprocessing\process.py", line 320, in _bootstrap
+    self.run()
+    │    └ <function BaseProcess.run at 0x0000018DB592D590>
+    └ <SpawnProcess name='SpawnProcess-1' parent=17764 started>
+  File "C:\Python314\Lib\multiprocessing\process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+    │    │        │    │        │    └ {'config': <uvicorn.config.Config object at 0x0000018DB8535160>, 'target': <bound method Server.run of <uvicorn.server.Server...
+    │    │        │    │        └ <SpawnProcess name='SpawnProcess-1' parent=17764 started>
+    │    │        │    └ ()
+    │    │        └ <SpawnProcess name='SpawnProcess-1' parent=17764 started>
+    │    └ <function subprocess_started at 0x0000018DB8565FE0>
+    └ <SpawnProcess name='SpawnProcess-1' parent=17764 started>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\uvicorn\_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+    │              └ [<socket.socket fd=584, family=2, type=1, proto=6, laddr=('127.0.0.1', 8000)>]
+    └ <bound method Server.run of <uvicorn.server.Server object at 0x0000018DB85352B0>>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\uvicorn\server.py", line 75, in run
+    return asyncio_run(self.serve(sockets=sockets), loop_factory=self.config.get_loop_factory())
+           │           │    │             │                      │    │      └ <function Config.get_loop_factory at 0x0000018DB84EA6C0>
+           │           │    │             │                      │    └ <uvicorn.config.Config object at 0x0000018DB8535160>
+           │           │    │             │                      └ <uvicorn.server.Server object at 0x0000018DB85352B0>
+           │           │    │             └ [<socket.socket fd=584, family=2, type=1, proto=6, laddr=('127.0.0.1', 8000)>]
+           │           │    └ <function Server.serve at 0x0000018DB8557A00>
+           │           └ <uvicorn.server.Server object at 0x0000018DB85352B0>
+           └ <function run at 0x0000018DB6399430>
+  File "C:\Python314\Lib\asyncio\runners.py", line 204, in run
+    return runner.run(main)
+           │      │   └ <coroutine object Server.serve at 0x0000018DB854AF20>
+           │      └ <function Runner.run at 0x0000018DB6399850>
+           └ <asyncio.runners.Runner object at 0x0000018DB8536120>
+  File "C:\Python314\Lib\asyncio\runners.py", line 127, in run
+    return self._loop.run_until_complete(task)
+           │    │     │                  └ <Task pending name='Task-1' coro=<Server.serve() running at C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\ba...
+           │    │     └ <function BaseEventLoop.run_until_complete at 0x0000018DB63A1BC0>
+           │    └ <_WindowsSelectorEventLoop running=True closed=False debug=False>
+           └ <asyncio.runners.Runner object at 0x0000018DB8536120>
+  File "C:\Python314\Lib\asyncio\base_events.py", line 706, in run_until_complete
+    self.run_forever()
+    │    └ <function BaseEventLoop.run_forever at 0x0000018DB63A1B10>
+    └ <_WindowsSelectorEventLoop running=True closed=False debug=False>
+  File "C:\Python314\Lib\asyncio\base_events.py", line 677, in run_forever
+    self._run_once()
+    │    └ <function BaseEventLoop._run_once at 0x0000018DB63A3C10>
+    └ <_WindowsSelectorEventLoop running=True closed=False debug=False>
+  File "C:\Python314\Lib\asyncio\base_events.py", line 2057, in _run_once
+    handle._run()
+    │      └ <function Handle._run at 0x0000018DB60B38A0>
+    └ <Handle Task.task_wakeup()>
+  File "C:\Python314\Lib\asyncio\events.py", line 94, in _run
+    self._context.run(self._callback, *self._args)
+    │    │            │    │           │    └ <member '_args' of 'Handle' objects>
+    │    │            │    │           └ <Handle Task.task_wakeup()>
+    │    │            │    └ <member '_callback' of 'Handle' objects>
+    │    │            └ <Handle Task.task_wakeup()>
+    │    └ <member '_context' of 'Handle' objects>
+    └ <Handle Task.task_wakeup()>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\anyio\_core\_tasks.py", line 278, in _run_coro
+    retval = await self._coro
+                   │    └ <member '_coro' of 'TaskHandle' objects>
+                   └ <TaskHandle pending name='starlette.middleware.base.BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.coro' coro=<corou...
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\starlette\middleware\base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+          │    │   │      │                      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.send_no_error at 0x0000018DBFEFE4B0>
+          │    │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x0000018DBFEFDE80>
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <starlette.middleware.exceptions.ExceptionMiddleware object at 0x0000018DBFD8DA90>
+          └ <app.core.middleware.RequestLoggingMiddleware object at 0x0000018DBFD8DBE0>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+          │                            │    │    │     │      │        └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.send_no_error at 0x0000018DBFEFE4B0>
+          │                            │    │    │     │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x0000018DBFEFDE80>
+          │                            │    │    │     └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │                            │    │    └ <starlette.requests.Request object at 0x0000018DBFEFE990>
+          │                            │    └ <fastapi.middleware.asyncexitstack.AsyncExitStackMiddleware object at 0x0000018DBFD8D940>
+          │                            └ <starlette.middleware.exceptions.ExceptionMiddleware object at 0x0000018DBFD8DA90>
+          └ <function wrap_app_handling_exceptions at 0x0000018DB9001640>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+          │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x0000018DBFEFDF30>
+          │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x0000018DBFEFDE80>
+          │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          └ <fastapi.middleware.asyncexitstack.AsyncExitStackMiddleware object at 0x0000018DBFD8D940>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+          │    │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x0000018DBFEFDF30>
+          │    │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x0000018DBFEFDE80>
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <fastapi.routing.APIRouter object at 0x0000018DBFE09480>
+          └ <fastapi.middleware.asyncexitstack.AsyncExitStackMiddleware object at 0x0000018DBFD8D940>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\starlette\routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+          │    │                │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x0000018DBFEFDF30>
+          │    │                │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x0000018DBFEFDE80>
+          │    │                └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <bound method APIRouter.app of <fastapi.routing.APIRouter object at 0x0000018DBFE09480>>
+          └ <fastapi.routing.APIRouter object at 0x0000018DBFE09480>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\fastapi\routing.py", line 2543, in app
+    await route.handle(scope, receive, send)
+          │     │      │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x0000018DBFEFDF30>
+          │     │      │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x0000018DBFEFDE80>
+          │     │      └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │     └ <function _IncludedRouter.handle at 0x0000018DB90562A0>
+          └ _IncludedRouter(original_router=<fastapi.routing.APIRouter object at 0x0000018DBB6106B0>, include_context=_RouterIncludeConte...
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\fastapi\routing.py", line 1700, in handle
+    await self.original_router.handle(scope, receive, send)
+          │    │               │      │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x0000018DBFEFDF30>
+          │    │               │      │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x0000018DBFEFDE80>
+          │    │               │      └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    │               └ <function APIRouter.handle at 0x0000018DB90762A0>
+          │    └ <fastapi.routing.APIRouter object at 0x0000018DBB6106B0>
+          └ _IncludedRouter(original_router=<fastapi.routing.APIRouter object at 0x0000018DBB6106B0>, include_context=_RouterIncludeConte...
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\fastapi\routing.py", line 2598, in handle
+    await included_router._handle_selected(scope, receive, send)
+          │               │                │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x0000018DBFEFDF30>
+          │               │                │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x0000018DBFEFDE80>
+          │               │                └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │               └ <function _IncludedRouter._handle_selected at 0x0000018DB9056400>
+          └ _IncludedRouter(original_router=<fastapi.routing.APIRouter object at 0x0000018DBB6106B0>, include_context=_RouterIncludeConte...
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\fastapi\routing.py", line 1711, in _handle_selected
+    await route.handle(scope, receive, send)
+          │     │      │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x0000018DBFEFDF30>
+          │     │      │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x0000018DBFEFDE80>
+          │     │      └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │     └ <function _IncludedRouter.handle at 0x0000018DB90562A0>
+          └ _IncludedRouter(original_router=<fastapi.routing.APIRouter object at 0x0000018DBFC78E90>, include_context=_RouterIncludeConte...
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\fastapi\routing.py", line 1700, in handle
+    await self.original_router.handle(scope, receive, send)
+          │    │               │      │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x0000018DBFEFDF30>
+          │    │               │      │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x0000018DBFEFDE80>
+          │    │               │      └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    │               └ <function APIRouter.handle at 0x0000018DB90762A0>
+          │    └ <fastapi.routing.APIRouter object at 0x0000018DBFC78E90>
+          └ _IncludedRouter(original_router=<fastapi.routing.APIRouter object at 0x0000018DBFC78E90>, include_context=_RouterIncludeConte...
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\fastapi\routing.py", line 2598, in handle
+    await included_router._handle_selected(scope, receive, send)
+          │               │                │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x0000018DBFEFDF30>
+          │               │                │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x0000018DBFEFDE80>
+          │               │                └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │               └ <function _IncludedRouter._handle_selected at 0x0000018DB9056400>
+          └ _IncludedRouter(original_router=<fastapi.routing.APIRouter object at 0x0000018DBFC78E90>, include_context=_RouterIncludeConte...
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\fastapi\routing.py", line 1720, in _handle_selected
+    await original_route.handle(scope, receive, send)
+          │              │      │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x0000018DBFEFDF30>
+          │              │      │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x0000018DBFEFDE80>
+          │              │      └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │              └ <function APIRoute.handle at 0x0000018DB9037320>
+          └ APIRoute(path='/', name='create_complaint', methods=['POST'])
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\fastapi\routing.py", line 1239, in handle
+    await app(scope, receive, send)
+          │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x0000018DBFEFDF30>
+          │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x0000018DBFEFDE80>
+          │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          └ <function request_response.<locals>.app at 0x0000018DBFE69DD0>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\fastapi\routing.py", line 150, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+          │                            │    │        │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x0000018DBFEFDF30>
+          │                            │    │        │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x0000018DBFEFDE80>
+          │                            │    │        └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │                            │    └ <starlette.requests.Request object at 0x0000018DBFE6AD00>
+          │                            └ <function request_response.<locals>.app.<locals>.app at 0x0000018DBFE6ADA0>
+          └ <function wrap_app_handling_exceptions at 0x0000018DB9001640>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+          │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x0000018DC130C670>
+          │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x0000018DBFEFDE80>
+          │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          └ <function request_response.<locals>.app.<locals>.app at 0x0000018DBFE6ADA0>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\fastapi\routing.py", line 136, in app
+    response = await f(request)
+                     │ └ <starlette.requests.Request object at 0x0000018DBFE6AD00>
+                     └ <function get_request_handler.<locals>.app at 0x0000018DBFEFEA30>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\fastapi\routing.py", line 690, in app
+    raw_response = await run_endpoint_function(
+                         └ <function run_endpoint_function at 0x0000018DB9035C70>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\fastapi\routing.py", line 344, in run_endpoint_function
+    return await dependant.call(**values)
+                 │         │      └ {'service': <app.services.incident_service.IncidentService object at 0x0000018DC13216D0>, 'complaint': IncidentCreate(title='...
+                 │         └ <function create_complaint at 0x0000018DBFCA5D20>
+                 └ Dependant(path_params=[], query_params=[], header_params=[], cookie_params=[], body_params=[ModelField(field_info=Body(Pydant...
+
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\app\api\complaints.py", line 35, in create_complaint
+    incident = await service.create_incident(complaint)
+                     │       │               └ IncidentCreate(title='string', description='stringstringstringst', reporter_type=<ReporterType.CITIZEN: 'citizen'>, source=<I...
+                     │       └ <function IncidentService.create_incident at 0x0000018DBFCA4670>
+                     └ <app.services.incident_service.IncidentService object at 0x0000018DC13216D0>
+
+> File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\app\services\incident_service.py", line 134, in create_incident
+    await self._entity_extraction_service.extract_entities(
+          │    │                          └ <function EntityExtractionService.extract_entities at 0x0000018DBFC41A60>
+          │    └ <app.services.entity_extraction_service.EntityExtractionService object at 0x0000018DC13211D0>
+          └ <app.services.incident_service.IncidentService object at 0x0000018DC13216D0>
+
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\app\services\entity_extraction_service.py", line 47, in extract_entities
+    response = await self._ai_client.generate_content(prompt)
+                     │    │          │                └ 'You are an expert cyber fraud intelligence analyst.\n\nYour task is to extract entities that are explicitly mentioned in the...
+                     │    │          └ <function GeminiClient.generate_content at 0x0000018DBDFCBB60>
+                     │    └ <app.ai.client.GeminiClient object at 0x0000018DC12FAAD0>
+                     └ <app.services.entity_extraction_service.EntityExtractionService object at 0x0000018DC13211D0>
+
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\app\ai\client.py", line 115, in generate_content
+    self._translate_exception(exc)
+    │    └ <function GeminiClient._translate_exception at 0x0000018DBDFCBCC0>
+    └ <app.ai.client.GeminiClient object at 0x0000018DC12FAAD0>
+
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\app\ai\client.py", line 129, in _translate_exception
+    raise AIUnavailableError(str(exc)) from exc
+          │                      │          └ ServerError("503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in...
+          │                      └ ServerError("503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in...
+          └ <class 'app.ai.exceptions.AIUnavailableError'>
+
+app.ai.exceptions.AIUnavailableError: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.', 'status': 'UNAVAILABLE'}}
+2026-07-14 23:19:05.899 | INFO     | middleware:dispatch:24 - RID: c714b299-d72e-4b4a-b856-e446a8152f8b | POST /api/v1/complaints/ | Status: 201 | Duration: 148635.83 ms | Client: 127.0.0.1
+2026-07-14 23:23:25.953 | INFO     | incident_service:create_incident:115 - Creating incident with case reference: N/A
+2026-07-14 23:23:25.989 | INFO     | entity_extraction_service:extract_entities:41 - Starting entity extraction.
+2026-07-14 23:23:25.992 | INFO     | client:generate_content:83 - Sending request to Gemini (model=gemini-flash-latest, prompt_length=902)
+2026-07-14 23:23:54.125 | INFO     | client:generate_content:106 - Gemini response received (duration=28.13s, response_length=432)
+2026-07-14 23:23:54.127 | INFO     | entity_extraction_service:extract_entities:59 - Entity extraction completed successfully.
+2026-07-14 23:23:54.128 | INFO     | service:build_and_persist:60 - Building fraud intelligence graph for complaint '1c922a94-316f-4c73-82f2-24c70b5e0a11'.
+2026-07-14 23:23:54.130 | INFO     | repository:save_graph:80 - Persisting graph (nodes=5, relationships=4).
+2026-07-14 23:23:55.507 | SUCCESS  | repository:save_graph:107 - Graph persisted successfully (1377.36 ms).
+2026-07-14 23:23:55.508 | SUCCESS  | service:build_and_persist:80 - Fraud intelligence graph persisted for complaint '1c922a94-316f-4c73-82f2-24c70b5e0a11' (nodes=5, relationships=4, 1377.36 ms).
+2026-07-14 23:23:55.509 | INFO     | incident_service:create_incident:144 - Graph persisted for incident '1c922a94-316f-4c73-82f2-24c70b5e0a11' (nodes=5, relationships=4, 1377.36 ms).
+2026-07-14 23:23:55.513 | INFO     | middleware:dispatch:24 - RID: 0ab73496-76b9-4f1c-a4b7-c58ab98bbbd8 | POST /api/v1/complaints/ | Status: 201 | Duration: 31250.63 ms | Client: 127.0.0.1
+2026-07-14 23:37:35.604 | INFO     | neo4j:disconnect_neo4j:54 - Neo4j connection closed.
+2026-07-14 23:37:35.609 | INFO     | events:shutdown:25 - SentinelGraph AI shutting down...
+2026-07-14 23:37:35.609 | INFO     | events:shutdown:26 - Shutdown complete.
