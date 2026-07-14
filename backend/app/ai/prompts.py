@@ -8,6 +8,7 @@ ensuring consistency, maintainability, and reusability across the
 application.
 """
 
+
 class PromptBuilder:
     """
     Factory class for constructing AI prompts.
