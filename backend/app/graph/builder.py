@@ -126,7 +126,7 @@ class GraphBuilder:
             id=f"complaint:{complaint_id}",
             label=GraphLabel.COMPLAINT,
             properties={
-                "id": str(complaint_id),
+                "complaint_id": str(complaint_id),
             },
         )
 

@@ -194,11 +194,15 @@ class GraphRepository:
         SET n += $properties
         """
 
+        if "id" in node.properties:
+            raise GraphPersistenceError(
+                "Node properties cannot contain reserved key 'id'."
+            )
+
         properties = {
             "id": node.id,
             **node.properties,
         }
-
         try:
             await tx.run(
                 cypher,
