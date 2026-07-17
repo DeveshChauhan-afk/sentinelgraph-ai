@@ -49,3 +49,22 @@ class FraudRingResult(BaseModel):
     entity: GraphNode
     nodes: list[GraphNode]
     incidents: list[GraphNode]
+
+class NetworkSummaryResult(BaseModel):
+    """
+    Repository result containing network statistics.
+    """
+
+    total_nodes: int
+
+    total_relationships: int
+
+    complaints: int
+
+    phones: int
+
+    upis: int
+
+    emails: int
+
+    organizations: int

@@ -40,6 +40,7 @@ from app.graph.query_results import (
     RiskMetricsResult,
 )
 from app.graph.query_results import FraudRingResult
+from app.graph.query_results import NetworkSummaryResult
 
 class GraphRepository:
     """
@@ -732,37 +733,37 @@ class GraphRepository:
         query = """
         MATCH (entity {value: $value})
 
-        CALL {
+        CALL () {
             WITH entity
             OPTIONAL MATCH (entity)-[]-(neighbor)
             RETURN count(DISTINCT neighbor) AS neighbor_count
         }
 
-        CALL {
+        CALL () {
             WITH entity
             OPTIONAL MATCH (entity)-[:MENTIONS]-(incident:Complaint)
             RETURN count(DISTINCT incident) AS incident_count
         }
 
-        CALL {
+        CALL () {
             WITH entity
             OPTIONAL MATCH (entity)-[]-(phone:Phone)
             RETURN count(DISTINCT phone) AS phone_count
         }
 
-        CALL {
+        CALL () {
             WITH entity
             OPTIONAL MATCH (entity)-[]-(upi:UPI)
             RETURN count(DISTINCT upi) AS upi_count
         }
 
-        CALL {
+        CALL () {
             WITH entity
             OPTIONAL MATCH (entity)-[]-(email:Email)
             RETURN count(DISTINCT email) AS email_count
         }
 
-        CALL {
+        CALL () {
             WITH entity
             OPTIONAL MATCH (entity)-[]-(organization:Organization)
             RETURN count(DISTINCT organization) AS organization_count
@@ -924,4 +925,116 @@ class GraphRepository:
             entity=entity,
             nodes=nodes,
             incidents=incidents,
+        )
+    
+    async def get_network_summary(
+        self,
+    ) -> NetworkSummaryResult:
+        """
+        Retrieve graph-wide statistics.
+
+        Returns:
+            NetworkSummaryResult.
+
+        Raises:
+            GraphConnectionError:
+                If Neo4j cannot be reached.
+
+            GraphQueryError:
+                If query execution fails.
+        """
+
+        logger.debug(
+            "Retrieving network summary.",
+        )
+
+        query = """
+        CALL () {
+            MATCH (n)
+            RETURN count(n) AS total_nodes
+        }
+
+        CALL () {
+            MATCH ()-[r]->()
+            RETURN count(r) AS total_relationships
+        }
+
+        CALL () {
+            MATCH (n:Complaint)
+            RETURN count(n) AS complaints
+        }
+
+        CALL () {
+            MATCH (n:Phone)
+            RETURN count(n) AS phones
+        }
+
+        CALL () {
+            MATCH (n:UPI)
+            RETURN count(n) AS upis
+        }
+
+        CALL () {
+            MATCH (n:Email)
+            RETURN count(n) AS emails
+        }
+
+        CALL () {
+            MATCH (n:Organization)
+            RETURN count(n) AS organizations
+        }
+
+        RETURN
+            total_nodes,
+            total_relationships,
+            complaints,
+            phones,
+            upis,
+            emails,
+            organizations
+        """
+
+        try:
+            async with self._driver.session() as session:
+                result = await session.run(query)
+
+                record = await result.single()
+
+        except Neo4jError as exc:
+            logger.exception(
+                "Failed to retrieve network summary.",
+            )
+
+            raise GraphQueryError(
+                "Failed to retrieve network summary.",
+            ) from exc
+
+        except Exception as exc:
+            logger.exception(
+                "Unable to connect to Neo4j.",
+            )
+
+            raise GraphConnectionError(
+                "Neo4j connection failed.",
+            ) from exc
+
+        if record is None:
+            return NetworkSummaryResult(
+                total_nodes=0,
+                total_relationships=0,
+                complaints=0,
+                phones=0,
+                upis=0,
+                emails=0,
+                organizations=0,
+            )
+
+        return NetworkSummaryResult(
+            total_nodes=record["total_nodes"],
+            total_relationships=record["total_relationships"],
+            complaints=record["complaints"],
+            phones=record["phones"],
+            upis=record["upis"],
+            emails=record["emails"],
+            organizations=record["organizations"],
         )

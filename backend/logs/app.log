@@ -1431,3 +1431,433 @@ Status: ONLINE
 2026-07-17 22:07:47.808 | INFO     | neo4j:disconnect_neo4j:54 - Neo4j connection closed.
 2026-07-17 22:07:47.809 | INFO     | events:shutdown:25 - SentinelGraph AI shutting down...
 2026-07-17 22:07:47.810 | INFO     | events:shutdown:26 - Shutdown complete.
+2026-07-17 22:19:03.048 | INFO     | logger:setup_logger:65 - Logger initialized.
+2026-07-17 22:19:03.048 | INFO     | neo4j:connect_neo4j:26 - Connecting to Neo4j...
+2026-07-17 22:19:04.427 | SUCCESS  | neo4j:connect_neo4j:38 - Connected to Neo4j.
+2026-07-17 22:19:04.428 | INFO     | events:startup:18 - 
+==================================================
+SentinelGraph AI - Digital Public Safety Platform
+Status: ONLINE
+==================================================
+
+2026-07-17 22:19:04.428 | INFO     | events:startup:19 - Configuration validation complete.
+2026-07-17 22:19:04.428 | INFO     | events:startup:20 - Application ready.
+2026-07-17 22:19:08.821 | INFO     | middleware:dispatch:24 - RID: 0d2b3490-0873-4fb2-980e-15b2666b0cba | GET /docs | Status: 200 | Duration: 1.57 ms | Client: 127.0.0.1
+2026-07-17 22:19:09.272 | INFO     | middleware:dispatch:24 - RID: 889ad092-3242-48b5-a5e5-50306e1b1f95 | GET /api/v1/openapi.json | Status: 200 | Duration: 79.47 ms | Client: 127.0.0.1
+2026-07-17 22:19:16.233 | INFO     | query_service:get_network_summary:324 - Retrieving network summary.
+2026-07-17 22:19:16.510 | INFO     | middleware:dispatch:24 - RID: b8f24bdc-c6b4-4f7f-86e4-7b9eb435b09c | GET /api/v1/graph/network/summary | Status: 500 | Duration: 286.33 ms | Client: 127.0.0.1
+2026-07-17 22:19:16.512 | ERROR    | exceptions:global_exception_handler:50 - RID: b8f24bdc-c6b4-4f7f-86e4-7b9eb435b09c | Unhandled Exception
+Traceback (most recent call last):
+
+  File "<string>", line 1, in <module>
+  File "C:\Python314\Lib\multiprocessing\spawn.py", line 122, in spawn_main
+    exitcode = _main(fd, parent_sentinel)
+               │     │   └ 328
+               │     └ 3
+               └ <function _main at 0x0000024502284250>
+  File "C:\Python314\Lib\multiprocessing\spawn.py", line 135, in _main
+    return self._bootstrap(parent_sentinel)
+           │    │          └ 328
+           │    └ <function BaseProcess._bootstrap at 0x00000245021421F0>
+           └ <SpawnProcess name='SpawnProcess-1' parent=12700 started>
+  File "C:\Python314\Lib\multiprocessing\process.py", line 320, in _bootstrap
+    self.run()
+    │    └ <function BaseProcess.run at 0x0000024502141590>
+    └ <SpawnProcess name='SpawnProcess-1' parent=12700 started>
+  File "C:\Python314\Lib\multiprocessing\process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+    │    │        │    │        │    └ {'config': <uvicorn.config.Config object at 0x0000024504DB5160>, 'target': <bound method Server.run of <uvicorn.server.Server...
+    │    │        │    │        └ <SpawnProcess name='SpawnProcess-1' parent=12700 started>
+    │    │        │    └ ()
+    │    │        └ <SpawnProcess name='SpawnProcess-1' parent=12700 started>
+    │    └ <function subprocess_started at 0x0000024504DE5FE0>
+    └ <SpawnProcess name='SpawnProcess-1' parent=12700 started>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\uvicorn\_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+    │              └ [<socket.socket fd=348, family=2, type=1, proto=6, laddr=('127.0.0.1', 8000)>]
+    └ <bound method Server.run of <uvicorn.server.Server object at 0x0000024504DB52B0>>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\uvicorn\server.py", line 75, in run
+    return asyncio_run(self.serve(sockets=sockets), loop_factory=self.config.get_loop_factory())
+           │           │    │             │                      │    │      └ <function Config.get_loop_factory at 0x0000024504D6A6C0>
+           │           │    │             │                      │    └ <uvicorn.config.Config object at 0x0000024504DB5160>
+           │           │    │             │                      └ <uvicorn.server.Server object at 0x0000024504DB52B0>
+           │           │    │             └ [<socket.socket fd=348, family=2, type=1, proto=6, laddr=('127.0.0.1', 8000)>]
+           │           │    └ <function Server.serve at 0x0000024504DD7A00>
+           │           └ <uvicorn.server.Server object at 0x0000024504DB52B0>
+           └ <function run at 0x0000024504249430>
+  File "C:\Python314\Lib\asyncio\runners.py", line 204, in run
+    return runner.run(main)
+           │      │   └ <coroutine object Server.serve at 0x0000024504DCAF20>
+           │      └ <function Runner.run at 0x0000024504249850>
+           └ <asyncio.runners.Runner object at 0x0000024504DB6120>
+  File "C:\Python314\Lib\asyncio\runners.py", line 127, in run
+    return self._loop.run_until_complete(task)
+           │    │     │                  └ <Task pending name='Task-1' coro=<Server.serve() running at C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\ba...
+           │    │     └ <function BaseEventLoop.run_until_complete at 0x0000024504251BC0>
+           │    └ <_WindowsSelectorEventLoop running=True closed=False debug=False>
+           └ <asyncio.runners.Runner object at 0x0000024504DB6120>
+  File "C:\Python314\Lib\asyncio\base_events.py", line 706, in run_until_complete
+    self.run_forever()
+    │    └ <function BaseEventLoop.run_forever at 0x0000024504251B10>
+    └ <_WindowsSelectorEventLoop running=True closed=False debug=False>
+  File "C:\Python314\Lib\asyncio\base_events.py", line 677, in run_forever
+    self._run_once()
+    │    └ <function BaseEventLoop._run_once at 0x0000024504253C10>
+    └ <_WindowsSelectorEventLoop running=True closed=False debug=False>
+  File "C:\Python314\Lib\asyncio\base_events.py", line 2057, in _run_once
+    handle._run()
+    │      └ <function Handle._run at 0x00000245028C38A0>
+    └ <Handle Task.task_wakeup()>
+  File "C:\Python314\Lib\asyncio\events.py", line 94, in _run
+    self._context.run(self._callback, *self._args)
+    │    │            │    │           │    └ <member '_args' of 'Handle' objects>
+    │    │            │    │           └ <Handle Task.task_wakeup()>
+    │    │            │    └ <member '_callback' of 'Handle' objects>
+    │    │            └ <Handle Task.task_wakeup()>
+    │    └ <member '_context' of 'Handle' objects>
+    └ <Handle Task.task_wakeup()>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\uvicorn\protocols\http\h11_impl.py", line 415, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+                   └ <uvicorn.middleware.proxy_headers.ProxyHeadersMiddleware object at 0x000002450C649400>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\uvicorn\middleware\proxy_headers.py", line 62, in __call__
+    return await self.app(scope, receive, send)
+                 │    │   │      │        └ <bound method RequestResponseCycle.send of <uvicorn.protocols.http.h11_impl.RequestResponseCycle object at 0x000002450C756850>>
+                 │    │   │      └ <bound method RequestResponseCycle.receive of <uvicorn.protocols.http.h11_impl.RequestResponseCycle object at 0x000002450C756...
+                 │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+                 │    └ <fastapi.applications.FastAPI object at 0x000002450C648D70>
+                 └ <uvicorn.middleware.proxy_headers.ProxyHeadersMiddleware object at 0x000002450C649400>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\fastapi\applications.py", line 1163, in __call__
+    await super().__call__(scope, receive, send)
+                           │      │        └ <bound method RequestResponseCycle.send of <uvicorn.protocols.http.h11_impl.RequestResponseCycle object at 0x000002450C756850>>
+                           │      └ <bound method RequestResponseCycle.receive of <uvicorn.protocols.http.h11_impl.RequestResponseCycle object at 0x000002450C756...
+                           └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\starlette\applications.py", line 90, in __call__
+    await self.middleware_stack(scope, receive, send)
+          │    │                │      │        └ <bound method RequestResponseCycle.send of <uvicorn.protocols.http.h11_impl.RequestResponseCycle object at 0x000002450C756850>>
+          │    │                │      └ <bound method RequestResponseCycle.receive of <uvicorn.protocols.http.h11_impl.RequestResponseCycle object at 0x000002450C756...
+          │    │                └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <starlette.middleware.errors.ServerErrorMiddleware object at 0x000002450C649E80>
+          └ <fastapi.applications.FastAPI object at 0x000002450C648D70>
+> File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+          │    │   │      │        └ <function ServerErrorMiddleware.__call__.<locals>._send at 0x000002450C775010>
+          │    │   │      └ <bound method RequestResponseCycle.receive of <uvicorn.protocols.http.h11_impl.RequestResponseCycle object at 0x000002450C756...
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <app.core.middleware.RequestLoggingMiddleware object at 0x000002450C649D30>
+          └ <starlette.middleware.errors.ServerErrorMiddleware object at 0x000002450C649E80>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\starlette\middleware\base.py", line 193, in __call__
+    response = await self.dispatch_func(request, call_next)
+                     │    │             │        └ <function BaseHTTPMiddleware.__call__.<locals>.call_next at 0x000002450C776350>
+                     │    │             └ <starlette.middleware.base._CachedRequest object at 0x000002450C754690>
+                     │    └ <bound method RequestLoggingMiddleware.dispatch of <app.core.middleware.RequestLoggingMiddleware object at 0x000002450C649D30>>
+                     └ <app.core.middleware.RequestLoggingMiddleware object at 0x000002450C649D30>
+
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\app\core\middleware.py", line 18, in dispatch
+    response = await call_next(request)
+                     │         └ <starlette.middleware.base._CachedRequest object at 0x000002450C754690>
+                     └ <function BaseHTTPMiddleware.__call__.<locals>.call_next at 0x000002450C776350>
+
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\starlette\middleware\base.py", line 168, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+          │            │       │            │       └ <attribute '__context__' of 'BaseException' objects>
+          │            │       │            └ 2 validation errors for NetworkSummaryResult
+          │            │       │              connected_components
+          │            │       │                Field required [type=missing, input_value={'total_nodes':...
+          │            │       └ <attribute '__cause__' of 'BaseException' objects>
+          │            └ 2 validation errors for NetworkSummaryResult
+          │              connected_components
+          │                Field required [type=missing, input_value={'total_nodes':...
+          └ 2 validation errors for NetworkSummaryResult
+            connected_components
+              Field required [type=missing, input_value={'total_nodes':...
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\starlette\middleware\base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+          │    │   │      │                      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.send_no_error at 0x000002450C7D6A30>
+          │    │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x000002450C7D50C0>
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <starlette.middleware.exceptions.ExceptionMiddleware object at 0x000002450C649BE0>
+          └ <app.core.middleware.RequestLoggingMiddleware object at 0x000002450C649D30>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+          │                            │    │    │     │      │        └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.send_no_error at 0x000002450C7D6A30>
+          │                            │    │    │     │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x000002450C7D50C0>
+          │                            │    │    │     └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │                            │    │    └ <starlette.requests.Request object at 0x000002450C7E3E10>
+          │                            │    └ <fastapi.middleware.asyncexitstack.AsyncExitStackMiddleware object at 0x000002450C649A90>
+          │                            └ <starlette.middleware.exceptions.ExceptionMiddleware object at 0x000002450C649BE0>
+          └ <function wrap_app_handling_exceptions at 0x000002450586D640>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+          │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000002450C7D54E0>
+          │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x000002450C7D50C0>
+          │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          └ <fastapi.middleware.asyncexitstack.AsyncExitStackMiddleware object at 0x000002450C649A90>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+          │    │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000002450C7D54E0>
+          │    │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x000002450C7D50C0>
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <fastapi.routing.APIRouter object at 0x000002450C6D6690>
+          └ <fastapi.middleware.asyncexitstack.AsyncExitStackMiddleware object at 0x000002450C649A90>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\starlette\routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+          │    │                │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000002450C7D54E0>
+          │    │                │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x000002450C7D50C0>
+          │    │                └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <bound method APIRouter.app of <fastapi.routing.APIRouter object at 0x000002450C6D6690>>
+          └ <fastapi.routing.APIRouter object at 0x000002450C6D6690>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\fastapi\routing.py", line 2543, in app
+    await route.handle(scope, receive, send)
+          │     │      │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000002450C7D54E0>
+          │     │      │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x000002450C7D50C0>
+          │     │      └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │     └ <function _IncludedRouter.handle at 0x00000245058C62A0>
+          └ _IncludedRouter(original_router=<fastapi.routing.APIRouter object at 0x000002450C6D6250>, include_context=_RouterIncludeConte...
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\fastapi\routing.py", line 1700, in handle
+    await self.original_router.handle(scope, receive, send)
+          │    │               │      │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000002450C7D54E0>
+          │    │               │      │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x000002450C7D50C0>
+          │    │               │      └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    │               └ <function APIRouter.handle at 0x00000245058E62A0>
+          │    └ <fastapi.routing.APIRouter object at 0x000002450C6D6250>
+          └ _IncludedRouter(original_router=<fastapi.routing.APIRouter object at 0x000002450C6D6250>, include_context=_RouterIncludeConte...
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\fastapi\routing.py", line 2598, in handle
+    await included_router._handle_selected(scope, receive, send)
+          │               │                │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000002450C7D54E0>
+          │               │                │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x000002450C7D50C0>
+          │               │                └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │               └ <function _IncludedRouter._handle_selected at 0x00000245058C6400>
+          └ _IncludedRouter(original_router=<fastapi.routing.APIRouter object at 0x000002450C6D6250>, include_context=_RouterIncludeConte...
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\fastapi\routing.py", line 1711, in _handle_selected
+    await route.handle(scope, receive, send)
+          │     │      │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000002450C7D54E0>
+          │     │      │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x000002450C7D50C0>
+          │     │      └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │     └ <function _IncludedRouter.handle at 0x00000245058C62A0>
+          └ _IncludedRouter(original_router=<fastapi.routing.APIRouter object at 0x000002450C682450>, include_context=_RouterIncludeConte...
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\fastapi\routing.py", line 1700, in handle
+    await self.original_router.handle(scope, receive, send)
+          │    │               │      │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000002450C7D54E0>
+          │    │               │      │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x000002450C7D50C0>
+          │    │               │      └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    │               └ <function APIRouter.handle at 0x00000245058E62A0>
+          │    └ <fastapi.routing.APIRouter object at 0x000002450C682450>
+          └ _IncludedRouter(original_router=<fastapi.routing.APIRouter object at 0x000002450C682450>, include_context=_RouterIncludeConte...
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\fastapi\routing.py", line 2598, in handle
+    await included_router._handle_selected(scope, receive, send)
+          │               │                │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000002450C7D54E0>
+          │               │                │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x000002450C7D50C0>
+          │               │                └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │               └ <function _IncludedRouter._handle_selected at 0x00000245058C6400>
+          └ _IncludedRouter(original_router=<fastapi.routing.APIRouter object at 0x000002450C682450>, include_context=_RouterIncludeConte...
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\fastapi\routing.py", line 1720, in _handle_selected
+    await original_route.handle(scope, receive, send)
+          │              │      │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000002450C7D54E0>
+          │              │      │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x000002450C7D50C0>
+          │              │      └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │              └ <function APIRoute.handle at 0x00000245058A7320>
+          └ APIRoute(path='/network/summary', name='get_network_summary', methods=['GET'])
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\fastapi\routing.py", line 1239, in handle
+    await app(scope, receive, send)
+          │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000002450C7D54E0>
+          │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x000002450C7D50C0>
+          │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          └ <function request_response.<locals>.app at 0x000002450C7D57A0>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\fastapi\routing.py", line 150, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+          │                            │    │        │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000002450C7D54E0>
+          │                            │    │        │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x000002450C7D50C0>
+          │                            │    │        └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │                            │    └ <starlette.requests.Request object at 0x000002450C751C70>
+          │                            └ <function request_response.<locals>.app.<locals>.app at 0x000002450C7D5900>
+          └ <function wrap_app_handling_exceptions at 0x000002450586D640>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+          │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000002450C7D6980>
+          │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x000002450C7D50C0>
+          │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          └ <function request_response.<locals>.app.<locals>.app at 0x000002450C7D5900>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\fastapi\routing.py", line 136, in app
+    response = await f(request)
+                     │ └ <starlette.requests.Request object at 0x000002450C751C70>
+                     └ <function get_request_handler.<locals>.app at 0x000002450C7D5640>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\fastapi\routing.py", line 690, in app
+    raw_response = await run_endpoint_function(
+                         └ <function run_endpoint_function at 0x00000245058A5C70>
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\fastapi\routing.py", line 344, in run_endpoint_function
+    return await dependant.call(**values)
+                 │         │      └ {'service': <app.graph.query_service.GraphQueryService object at 0x000002450C76FA10>}
+                 │         └ <function get_network_summary at 0x000002450C6E9B10>
+                 └ Dependant(path_params=[], query_params=[], header_params=[], cookie_params=[], body_params=[], dependencies=[Dependant(path_p...
+
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\app\api\graph.py", line 140, in get_network_summary
+    return await service.get_network_summary()
+                 │       └ <function GraphQueryService.get_network_summary at 0x000002450C54EE50>
+                 └ <app.graph.query_service.GraphQueryService object at 0x000002450C76FA10>
+
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\app\graph\query_service.py", line 328, in get_network_summary
+    result = await self._repository.get_network_summary()
+                   │    │           └ <function GraphRepository.get_network_summary at 0x000002450C4AFE20>
+                   │    └ <app.graph.repository.GraphRepository object at 0x000002450C76EE40>
+                   └ <app.graph.query_service.GraphQueryService object at 0x000002450C76FA10>
+
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\app\graph\repository.py", line 1032, in get_network_summary
+    return NetworkSummaryResult(
+           └ <class 'app.graph.query_results.NetworkSummaryResult'>
+
+  File "C:\Users\ACER\OneDrive\Desktop\Devesh Chauhan\sentinelgraph-ai\backend\venv\Lib\site-packages\pydantic\main.py", line 263, in __init__
+    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)
+                     │    │                      │               │                   └ NetworkSummaryResult()
+                     │    │                      │               └ {'total_nodes': 5, 'total_relationships': 4, 'complaints': 1, 'phones': 1, 'upis': 1, 'emails': 1, 'organizations': 1}
+                     │    │                      └ <method 'validate_python' of 'pydantic_core._pydantic_core.SchemaValidator' objects>
+                     │    └ SchemaValidator(title="NetworkSummaryResult", validator=Model(
+                     │          ModelValidator {
+                     │              revalidate: Never,
+                     │              valida...
+                     └ NetworkSummaryResult()
+
+pydantic_core._pydantic_core.ValidationError: 2 validation errors for NetworkSummaryResult
+connected_components
+  Field required [type=missing, input_value={'total_nodes': 5, 'total...: 1, 'organizations': 1}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.13/v/missing
+largest_ring_size
+  Field required [type=missing, input_value={'total_nodes': 5, 'total...: 1, 'organizations': 1}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.13/v/missing
+2026-07-17 22:20:39.228 | INFO     | neo4j:disconnect_neo4j:54 - Neo4j connection closed.
+2026-07-17 22:20:39.252 | INFO     | events:shutdown:25 - SentinelGraph AI shutting down...
+2026-07-17 22:20:39.254 | INFO     | events:shutdown:26 - Shutdown complete.
+2026-07-17 22:20:45.014 | INFO     | logger:setup_logger:65 - Logger initialized.
+2026-07-17 22:20:45.014 | INFO     | neo4j:connect_neo4j:26 - Connecting to Neo4j...
+2026-07-17 22:20:46.478 | SUCCESS  | neo4j:connect_neo4j:38 - Connected to Neo4j.
+2026-07-17 22:20:46.478 | INFO     | events:startup:18 - 
+==================================================
+SentinelGraph AI - Digital Public Safety Platform
+Status: ONLINE
+==================================================
+
+2026-07-17 22:20:46.479 | INFO     | events:startup:19 - Configuration validation complete.
+2026-07-17 22:20:46.479 | INFO     | events:startup:20 - Application ready.
+2026-07-17 22:20:51.977 | INFO     | neo4j:disconnect_neo4j:54 - Neo4j connection closed.
+2026-07-17 22:20:51.983 | INFO     | events:shutdown:25 - SentinelGraph AI shutting down...
+2026-07-17 22:20:51.997 | INFO     | events:shutdown:26 - Shutdown complete.
+2026-07-17 22:20:59.731 | INFO     | logger:setup_logger:65 - Logger initialized.
+2026-07-17 22:20:59.734 | INFO     | neo4j:connect_neo4j:26 - Connecting to Neo4j...
+2026-07-17 22:21:01.874 | SUCCESS  | neo4j:connect_neo4j:38 - Connected to Neo4j.
+2026-07-17 22:21:01.875 | INFO     | events:startup:18 - 
+==================================================
+SentinelGraph AI - Digital Public Safety Platform
+Status: ONLINE
+==================================================
+
+2026-07-17 22:21:01.876 | INFO     | events:startup:19 - Configuration validation complete.
+2026-07-17 22:21:01.877 | INFO     | events:startup:20 - Application ready.
+2026-07-17 22:21:27.242 | INFO     | neo4j:disconnect_neo4j:54 - Neo4j connection closed.
+2026-07-17 22:21:27.242 | INFO     | events:shutdown:25 - SentinelGraph AI shutting down...
+2026-07-17 22:21:27.243 | INFO     | events:shutdown:26 - Shutdown complete.
+2026-07-17 22:21:31.843 | INFO     | logger:setup_logger:65 - Logger initialized.
+2026-07-17 22:21:31.843 | INFO     | neo4j:connect_neo4j:26 - Connecting to Neo4j...
+2026-07-17 22:21:33.268 | SUCCESS  | neo4j:connect_neo4j:38 - Connected to Neo4j.
+2026-07-17 22:21:33.269 | INFO     | events:startup:18 - 
+==================================================
+SentinelGraph AI - Digital Public Safety Platform
+Status: ONLINE
+==================================================
+
+2026-07-17 22:21:33.270 | INFO     | events:startup:19 - Configuration validation complete.
+2026-07-17 22:21:33.271 | INFO     | events:startup:20 - Application ready.
+2026-07-17 22:21:33.531 | INFO     | neo4j:disconnect_neo4j:54 - Neo4j connection closed.
+2026-07-17 22:21:33.532 | INFO     | events:shutdown:25 - SentinelGraph AI shutting down...
+2026-07-17 22:21:33.533 | INFO     | events:shutdown:26 - Shutdown complete.
+2026-07-17 22:21:39.730 | INFO     | logger:setup_logger:65 - Logger initialized.
+2026-07-17 22:21:39.730 | INFO     | neo4j:connect_neo4j:26 - Connecting to Neo4j...
+2026-07-17 22:21:41.016 | SUCCESS  | neo4j:connect_neo4j:38 - Connected to Neo4j.
+2026-07-17 22:21:41.016 | INFO     | events:startup:18 - 
+==================================================
+SentinelGraph AI - Digital Public Safety Platform
+Status: ONLINE
+==================================================
+
+2026-07-17 22:21:41.017 | INFO     | events:startup:19 - Configuration validation complete.
+2026-07-17 22:21:41.017 | INFO     | events:startup:20 - Application ready.
+2026-07-17 22:21:41.276 | INFO     | neo4j:disconnect_neo4j:54 - Neo4j connection closed.
+2026-07-17 22:21:41.278 | INFO     | events:shutdown:25 - SentinelGraph AI shutting down...
+2026-07-17 22:21:41.279 | INFO     | events:shutdown:26 - Shutdown complete.
+2026-07-17 22:21:46.771 | INFO     | logger:setup_logger:65 - Logger initialized.
+2026-07-17 22:21:46.771 | INFO     | neo4j:connect_neo4j:26 - Connecting to Neo4j...
+2026-07-17 22:21:48.121 | SUCCESS  | neo4j:connect_neo4j:38 - Connected to Neo4j.
+2026-07-17 22:21:48.123 | INFO     | events:startup:18 - 
+==================================================
+SentinelGraph AI - Digital Public Safety Platform
+Status: ONLINE
+==================================================
+
+2026-07-17 22:21:48.124 | INFO     | events:startup:19 - Configuration validation complete.
+2026-07-17 22:21:48.125 | INFO     | events:startup:20 - Application ready.
+2026-07-17 22:21:54.004 | INFO     | neo4j:disconnect_neo4j:54 - Neo4j connection closed.
+2026-07-17 22:21:54.005 | INFO     | events:shutdown:25 - SentinelGraph AI shutting down...
+2026-07-17 22:21:54.007 | INFO     | events:shutdown:26 - Shutdown complete.
+2026-07-17 22:21:58.533 | INFO     | logger:setup_logger:65 - Logger initialized.
+2026-07-17 22:21:58.533 | INFO     | neo4j:connect_neo4j:26 - Connecting to Neo4j...
+2026-07-17 22:21:59.922 | SUCCESS  | neo4j:connect_neo4j:38 - Connected to Neo4j.
+2026-07-17 22:21:59.922 | INFO     | events:startup:18 - 
+==================================================
+SentinelGraph AI - Digital Public Safety Platform
+Status: ONLINE
+==================================================
+
+2026-07-17 22:21:59.923 | INFO     | events:startup:19 - Configuration validation complete.
+2026-07-17 22:21:59.923 | INFO     | events:startup:20 - Application ready.
+2026-07-17 22:22:00.383 | INFO     | neo4j:disconnect_neo4j:54 - Neo4j connection closed.
+2026-07-17 22:22:00.383 | INFO     | events:shutdown:25 - SentinelGraph AI shutting down...
+2026-07-17 22:22:00.384 | INFO     | events:shutdown:26 - Shutdown complete.
+2026-07-17 22:22:05.985 | INFO     | logger:setup_logger:65 - Logger initialized.
+2026-07-17 22:22:05.985 | INFO     | neo4j:connect_neo4j:26 - Connecting to Neo4j...
+2026-07-17 22:22:07.324 | SUCCESS  | neo4j:connect_neo4j:38 - Connected to Neo4j.
+2026-07-17 22:22:07.325 | INFO     | events:startup:18 - 
+==================================================
+SentinelGraph AI - Digital Public Safety Platform
+Status: ONLINE
+==================================================
+
+2026-07-17 22:22:07.326 | INFO     | events:startup:19 - Configuration validation complete.
+2026-07-17 22:22:07.326 | INFO     | events:startup:20 - Application ready.
+2026-07-17 22:22:07.624 | INFO     | neo4j:disconnect_neo4j:54 - Neo4j connection closed.
+2026-07-17 22:22:07.637 | INFO     | events:shutdown:25 - SentinelGraph AI shutting down...
+2026-07-17 22:22:07.692 | INFO     | events:shutdown:26 - Shutdown complete.
+2026-07-17 22:22:12.917 | INFO     | logger:setup_logger:65 - Logger initialized.
+2026-07-17 22:22:12.917 | INFO     | neo4j:connect_neo4j:26 - Connecting to Neo4j...
+2026-07-17 22:22:14.398 | SUCCESS  | neo4j:connect_neo4j:38 - Connected to Neo4j.
+2026-07-17 22:22:14.402 | INFO     | events:startup:18 - 
+==================================================
+SentinelGraph AI - Digital Public Safety Platform
+Status: ONLINE
+==================================================
+
+2026-07-17 22:22:14.402 | INFO     | events:startup:19 - Configuration validation complete.
+2026-07-17 22:22:14.403 | INFO     | events:startup:20 - Application ready.
+2026-07-17 22:22:14.664 | INFO     | neo4j:disconnect_neo4j:54 - Neo4j connection closed.
+2026-07-17 22:22:14.664 | INFO     | events:shutdown:25 - SentinelGraph AI shutting down...
+2026-07-17 22:22:14.665 | INFO     | events:shutdown:26 - Shutdown complete.
+2026-07-17 22:22:19.445 | INFO     | logger:setup_logger:65 - Logger initialized.
+2026-07-17 22:22:19.445 | INFO     | neo4j:connect_neo4j:26 - Connecting to Neo4j...
+2026-07-17 22:22:20.943 | SUCCESS  | neo4j:connect_neo4j:38 - Connected to Neo4j.
+2026-07-17 22:22:20.944 | INFO     | events:startup:18 - 
+==================================================
+SentinelGraph AI - Digital Public Safety Platform
+Status: ONLINE
+==================================================
+
+2026-07-17 22:22:20.944 | INFO     | events:startup:19 - Configuration validation complete.
+2026-07-17 22:22:20.945 | INFO     | events:startup:20 - Application ready.
+2026-07-17 22:22:20.958 | INFO     | middleware:dispatch:24 - RID: 6cee9992-44fb-4c43-9c2f-b66360fba023 | GET /docs | Status: 200 | Duration: 0.68 ms | Client: 127.0.0.1
+2026-07-17 22:22:22.751 | INFO     | middleware:dispatch:24 - RID: 1708ef25-87f5-40a6-a5ed-9f22c606ddee | GET /docs | Status: 200 | Duration: 0.43 ms | Client: 127.0.0.1
+2026-07-17 22:22:23.073 | INFO     | middleware:dispatch:24 - RID: f42de859-cd19-4d73-b67b-1eb6cddb2f97 | GET /api/v1/openapi.json | Status: 200 | Duration: 107.41 ms | Client: 127.0.0.1
+2026-07-17 22:22:34.923 | INFO     | query_service:get_network_summary:324 - Retrieving network summary.
+2026-07-17 22:22:35.198 | INFO     | middleware:dispatch:24 - RID: 1abcbfd8-eca3-4623-92c6-fe0e45165d80 | GET /api/v1/graph/network/summary | Status: 200 | Duration: 299.95 ms | Client: 127.0.0.1
+2026-07-17 22:23:26.703 | INFO     | neo4j:disconnect_neo4j:54 - Neo4j connection closed.
+2026-07-17 22:23:26.704 | INFO     | events:shutdown:25 - SentinelGraph AI shutting down...
+2026-07-17 22:23:26.705 | INFO     | events:shutdown:26 - Shutdown complete.

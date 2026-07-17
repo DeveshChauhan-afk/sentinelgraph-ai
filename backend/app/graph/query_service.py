@@ -25,6 +25,7 @@ from app.graph.query_models import (
     EntityRiskResponse,
 )
 from app.graph.query_models import FraudRingResponse
+from app.graph.query_models import NetworkSummaryResponse
 
 class GraphQueryService:
     """
@@ -311,4 +312,27 @@ class GraphQueryService:
             incidents=result.incidents,
             total_nodes=len(result.nodes),
             total_incidents=len(result.incidents),
+        )
+    
+    async def get_network_summary(
+        self,
+    ) -> NetworkSummaryResponse:
+        """
+        Retrieve graph-wide statistics.
+        """
+
+        logger.info(
+            "Retrieving network summary.",
+        )
+
+        result = await self._repository.get_network_summary()
+
+        return NetworkSummaryResponse(
+            total_nodes=result.total_nodes,
+            total_relationships=result.total_relationships,
+            complaints=result.complaints,
+            phones=result.phones,
+            upis=result.upis,
+            emails=result.emails,
+            organizations=result.organizations,
         )

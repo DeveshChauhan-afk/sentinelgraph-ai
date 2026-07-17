@@ -78,7 +78,7 @@ class EntityRiskResponse(BaseModel):
     metrics: RiskMetrics
 
     reasons: list[str]
-    
+
 
 class FraudRingResponse(BaseModel):
     """
@@ -94,3 +94,23 @@ class FraudRingResponse(BaseModel):
     total_nodes: int
 
     total_incidents: int
+
+
+class NetworkSummaryResponse(BaseModel):
+    """
+    Network-wide fraud graph statistics.
+    """
+
+    total_nodes: int
+
+    total_relationships: int
+
+    complaints: int
+
+    phones: int
+
+    upis: int
+
+    emails: int
+
+    organizations: int

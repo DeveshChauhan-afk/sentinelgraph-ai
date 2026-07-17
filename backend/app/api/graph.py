@@ -19,6 +19,7 @@ from app.graph.query_models import (
 )
 from app.graph.query_models import EntityRiskResponse
 from app.graph.query_models import FraudRingResponse
+from app.graph.query_models import NetworkSummaryResponse
 
 router = APIRouter()
 
@@ -122,3 +123,18 @@ async def get_fraud_ring(
     Retrieve the connected fraud ring for an entity.
     """
     return await service.get_fraud_ring(value)
+
+@router.get(
+    "/network/summary",
+    response_model=NetworkSummaryResponse,
+)
+async def get_network_summary(
+    service: GraphQueryService = Depends(
+        get_graph_query_service,
+    ),
+) -> NetworkSummaryResponse:
+    """
+    Retrieve graph-wide statistics.
+    """
+
+    return await service.get_network_summary()
