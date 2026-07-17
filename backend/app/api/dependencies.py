@@ -21,6 +21,7 @@ from app.services.entity_extraction_service import (
     EntityExtractionService,
 )
 from app.services.incident_service import IncidentService
+from app.graph.query_service import GraphQueryService
 
 
 def get_ai_client() -> GeminiClient:
@@ -60,6 +61,17 @@ def get_graph_service(
         repository=repository,
     )
 
+def get_graph_query_service(
+    repository: GraphRepository = Depends(
+        get_graph_repository,
+    ),
+) -> GraphQueryService:
+    """
+    Return the graph query service.
+    """
+    return GraphQueryService(
+        repository=repository,
+    )
 
 def get_incident_repository(
     session: AsyncSession = Depends(get_db),

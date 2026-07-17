@@ -30,12 +30,12 @@ class GraphService:
         repository: GraphRepository,
     ) -> None:
         """
-    Initialize the graph service.
+        Initialize the graph service.
 
-    Args:
-        repository:
-            Graph repository.
-    """
+        Args:
+            repository:
+                Graph repository.
+        """
         self._builder = GraphBuilder()
         self._repository = repository
 
@@ -67,8 +67,7 @@ class GraphService:
             entities=entities,
         )
         logger.debug(
-            "Graph built successfully "
-            "(nodes={}, relationships={}).",
+            "Graph built successfully " "(nodes={}, relationships={}).",
             len(graph.nodes),
             len(graph.relationships),
         )

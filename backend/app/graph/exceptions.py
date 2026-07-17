@@ -47,3 +47,9 @@ class GraphRelationshipError(GraphError):
     """
     Raised when graph relationship creation or validation fails.
     """
+
+
+class GraphEntityNotFoundError(GraphError):
+    """
+    Raised when a graph entity cannot be found.
+    """

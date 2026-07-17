@@ -1,0 +1,96 @@
+"""
+Graph query models.
+"""
+
+from __future__ import annotations
+
+from pydantic import BaseModel
+
+from app.graph.models import GraphNode
+
+
+class GraphNeighborsResponse(BaseModel):
+    """
+    Response containing an entity and its directly connected neighbors.
+    """
+
+    entity: GraphNode
+    neighbors: list[GraphNode]
+
+
+class RelatedIncidentsResponse(BaseModel):
+    """
+    Response containing an entity and all related complaints.
+    """
+
+    entity: GraphNode
+    incidents: list[GraphNode]
+
+
+class RiskMetrics(BaseModel):
+    """
+    Raw graph metrics used for risk analysis.
+    """
+
+    incident_count: int
+    neighbor_count: int
+    phone_count: int
+    upi_count: int
+    email_count: int
+    organization_count: int
+
+
+class EntityRiskResponse(BaseModel):
+    """
+    Risk assessment for a graph entity.
+    """
+
+    entity: GraphNode
+    risk_score: int
+    risk_level: str
+    metrics: RiskMetrics
+    reasons: list[str]
+
+class RiskMetrics(BaseModel):
+    """
+    Risk metrics returned by the API.
+    """
+
+    incident_count: int
+    neighbor_count: int
+    phone_count: int
+    upi_count: int
+    email_count: int
+    organization_count: int
+
+
+class EntityRiskResponse(BaseModel):
+    """
+    Risk analysis response.
+    """
+
+    entity: GraphNode
+
+    risk_score: int
+
+    risk_level: str
+
+    metrics: RiskMetrics
+
+    reasons: list[str]
+    
+
+class FraudRingResponse(BaseModel):
+    """
+    Response containing every node belonging to the same fraud ring.
+    """
+
+    entity: GraphNode
+
+    nodes: list[GraphNode]
+
+    incidents: list[GraphNode]
+
+    total_nodes: int
+
+    total_incidents: int

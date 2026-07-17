@@ -29,6 +29,7 @@ from app.services.entity_extraction_service import (
 )
 from sqlalchemy.ext.asyncio import AsyncSession
 
+
 class IncidentService(BaseService[IncidentRepository]):
     """
     Service responsible for business operations related to incidents.
@@ -61,9 +62,7 @@ class IncidentService(BaseService[IncidentRepository]):
         super().__init__(repository)
         self._session = session
 
-        self._entity_extraction_service = (
-            entity_extraction_service
-        )
+        self._entity_extraction_service = entity_extraction_service
         self._graph_service = graph_service
 
     async def _get_required_incident(
@@ -130,10 +129,8 @@ class IncidentService(BaseService[IncidentRepository]):
         await self._session.commit()
 
         try:
-            entities = (
-                await self._entity_extraction_service.extract_entities(
-                    incident.description,
-                )
+            entities = await self._entity_extraction_service.extract_entities(
+                incident.description,
             )
 
             result = await self._graph_service.build_and_persist(
@@ -165,7 +162,7 @@ class IncidentService(BaseService[IncidentRepository]):
             )
 
         return incident
-    
+
     async def get_incident(self, incident_id: UUID) -> Incident | None:
         """
         Retrieve an incident by its unique identifier.

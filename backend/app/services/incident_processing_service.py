@@ -55,9 +55,7 @@ class IncidentProcessingService:
             graph_service:
                 Fraud graph service.
         """
-        self._entity_extraction_service = (
-            entity_extraction_service
-        )
+        self._entity_extraction_service = entity_extraction_service
         self._graph_service = graph_service
 
     async def process_incident(
@@ -80,10 +78,8 @@ class IncidentProcessingService:
             incident.id,
         )
         try:
-            entities = (
-                await self._entity_extraction_service.extract_entities(
-                    incident.description,
-                )
+            entities = await self._entity_extraction_service.extract_entities(
+                incident.description,
             )
 
             logger.info(

@@ -1,8 +1,124 @@
-from fastapi import APIRouter
+"""
+Graph query API routes.
+"""
+
+from __future__ import annotations
+
+from typing import Annotated
+
+from fastapi import APIRouter, Depends, HTTPException, status
+
+from app.api.dependencies import get_graph_query_service
+from app.graph.exceptions import GraphEntityNotFoundError
+from app.graph.models import GraphNode
+from app.graph.query_service import GraphQueryService
+from app.graph.query_models import GraphNeighborsResponse
+from app.graph.query_models import (
+    GraphNeighborsResponse,
+    RelatedIncidentsResponse,
+)
+from app.graph.query_models import EntityRiskResponse
+from app.graph.query_models import FraudRingResponse
 
 router = APIRouter()
 
 
-@router.get("/")
-async def placeholder():
-    return {"message": "Coming soon"}
+@router.get(
+    "/entity/{value}",
+    response_model=GraphNode,
+    summary="Retrieve a graph entity",
+)
+async def get_entity(
+    value: str,
+    service: Annotated[
+        GraphQueryService,
+        Depends(get_graph_query_service),
+    ],
+) -> GraphNode:
+    """
+    Retrieve a graph entity by its value.
+    """
+    try:
+        return await service.get_entity(value)
+
+    except GraphEntityNotFoundError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=str(exc),
+        ) from exc
+
+@router.get(
+    "/entity/{value}/neighbors",
+    response_model=GraphNeighborsResponse,
+    summary="Retrieve neighboring graph entities",
+)
+async def get_neighbors(
+    value: str,
+    service: Annotated[
+        GraphQueryService,
+        Depends(get_graph_query_service),
+    ],
+) -> GraphNeighborsResponse:
+    """
+    Retrieve an entity together with its directly connected neighbors.
+    """
+    try:
+        return await service.get_neighbors(value)
+
+    except GraphEntityNotFoundError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=str(exc),
+        ) from exc
+
+@router.get(
+    "/entity/{value}/incidents",
+    response_model=RelatedIncidentsResponse,
+    summary="Retrieve related incidents",
+)
+async def get_related_incidents(
+    value: str,
+    service: Annotated[
+        GraphQueryService,
+        Depends(get_graph_query_service),
+    ],
+) -> RelatedIncidentsResponse:
+    """
+    Retrieve all complaint nodes connected to an entity.
+    """
+    try:
+        return await service.get_related_incidents(value)
+
+    except GraphEntityNotFoundError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=str(exc),
+        ) from exc
+
+@router.get(
+    "/entity/{value}/risk",
+    response_model=EntityRiskResponse,
+)
+async def get_entity_risk(
+    value: str,
+    service: GraphQueryService = Depends(get_graph_query_service),
+) -> EntityRiskResponse:
+    """
+    Retrieve risk assessment for a graph entity.
+    """
+    return await service.get_entity_risk(value)
+
+@router.get(
+    "/entity/{value}/ring",
+    response_model=FraudRingResponse,
+)
+async def get_fraud_ring(
+    value: str,
+    service: GraphQueryService = Depends(
+        get_graph_query_service,
+    ),
+) -> FraudRingResponse:
+    """
+    Retrieve the connected fraud ring for an entity.
+    """
+    return await service.get_fraud_ring(value)
