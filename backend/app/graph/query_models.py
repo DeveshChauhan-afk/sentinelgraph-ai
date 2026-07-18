@@ -130,3 +130,14 @@ class TopRiskEntityResponse(BaseModel):
     risk_score: int
 
     risk_level: str
+
+class PathResponse(BaseModel):
+    """
+    API response representing the shortest path.
+    """
+
+    found: bool
+
+    length: int
+
+    nodes: list[GraphNode]

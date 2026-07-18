@@ -80,3 +80,14 @@ class TopRiskEntityResult(BaseModel):
     incident_count: int
 
     neighbor_count: int
+
+class PathResult(BaseModel):
+    """
+    Repository result representing the shortest path.
+    """
+
+    found: bool
+
+    length: int
+
+    nodes: list[GraphNode]

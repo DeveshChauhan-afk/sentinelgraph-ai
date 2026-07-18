@@ -21,6 +21,7 @@ from app.graph.query_models import (
 from app.graph.query_models import EntityRiskResponse
 from app.graph.query_models import FraudRingResponse
 from app.graph.query_models import NetworkSummaryResponse
+from app.graph.query_models import PathResponse
 
 router = APIRouter()
 
@@ -159,3 +160,23 @@ async def get_top_risk_entities(
     """
 
     return await service.get_top_risk_entities(limit)
+
+@router.get(
+    "/path",
+    response_model=PathResponse,
+)
+async def get_shortest_path(
+    source: str,
+    target: str,
+    service: GraphQueryService = Depends(
+        get_graph_query_service,
+    ),
+) -> PathResponse:
+    """
+    Find the shortest path between two graph entities.
+    """
+
+    return await service.get_shortest_path(
+        source,
+        target,
+    )

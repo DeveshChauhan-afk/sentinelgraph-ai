@@ -27,6 +27,7 @@ from app.graph.query_models import (
 )
 from app.graph.query_models import FraudRingResponse
 from app.graph.query_models import NetworkSummaryResponse
+from app.graph.query_models import PathResponse
 
 class GraphQueryService:
     """
@@ -388,3 +389,36 @@ class GraphQueryService:
             )
 
         return response
+    
+    async def get_shortest_path(
+        self,
+        source: str,
+        target: str,
+    ) -> PathResponse:
+        """
+        Retrieve the shortest path between two entities.
+        """
+
+        logger.info(
+            "Retrieving shortest path between '{}' and '{}'.",
+            source,
+            target,
+        )
+
+        result = await self._repository.find_shortest_path(
+            source,
+            target,
+        )
+
+        if result is None:
+            return PathResponse(
+                found=False,
+                length=0,
+                nodes=[],
+            )
+
+        return PathResponse(
+            found=result.found,
+            length=result.length,
+            nodes=result.nodes,
+        )

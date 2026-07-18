@@ -15,3 +15,36 @@ Status: ONLINE
 2026-07-18 17:23:35.236 | INFO     | neo4j:disconnect_neo4j:54 - Neo4j connection closed.
 2026-07-18 17:23:35.237 | INFO     | events:shutdown:25 - SentinelGraph AI shutting down...
 2026-07-18 17:23:35.237 | INFO     | events:shutdown:26 - Shutdown complete.
+2026-07-18 17:27:28.407 | INFO     | logger:setup_logger:65 - Logger initialized.
+2026-07-18 17:27:28.408 | INFO     | neo4j:connect_neo4j:26 - Connecting to Neo4j...
+2026-07-18 17:27:29.874 | SUCCESS  | neo4j:connect_neo4j:38 - Connected to Neo4j.
+2026-07-18 17:27:29.875 | INFO     | events:startup:18 - 
+==================================================
+SentinelGraph AI - Digital Public Safety Platform
+Status: ONLINE
+==================================================
+
+2026-07-18 17:27:29.876 | INFO     | events:startup:19 - Configuration validation complete.
+2026-07-18 17:27:29.877 | INFO     | events:startup:20 - Application ready.
+2026-07-18 17:27:33.090 | INFO     | middleware:dispatch:24 - RID: 2291b75c-c2c1-43f8-8407-374745624097 | GET /docs | Status: 200 | Duration: 0.74 ms | Client: 127.0.0.1
+2026-07-18 17:27:33.550 | INFO     | middleware:dispatch:24 - RID: 80fe06b1-5fbe-4263-a2b0-a6500e474e76 | GET /api/v1/openapi.json | Status: 200 | Duration: 137.61 ms | Client: 127.0.0.1
+2026-07-18 17:28:16.804 | INFO     | query_service:get_shortest_path:402 - Retrieving shortest path between '+919999999999' and 'abc@oksbi'.
+2026-07-18 17:28:17.113 | INFO     | middleware:dispatch:24 - RID: dda376ac-b5cc-4d9e-895c-d92e4ddc9324 | GET /api/v1/graph/path | Status: 200 | Duration: 312.23 ms | Client: 127.0.0.1
+2026-07-18 17:30:16.239 | INFO     | incident_service:create_incident:114 - Creating incident with case reference: TEST-SHORTEST-PATH-001
+2026-07-18 17:30:16.259 | INFO     | entity_extraction_service:extract_entities:41 - Starting entity extraction.
+2026-07-18 17:30:16.259 | INFO     | client:generate_content:83 - Sending request to Gemini (model=gemini-flash-latest, prompt_length=1052)
+2026-07-18 17:30:20.497 | INFO     | client:generate_content:106 - Gemini response received (duration=4.24s, response_length=450)
+2026-07-18 17:30:20.499 | INFO     | entity_extraction_service:extract_entities:59 - Entity extraction completed successfully.
+2026-07-18 17:30:20.500 | INFO     | service:build_and_persist:60 - Building fraud intelligence graph for complaint '777c54b0-4ef9-4112-9e73-acfe9bc3fd57'.
+2026-07-18 17:30:20.500 | INFO     | repository:save_graph:96 - Persisting graph (nodes=5, relationships=4).
+2026-07-18 17:30:23.012 | SUCCESS  | repository:save_graph:119 - Graph persisted successfully (2511.90 ms).
+2026-07-18 17:30:23.015 | SUCCESS  | service:build_and_persist:79 - Fraud intelligence graph persisted for complaint '777c54b0-4ef9-4112-9e73-acfe9bc3fd57' (nodes=5, relationships=4, 2511.90 ms).
+2026-07-18 17:30:23.016 | INFO     | incident_service:create_incident:141 - Graph persisted for incident '777c54b0-4ef9-4112-9e73-acfe9bc3fd57' (nodes=5, relationships=4, 2511.90 ms).
+2026-07-18 17:30:23.022 | INFO     | middleware:dispatch:24 - RID: 84610378-e22d-4beb-b0ad-a37e106302b4 | POST /api/v1/complaints/ | Status: 201 | Duration: 8002.97 ms | Client: 127.0.0.1
+2026-07-18 17:31:01.947 | INFO     | query_service:get_shortest_path:402 - Retrieving shortest path between '+919876543210' and 'abc@oksbi'.
+2026-07-18 17:31:02.810 | INFO     | middleware:dispatch:24 - RID: ddc57d9e-a0bb-4d7a-b885-d1750f19955b | GET /api/v1/graph/path | Status: 200 | Duration: 864.30 ms | Client: 127.0.0.1
+2026-07-18 17:33:46.782 | INFO     | query_service:get_shortest_path:402 - Retrieving shortest path between '+919876543210' and 'fraud.sbi@oksbi'.
+2026-07-18 17:33:47.697 | INFO     | middleware:dispatch:24 - RID: 96850814-0a9c-46ae-a95c-d0515fd9ceb8 | GET /api/v1/graph/path | Status: 200 | Duration: 916.05 ms | Client: 127.0.0.1
+2026-07-18 17:35:11.141 | INFO     | neo4j:disconnect_neo4j:54 - Neo4j connection closed.
+2026-07-18 17:35:11.142 | INFO     | events:shutdown:25 - SentinelGraph AI shutting down...
+2026-07-18 17:35:11.143 | INFO     | events:shutdown:26 - Shutdown complete.

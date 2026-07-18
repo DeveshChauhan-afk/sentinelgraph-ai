@@ -42,6 +42,7 @@ from app.graph.query_results import (
 )
 from app.graph.query_results import FraudRingResult
 from app.graph.query_results import NetworkSummaryResult
+from app.graph.query_results import PathResult
 
 class GraphRepository:
     """
@@ -1117,3 +1118,78 @@ class GraphRepository:
             raise GraphConnectionError(
                 "Neo4j connection failed.",
             ) from exc
+        
+
+    async def find_shortest_path(
+        self,
+        source: str,
+        target: str,
+    ) -> PathResult | None:
+        """
+        Find the shortest path between two entities.
+        """
+
+        logger.debug(
+            "Finding shortest path from '{}' to '{}'.",
+            source,
+            target,
+        )
+
+        query = """
+        MATCH (source {value: $source})
+        MATCH (target {value: $target})
+
+        MATCH path = shortestPath(
+            (source)-[*..10]-(target)
+        )
+
+        RETURN
+            nodes(path) AS nodes
+        """
+
+        try:
+            async with self._driver.session() as session:
+                result = await session.run(
+                    query,
+                    source=source,
+                    target=target,
+                )
+
+                record = await result.single()
+
+        except Neo4jError as exc:
+            logger.exception(
+                "Shortest path query failed.",
+            )
+
+            raise GraphQueryError(
+                "Failed to retrieve shortest path.",
+            ) from exc
+
+        except Exception as exc:
+            logger.exception(
+                "Neo4j connection failed.",
+            )
+
+            raise GraphConnectionError(
+                "Neo4j connection failed.",
+            ) from exc
+
+        if record is None:
+            return None
+
+        graph_nodes = []
+
+        for node in record["nodes"]:
+            graph_nodes.append(
+                self._map_node(
+                    node,
+                    list(node.labels),
+                )
+            )
+
+        return PathResult(
+            found=True,
+            length=len(graph_nodes) - 1,
+            nodes=graph_nodes,
+        )
