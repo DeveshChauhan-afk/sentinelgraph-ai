@@ -48,3 +48,20 @@ Status: ONLINE
 2026-07-18 17:35:11.141 | INFO     | neo4j:disconnect_neo4j:54 - Neo4j connection closed.
 2026-07-18 17:35:11.142 | INFO     | events:shutdown:25 - SentinelGraph AI shutting down...
 2026-07-18 17:35:11.143 | INFO     | events:shutdown:26 - Shutdown complete.
+2026-07-18 17:38:00.924 | INFO     | logger:setup_logger:65 - Logger initialized.
+2026-07-18 17:38:00.924 | INFO     | neo4j:connect_neo4j:26 - Connecting to Neo4j...
+2026-07-18 17:38:02.428 | SUCCESS  | neo4j:connect_neo4j:38 - Connected to Neo4j.
+2026-07-18 17:38:02.429 | INFO     | events:startup:18 - 
+==================================================
+SentinelGraph AI - Digital Public Safety Platform
+Status: ONLINE
+==================================================
+
+2026-07-18 17:38:02.429 | INFO     | events:startup:19 - Configuration validation complete.
+2026-07-18 17:38:02.430 | INFO     | events:startup:20 - Application ready.
+2026-07-18 17:38:06.778 | INFO     | middleware:dispatch:24 - RID: 12369c15-e17d-445d-8d77-33c7e8cfba76 | GET /docs | Status: 200 | Duration: 0.70 ms | Client: 127.0.0.1
+2026-07-18 17:38:07.028 | INFO     | middleware:dispatch:24 - RID: 2c60c236-12fd-43fc-b467-44fd250d3359 | GET /api/v1/openapi.json | Status: 200 | Duration: 94.12 ms | Client: 127.0.0.1
+2026-07-18 17:38:26.791 | INFO     | middleware:dispatch:24 - RID: 79927c14-41b6-492a-a48e-7b76bd13d174 | GET /api/v1/graph/entity/+919876543210/shared | Status: 200 | Duration: 270.08 ms | Client: 127.0.0.1
+2026-07-18 17:39:36.509 | INFO     | neo4j:disconnect_neo4j:54 - Neo4j connection closed.
+2026-07-18 17:39:36.509 | INFO     | events:shutdown:25 - SentinelGraph AI shutting down...
+2026-07-18 17:39:36.510 | INFO     | events:shutdown:26 - Shutdown complete.

@@ -28,6 +28,7 @@ from app.graph.query_models import (
 from app.graph.query_models import FraudRingResponse
 from app.graph.query_models import NetworkSummaryResponse
 from app.graph.query_models import PathResponse
+from app.graph.query_models import SharedEntityResponse
 
 class GraphQueryService:
     """
@@ -421,4 +422,27 @@ class GraphQueryService:
             found=result.found,
             length=result.length,
             nodes=result.nodes,
+        )
+    
+    async def get_shared_entity(
+        self,
+        value: str,
+    ) -> SharedEntityResponse:
+        """
+        Retrieve all complaints connected to an entity.
+        """
+
+        result = await self._repository.find_shared_entity(
+            value,
+        )
+
+        if result is None:
+            raise GraphEntityNotFoundError(
+                f"Entity '{value}' not found."
+            )
+
+        return SharedEntityResponse(
+            entity=result.entity,
+            complaints=result.complaints,
+            complaint_count=len(result.complaints),
         )

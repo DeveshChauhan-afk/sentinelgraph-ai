@@ -22,6 +22,7 @@ from app.graph.query_models import EntityRiskResponse
 from app.graph.query_models import FraudRingResponse
 from app.graph.query_models import NetworkSummaryResponse
 from app.graph.query_models import PathResponse
+from app.graph.query_models import SharedEntityResponse
 
 router = APIRouter()
 
@@ -180,3 +181,22 @@ async def get_shortest_path(
         source,
         target,
     )
+
+@router.get(
+    "/entity/{value}/shared",
+    response_model=SharedEntityResponse,
+)
+async def get_shared_entity(
+    value: str,
+    service: GraphQueryService = Depends(
+        get_graph_query_service,
+    ),
+) -> SharedEntityResponse:
+    """
+    Find all complaints sharing the specified entity.
+    """
+
+    return await service.get_shared_entity(
+        value,
+    )
+

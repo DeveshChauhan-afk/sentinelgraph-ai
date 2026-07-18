@@ -91,3 +91,12 @@ class PathResult(BaseModel):
     length: int
 
     nodes: list[GraphNode]
+
+class SharedEntityResult(BaseModel):
+    """
+    Repository result for shared entity analysis.
+    """
+
+    entity: GraphNode
+
+    complaints: list[GraphNode]

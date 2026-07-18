@@ -141,3 +141,14 @@ class PathResponse(BaseModel):
     length: int
 
     nodes: list[GraphNode]
+
+class SharedEntityResponse(BaseModel):
+    """
+    Shared entity analysis response.
+    """
+
+    entity: GraphNode
+
+    complaints: list[GraphNode]
+
+    complaint_count: int

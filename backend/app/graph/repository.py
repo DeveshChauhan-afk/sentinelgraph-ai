@@ -43,6 +43,7 @@ from app.graph.query_results import (
 from app.graph.query_results import FraudRingResult
 from app.graph.query_results import NetworkSummaryResult
 from app.graph.query_results import PathResult
+from app.graph.query_results import SharedEntityResult
 
 class GraphRepository:
     """
@@ -1192,4 +1193,72 @@ class GraphRepository:
             found=True,
             length=len(graph_nodes) - 1,
             nodes=graph_nodes,
+        )
+    
+
+    async def find_shared_entity(
+        self,
+        value: str,
+    ) -> SharedEntityResult | None:
+        """
+        Find all complaints connected to an entity.
+        """
+
+        logger.debug(
+            "Finding complaints sharing entity '{}'.",
+            value,
+        )
+
+        query = """
+        MATCH (entity {value: $value})
+
+        OPTIONAL MATCH
+            (entity)<-[:MENTIONS]-(complaint:Complaint)
+
+        RETURN
+            entity,
+            labels(entity) AS labels,
+            collect(DISTINCT complaint) AS complaints
+        """
+
+        try:
+            async with self._driver.session() as session:
+                result = await session.run(
+                    query,
+                    value=value,
+                )
+
+                record = await result.single()
+
+        except Neo4jError as exc:
+            logger.exception("Shared entity query failed.")
+
+            raise GraphQueryError(
+                "Failed to retrieve shared entity analysis.",
+            ) from exc
+
+        except Exception as exc:
+            logger.exception("Neo4j connection failed.")
+
+            raise GraphConnectionError(
+                "Neo4j connection failed.",
+            ) from exc
+
+        if record is None:
+            return None
+
+        entity = self._map_node(
+            record["entity"],
+            record["labels"],
+        )
+
+        complaints = [
+            self._map_node(node, ["Complaint"])
+            for node in record["complaints"]
+            if node is not None
+        ]
+
+        return SharedEntityResult(
+            entity=entity,
+            complaints=complaints,
         )
