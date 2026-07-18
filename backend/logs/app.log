@@ -5172,3 +5172,296 @@ Status: ONLINE
 2026-07-18 23:00:45.026 | INFO     | neo4j:disconnect_neo4j:54 - Neo4j connection closed.
 2026-07-18 23:00:45.027 | INFO     | events:shutdown:25 - SentinelGraph AI shutting down...
 2026-07-18 23:00:45.027 | INFO     | events:shutdown:26 - Shutdown complete.
+2026-07-18 23:11:32.597 | INFO     | logger:setup_logger:65 - Logger initialized.
+2026-07-18 23:11:32.599 | INFO     | neo4j:connect_neo4j:26 - Connecting to Neo4j...
+2026-07-18 23:11:34.060 | SUCCESS  | neo4j:connect_neo4j:38 - Connected to Neo4j.
+2026-07-18 23:11:34.061 | INFO     | events:startup:18 - 
+==================================================
+SentinelGraph AI - Digital Public Safety Platform
+Status: ONLINE
+==================================================
+
+2026-07-18 23:11:34.062 | INFO     | events:startup:19 - Configuration validation complete.
+2026-07-18 23:11:34.063 | INFO     | events:startup:20 - Application ready.
+2026-07-18 23:11:51.424 | INFO     | middleware:dispatch:24 - RID: 735474c9-b3ae-4ab6-811a-89fa1a22a6c4 | GET / | Status: 404 | Duration: 58.20 ms | Client: 127.0.0.1
+2026-07-18 23:11:54.601 | INFO     | middleware:dispatch:24 - RID: f95ddb79-8753-4515-b96c-f7d28a441801 | GET /docs | Status: 200 | Duration: 0.56 ms | Client: 127.0.0.1
+2026-07-18 23:11:54.894 | INFO     | middleware:dispatch:24 - RID: 9381e745-08df-4ca7-97fb-a5a92c07451e | GET /api/v1/openapi.json | Status: 200 | Duration: 112.76 ms | Client: 127.0.0.1
+2026-07-18 23:12:15.424 | INFO     | investigation_service:investigate:117 - Starting investigation for '+919876543210'.
+2026-07-18 23:12:15.425 | INFO     | investigation_service:build_evidence:66 - Building investigation evidence for '+919876543210'.
+2026-07-18 23:12:15.425 | INFO     | query_service:get_neighbors:108 - Retrieving neighbors for graph entity '+919876543210'.
+2026-07-18 23:12:15.662 | INFO     | query_service:get_related_incidents:148 - Retrieving related incidents for graph entity '+919876543210'.
+2026-07-18 23:12:15.751 | INFO     | query_service:get_entity_risk:190 - Calculating risk for graph entity '+919876543210'.
+2026-07-18 23:12:15.959 | INFO     | query_service:get_fraud_ring:280 - Retrieving fraud ring for '+919876543210'.
+2026-07-18 23:12:16.150 | INFO     | investigation_service:build_evidence:95 - Successfully collected investigation evidence for '+919876543210'.
+2026-07-18 23:12:16.150 | INFO     | client:generate_content:86 - Sending request to Gemini (model=gemini-3.5-flash, prompt_length=3225)
+2026-07-18 23:12:24.279 | INFO     | client:generate_content:103 - Finish reason: FinishReason.STOP
+2026-07-18 23:12:24.280 | INFO     | client:generate_content:120 - Gemini response received (duration=8.13s, response_length=1485)
+2026-07-18 23:12:24.281 | INFO     | investigation_service:investigate:168 - RAW GEMINI RESPONSE:
+{"summary":"The target entity, Phone +919876543210, is assessed at a MEDIUM risk level (Risk Score: 50) and is linked to 2 unknown complaints. The entity is part of a larger fraud ring of size 7, which includes spoofed SBI-related entities (UPIs, emails, and organizations), indicating organized fraudulent activity.","risk_level":"MEDIUM","confidence":80,"findings":["The target phone number +919876543210 is linked to 2 complaints.","The target is part of an organized fraud ring consisting of 7 members and 2 incidents.","The fraud ring contains SBI-themed entities, including UPI handles 'fraud.sbi@oksbi' and 'abc123@oksbi', emails 'support@sbi-verification.com' and 'fraud@sbi-help.com', and organizations 'SBI Bank' and 'SBI'.","The complaints associated with the target and the fraud ring are classified as 'Unknown' in the provided graph evidence."],"key_entities":["Phone: +919876543210","UPI: fraud.sbi@oksbi","Email: support@sbi-verification.com","Organization: SBI Bank","UPI: abc123@oksbi","Email: fraud@sbi-help.com","Organization: SBI"],"recommended_actions":["Investigate the 2 unknown complaints linked to the target phone number +919876543210.","Flag and monitor the associated UPI handles (fraud.sbi@oksbi, abc123@oksbi) and email addresses (support@sbi-verification.com, fraud@sbi-help.com) for potential spoofing of State Bank of India (SBI).","Coordinate with SBI Bank security teams regarding the unauthorized use of their brand in the identified fraud ring."]}
+2026-07-18 23:12:24.281 | INFO     | investigation_service:investigate:182 - Investigation completed for '+919876543210'.
+2026-07-18 23:12:24.282 | INFO     | investigation_service:investigate:187 - Creating InvestigationResponse: target_type=InvestigationTargetType.PHONE target_value=+919876543210
+2026-07-18 23:12:24.282 | INFO     | performance:summary:33 - 
+2026-07-18 23:12:24.283 | INFO     | performance:summary:34 - =======================================================
+2026-07-18 23:12:24.283 | INFO     | performance:summary:35 - Investigation Performance
+2026-07-18 23:12:24.284 | INFO     | performance:summary:36 - =======================================================
+2026-07-18 23:12:24.284 | INFO     | performance:summary:39 - Cache               :     0.01 ms
+2026-07-18 23:12:24.285 | INFO     | performance:summary:39 - Graph Queries       :   725.69 ms
+2026-07-18 23:12:24.285 | INFO     | performance:summary:39 - Prompt              :     0.10 ms
+2026-07-18 23:12:24.285 | INFO     | performance:summary:39 - Gemini              :  8130.19 ms
+2026-07-18 23:12:24.290 | INFO     | performance:summary:39 - Parser              :     0.29 ms
+2026-07-18 23:12:24.292 | INFO     | performance:summary:41 - -------------------------------------------------------
+2026-07-18 23:12:24.293 | INFO     | performance:summary:42 - Total               :  8858.10 ms
+2026-07-18 23:12:24.293 | INFO     | performance:summary:43 - =======================================================
+2026-07-18 23:12:24.298 | INFO     | middleware:dispatch:24 - RID: 57f885db-3435-410b-ac1e-82850b8ccbac | POST /api/v1/investigation/ | Status: 200 | Duration: 9657.34 ms | Client: 127.0.0.1
+2026-07-18 23:12:30.111 | INFO     | investigation_service:investigate:117 - Starting investigation for '+919876543210'.
+2026-07-18 23:12:30.111 | INFO     | investigation_service:investigate:134 - Returning cached investigation for 'phone:+919876543210'.
+2026-07-18 23:12:30.112 | INFO     | performance:summary:33 - 
+2026-07-18 23:12:30.112 | INFO     | performance:summary:34 - =======================================================
+2026-07-18 23:12:30.112 | INFO     | performance:summary:35 - Investigation Performance
+2026-07-18 23:12:30.113 | INFO     | performance:summary:36 - =======================================================
+2026-07-18 23:12:30.113 | INFO     | performance:summary:39 - Cache               :     0.02 ms
+2026-07-18 23:12:30.113 | INFO     | performance:summary:41 - -------------------------------------------------------
+2026-07-18 23:12:30.113 | INFO     | performance:summary:42 - Total               :     0.79 ms
+2026-07-18 23:12:30.114 | INFO     | performance:summary:43 - =======================================================
+2026-07-18 23:12:30.115 | INFO     | middleware:dispatch:24 - RID: 5081e8bc-60e1-485d-bec5-fc65011b3123 | POST /api/v1/investigation/ | Status: 200 | Duration: 613.70 ms | Client: 127.0.0.1
+2026-07-18 23:20:18.347 | INFO     | neo4j:disconnect_neo4j:54 - Neo4j connection closed.
+2026-07-18 23:20:18.348 | INFO     | events:shutdown:25 - SentinelGraph AI shutting down...
+2026-07-18 23:20:18.349 | INFO     | events:shutdown:26 - Shutdown complete.
+2026-07-18 23:20:26.367 | INFO     | logger:setup_logger:65 - Logger initialized.
+2026-07-18 23:20:26.368 | INFO     | neo4j:connect_neo4j:26 - Connecting to Neo4j...
+2026-07-18 23:20:27.867 | SUCCESS  | neo4j:connect_neo4j:38 - Connected to Neo4j.
+2026-07-18 23:20:27.867 | INFO     | events:startup:18 - 
+==================================================
+SentinelGraph AI - Digital Public Safety Platform
+Status: ONLINE
+==================================================
+
+2026-07-18 23:20:27.868 | INFO     | events:startup:19 - Configuration validation complete.
+2026-07-18 23:20:27.868 | INFO     | events:startup:20 - Application ready.
+2026-07-18 23:21:25.130 | INFO     | neo4j:disconnect_neo4j:54 - Neo4j connection closed.
+2026-07-18 23:21:25.131 | INFO     | events:shutdown:25 - SentinelGraph AI shutting down...
+2026-07-18 23:21:25.132 | INFO     | events:shutdown:26 - Shutdown complete.
+2026-07-18 23:21:33.574 | INFO     | logger:setup_logger:65 - Logger initialized.
+2026-07-18 23:21:33.575 | INFO     | neo4j:connect_neo4j:26 - Connecting to Neo4j...
+2026-07-18 23:21:35.150 | SUCCESS  | neo4j:connect_neo4j:38 - Connected to Neo4j.
+2026-07-18 23:21:35.151 | INFO     | events:startup:18 - 
+==================================================
+SentinelGraph AI - Digital Public Safety Platform
+Status: ONLINE
+==================================================
+
+2026-07-18 23:21:35.152 | INFO     | events:startup:19 - Configuration validation complete.
+2026-07-18 23:21:35.154 | INFO     | events:startup:20 - Application ready.
+2026-07-18 23:21:35.422 | INFO     | neo4j:disconnect_neo4j:54 - Neo4j connection closed.
+2026-07-18 23:21:35.423 | INFO     | events:shutdown:25 - SentinelGraph AI shutting down...
+2026-07-18 23:21:35.423 | INFO     | events:shutdown:26 - Shutdown complete.
+2026-07-18 23:21:43.489 | INFO     | logger:setup_logger:65 - Logger initialized.
+2026-07-18 23:21:43.491 | INFO     | neo4j:connect_neo4j:26 - Connecting to Neo4j...
+2026-07-18 23:21:45.290 | SUCCESS  | neo4j:connect_neo4j:38 - Connected to Neo4j.
+2026-07-18 23:21:45.297 | INFO     | events:startup:18 - 
+==================================================
+SentinelGraph AI - Digital Public Safety Platform
+Status: ONLINE
+==================================================
+
+2026-07-18 23:21:45.301 | INFO     | events:startup:19 - Configuration validation complete.
+2026-07-18 23:21:45.309 | INFO     | events:startup:20 - Application ready.
+2026-07-18 23:22:30.941 | INFO     | neo4j:disconnect_neo4j:54 - Neo4j connection closed.
+2026-07-18 23:22:30.941 | INFO     | events:shutdown:25 - SentinelGraph AI shutting down...
+2026-07-18 23:22:30.942 | INFO     | events:shutdown:26 - Shutdown complete.
+2026-07-18 23:22:36.693 | INFO     | logger:setup_logger:65 - Logger initialized.
+2026-07-18 23:22:36.694 | INFO     | neo4j:connect_neo4j:26 - Connecting to Neo4j...
+2026-07-18 23:22:38.227 | SUCCESS  | neo4j:connect_neo4j:38 - Connected to Neo4j.
+2026-07-18 23:22:38.231 | INFO     | events:startup:18 - 
+==================================================
+SentinelGraph AI - Digital Public Safety Platform
+Status: ONLINE
+==================================================
+
+2026-07-18 23:22:38.240 | INFO     | events:startup:19 - Configuration validation complete.
+2026-07-18 23:22:38.243 | INFO     | events:startup:20 - Application ready.
+2026-07-18 23:22:56.944 | INFO     | neo4j:disconnect_neo4j:54 - Neo4j connection closed.
+2026-07-18 23:22:56.946 | INFO     | events:shutdown:25 - SentinelGraph AI shutting down...
+2026-07-18 23:22:56.947 | INFO     | events:shutdown:26 - Shutdown complete.
+2026-07-18 23:23:01.688 | INFO     | logger:setup_logger:65 - Logger initialized.
+2026-07-18 23:23:01.689 | INFO     | neo4j:connect_neo4j:26 - Connecting to Neo4j...
+2026-07-18 23:23:03.111 | SUCCESS  | neo4j:connect_neo4j:38 - Connected to Neo4j.
+2026-07-18 23:23:03.112 | INFO     | events:startup:18 - 
+==================================================
+SentinelGraph AI - Digital Public Safety Platform
+Status: ONLINE
+==================================================
+
+2026-07-18 23:23:03.112 | INFO     | events:startup:19 - Configuration validation complete.
+2026-07-18 23:23:03.112 | INFO     | events:startup:20 - Application ready.
+2026-07-18 23:23:03.374 | INFO     | neo4j:disconnect_neo4j:54 - Neo4j connection closed.
+2026-07-18 23:23:03.375 | INFO     | events:shutdown:25 - SentinelGraph AI shutting down...
+2026-07-18 23:23:03.376 | INFO     | events:shutdown:26 - Shutdown complete.
+2026-07-18 23:23:09.357 | INFO     | logger:setup_logger:65 - Logger initialized.
+2026-07-18 23:23:09.362 | INFO     | neo4j:connect_neo4j:26 - Connecting to Neo4j...
+2026-07-18 23:23:11.108 | SUCCESS  | neo4j:connect_neo4j:38 - Connected to Neo4j.
+2026-07-18 23:23:11.109 | INFO     | events:startup:18 - 
+==================================================
+SentinelGraph AI - Digital Public Safety Platform
+Status: ONLINE
+==================================================
+
+2026-07-18 23:23:11.111 | INFO     | events:startup:19 - Configuration validation complete.
+2026-07-18 23:23:11.112 | INFO     | events:startup:20 - Application ready.
+2026-07-18 23:26:08.114 | INFO     | neo4j:disconnect_neo4j:54 - Neo4j connection closed.
+2026-07-18 23:26:08.115 | INFO     | events:shutdown:25 - SentinelGraph AI shutting down...
+2026-07-18 23:26:08.116 | INFO     | events:shutdown:26 - Shutdown complete.
+2026-07-18 23:26:13.907 | INFO     | logger:setup_logger:65 - Logger initialized.
+2026-07-18 23:26:13.909 | INFO     | neo4j:connect_neo4j:26 - Connecting to Neo4j...
+2026-07-18 23:26:15.306 | SUCCESS  | neo4j:connect_neo4j:38 - Connected to Neo4j.
+2026-07-18 23:26:15.318 | INFO     | events:startup:18 - 
+==================================================
+SentinelGraph AI - Digital Public Safety Platform
+Status: ONLINE
+==================================================
+
+2026-07-18 23:26:15.355 | INFO     | events:startup:19 - Configuration validation complete.
+2026-07-18 23:26:15.358 | INFO     | events:startup:20 - Application ready.
+2026-07-18 23:26:15.684 | INFO     | neo4j:disconnect_neo4j:54 - Neo4j connection closed.
+2026-07-18 23:26:15.686 | INFO     | events:shutdown:25 - SentinelGraph AI shutting down...
+2026-07-18 23:26:15.687 | INFO     | events:shutdown:26 - Shutdown complete.
+2026-07-18 23:26:20.623 | INFO     | logger:setup_logger:65 - Logger initialized.
+2026-07-18 23:26:20.624 | INFO     | neo4j:connect_neo4j:26 - Connecting to Neo4j...
+2026-07-18 23:26:22.279 | SUCCESS  | neo4j:connect_neo4j:38 - Connected to Neo4j.
+2026-07-18 23:26:22.280 | INFO     | events:startup:18 - 
+==================================================
+SentinelGraph AI - Digital Public Safety Platform
+Status: ONLINE
+==================================================
+
+2026-07-18 23:26:22.282 | INFO     | events:startup:19 - Configuration validation complete.
+2026-07-18 23:26:22.283 | INFO     | events:startup:20 - Application ready.
+2026-07-18 23:27:46.912 | INFO     | neo4j:disconnect_neo4j:54 - Neo4j connection closed.
+2026-07-18 23:27:46.913 | INFO     | events:shutdown:25 - SentinelGraph AI shutting down...
+2026-07-18 23:27:46.914 | INFO     | events:shutdown:26 - Shutdown complete.
+2026-07-18 23:28:03.613 | INFO     | logger:setup_logger:65 - Logger initialized.
+2026-07-18 23:28:03.616 | INFO     | neo4j:connect_neo4j:26 - Connecting to Neo4j...
+2026-07-18 23:28:05.185 | SUCCESS  | neo4j:connect_neo4j:38 - Connected to Neo4j.
+2026-07-18 23:28:05.188 | INFO     | events:startup:18 - 
+==================================================
+SentinelGraph AI - Digital Public Safety Platform
+Status: ONLINE
+==================================================
+
+2026-07-18 23:28:05.189 | INFO     | events:startup:19 - Configuration validation complete.
+2026-07-18 23:28:05.191 | INFO     | events:startup:20 - Application ready.
+2026-07-18 23:28:05.454 | INFO     | neo4j:disconnect_neo4j:54 - Neo4j connection closed.
+2026-07-18 23:28:05.455 | INFO     | events:shutdown:25 - SentinelGraph AI shutting down...
+2026-07-18 23:28:05.456 | INFO     | events:shutdown:26 - Shutdown complete.
+2026-07-18 23:28:10.394 | INFO     | logger:setup_logger:65 - Logger initialized.
+2026-07-18 23:28:10.395 | INFO     | neo4j:connect_neo4j:26 - Connecting to Neo4j...
+2026-07-18 23:28:11.753 | SUCCESS  | neo4j:connect_neo4j:38 - Connected to Neo4j.
+2026-07-18 23:28:11.754 | INFO     | events:startup:18 - 
+==================================================
+SentinelGraph AI - Digital Public Safety Platform
+Status: ONLINE
+==================================================
+
+2026-07-18 23:28:11.755 | INFO     | events:startup:19 - Configuration validation complete.
+2026-07-18 23:28:11.756 | INFO     | events:startup:20 - Application ready.
+2026-07-18 23:28:14.612 | INFO     | neo4j:disconnect_neo4j:54 - Neo4j connection closed.
+2026-07-18 23:28:14.627 | INFO     | events:shutdown:25 - SentinelGraph AI shutting down...
+2026-07-18 23:28:14.630 | INFO     | events:shutdown:26 - Shutdown complete.
+2026-07-18 23:28:18.689 | INFO     | logger:setup_logger:65 - Logger initialized.
+2026-07-18 23:28:18.689 | INFO     | neo4j:connect_neo4j:26 - Connecting to Neo4j...
+2026-07-18 23:28:20.149 | SUCCESS  | neo4j:connect_neo4j:38 - Connected to Neo4j.
+2026-07-18 23:28:20.150 | INFO     | events:startup:18 - 
+==================================================
+SentinelGraph AI - Digital Public Safety Platform
+Status: ONLINE
+==================================================
+
+2026-07-18 23:28:20.150 | INFO     | events:startup:19 - Configuration validation complete.
+2026-07-18 23:28:20.151 | INFO     | events:startup:20 - Application ready.
+2026-07-18 23:28:30.569 | INFO     | neo4j:disconnect_neo4j:54 - Neo4j connection closed.
+2026-07-18 23:28:30.570 | INFO     | events:shutdown:25 - SentinelGraph AI shutting down...
+2026-07-18 23:28:30.571 | INFO     | events:shutdown:26 - Shutdown complete.
+2026-07-18 23:28:36.760 | INFO     | logger:setup_logger:65 - Logger initialized.
+2026-07-18 23:28:36.761 | INFO     | neo4j:connect_neo4j:26 - Connecting to Neo4j...
+2026-07-18 23:28:38.410 | SUCCESS  | neo4j:connect_neo4j:38 - Connected to Neo4j.
+2026-07-18 23:28:38.519 | INFO     | events:startup:18 - 
+==================================================
+SentinelGraph AI - Digital Public Safety Platform
+Status: ONLINE
+==================================================
+
+2026-07-18 23:28:38.519 | INFO     | events:startup:19 - Configuration validation complete.
+2026-07-18 23:28:38.519 | INFO     | events:startup:20 - Application ready.
+2026-07-18 23:28:38.915 | INFO     | neo4j:disconnect_neo4j:54 - Neo4j connection closed.
+2026-07-18 23:28:38.916 | INFO     | events:shutdown:25 - SentinelGraph AI shutting down...
+2026-07-18 23:28:38.918 | INFO     | events:shutdown:26 - Shutdown complete.
+2026-07-18 23:28:43.647 | INFO     | logger:setup_logger:65 - Logger initialized.
+2026-07-18 23:28:43.648 | INFO     | neo4j:connect_neo4j:26 - Connecting to Neo4j...
+2026-07-18 23:28:45.118 | SUCCESS  | neo4j:connect_neo4j:38 - Connected to Neo4j.
+2026-07-18 23:28:45.120 | INFO     | events:startup:18 - 
+==================================================
+SentinelGraph AI - Digital Public Safety Platform
+Status: ONLINE
+==================================================
+
+2026-07-18 23:28:45.121 | INFO     | events:startup:19 - Configuration validation complete.
+2026-07-18 23:28:45.128 | INFO     | events:startup:20 - Application ready.
+2026-07-18 23:28:45.963 | INFO     | neo4j:disconnect_neo4j:54 - Neo4j connection closed.
+2026-07-18 23:28:45.964 | INFO     | events:shutdown:25 - SentinelGraph AI shutting down...
+2026-07-18 23:28:45.966 | INFO     | events:shutdown:26 - Shutdown complete.
+2026-07-18 23:28:50.825 | INFO     | logger:setup_logger:65 - Logger initialized.
+2026-07-18 23:28:50.826 | INFO     | neo4j:connect_neo4j:26 - Connecting to Neo4j...
+2026-07-18 23:28:52.361 | SUCCESS  | neo4j:connect_neo4j:38 - Connected to Neo4j.
+2026-07-18 23:28:52.364 | INFO     | events:startup:18 - 
+==================================================
+SentinelGraph AI - Digital Public Safety Platform
+Status: ONLINE
+==================================================
+
+2026-07-18 23:28:52.378 | INFO     | events:startup:19 - Configuration validation complete.
+2026-07-18 23:28:52.378 | INFO     | events:startup:20 - Application ready.
+2026-07-18 23:29:05.069 | INFO     | neo4j:disconnect_neo4j:54 - Neo4j connection closed.
+2026-07-18 23:29:05.072 | INFO     | events:shutdown:25 - SentinelGraph AI shutting down...
+2026-07-18 23:29:05.074 | INFO     | events:shutdown:26 - Shutdown complete.
+2026-07-18 23:29:16.757 | INFO     | logger:setup_logger:65 - Logger initialized.
+2026-07-18 23:29:16.758 | INFO     | neo4j:connect_neo4j:26 - Connecting to Neo4j...
+2026-07-18 23:29:18.396 | SUCCESS  | neo4j:connect_neo4j:38 - Connected to Neo4j.
+2026-07-18 23:29:18.397 | INFO     | events:startup:18 - 
+==================================================
+SentinelGraph AI - Digital Public Safety Platform
+Status: ONLINE
+==================================================
+
+2026-07-18 23:29:18.398 | INFO     | events:startup:19 - Configuration validation complete.
+2026-07-18 23:29:18.399 | INFO     | events:startup:20 - Application ready.
+2026-07-18 23:29:43.789 | INFO     | neo4j:disconnect_neo4j:54 - Neo4j connection closed.
+2026-07-18 23:29:43.790 | INFO     | events:shutdown:25 - SentinelGraph AI shutting down...
+2026-07-18 23:29:43.791 | INFO     | events:shutdown:26 - Shutdown complete.
+2026-07-18 23:29:47.396 | INFO     | logger:setup_logger:65 - Logger initialized.
+2026-07-18 23:29:47.397 | INFO     | neo4j:connect_neo4j:26 - Connecting to Neo4j...
+2026-07-18 23:29:48.931 | SUCCESS  | neo4j:connect_neo4j:38 - Connected to Neo4j.
+2026-07-18 23:29:48.933 | INFO     | events:startup:18 - 
+==================================================
+SentinelGraph AI - Digital Public Safety Platform
+Status: ONLINE
+==================================================
+
+2026-07-18 23:29:48.933 | INFO     | events:startup:19 - Configuration validation complete.
+2026-07-18 23:29:48.934 | INFO     | events:startup:20 - Application ready.
+2026-07-18 23:30:37.601 | INFO     | neo4j:disconnect_neo4j:54 - Neo4j connection closed.
+2026-07-18 23:30:37.603 | INFO     | events:shutdown:25 - SentinelGraph AI shutting down...
+2026-07-18 23:30:37.604 | INFO     | events:shutdown:26 - Shutdown complete.
+2026-07-18 23:30:47.400 | INFO     | logger:setup_logger:65 - Logger initialized.
+2026-07-18 23:30:47.401 | INFO     | neo4j:connect_neo4j:26 - Connecting to Neo4j...
+2026-07-18 23:30:49.247 | SUCCESS  | neo4j:connect_neo4j:38 - Connected to Neo4j.
+2026-07-18 23:30:49.248 | INFO     | events:startup:18 - 
+==================================================
+SentinelGraph AI - Digital Public Safety Platform
+Status: ONLINE
+==================================================
+
+2026-07-18 23:30:49.249 | INFO     | events:startup:19 - Configuration validation complete.
+2026-07-18 23:30:49.250 | INFO     | events:startup:20 - Application ready.
+2026-07-18 23:31:14.320 | INFO     | neo4j:disconnect_neo4j:54 - Neo4j connection closed.
+2026-07-18 23:31:14.321 | INFO     | events:shutdown:25 - SentinelGraph AI shutting down...
+2026-07-18 23:31:14.322 | INFO     | events:shutdown:26 - Shutdown complete.

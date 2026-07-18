@@ -60,6 +60,8 @@ class Settings(BaseSettings):
     LLM_TEMPERATURE: float = Field(default=0.2, ge=0.0, le=2.0)
     LLM_MAX_TOKENS: int = Field(default=2048, ge=1)
 
+    INVESTIGATION_CACHE_TTL: int = 300
+
     @computed_field
     @property
     def DATABASE_URL(self) -> str:

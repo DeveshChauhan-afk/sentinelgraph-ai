@@ -19,6 +19,9 @@ from app.ai.client import GeminiClient
 from app.services.investigation.prompt_builder import PromptBuilder
 from app.services.investigation.report_parser import ReportParser
 from app.services.investigation.cache import investigation_cache
+from app.services.investigation.performance import (
+    InvestigationTimer,
+)
 
 
 
@@ -110,6 +113,7 @@ class InvestigationService:
         Perform a complete Graph-RAG investigation.
         """
 
+        timer = InvestigationTimer()
         logger.info(
             "Starting investigation for '{}'.",
             request.target_value,
@@ -122,37 +126,46 @@ class InvestigationService:
             f"{request.target_type.value}:{request.target_value.strip().lower()}"
         )
 
+        timer.start("Cache")
         cached_response = self._cache.get(cache_key)
+        timer.stop("Cache")
 
         if cached_response is not None:
             logger.info(
                 "Returning cached investigation for '{}'.",
                 cache_key,
             )
+            timer.summary()
             return cached_response
 
         # ------------------------------------------------------------------
         # Build evidence
         # ------------------------------------------------------------------
+        timer.start("Graph Queries")
         evidence = await self.build_evidence(
             request,
         )
+        timer.stop("Graph Queries")
 
         # ------------------------------------------------------------------
         # Build prompt
         # ------------------------------------------------------------------
+        timer.start("Prompt")
         prompt = self._prompt_builder.build(
             evidence,
         )
+        timer.stop("Prompt")
 
         # ------------------------------------------------------------------
         # Query Gemini
         # ------------------------------------------------------------------
+        timer.start("Gemini")
         raw_response = await self._ai_client.generate_content(
             prompt,
         )
+        timer.stop("Gemini")
 
-        logger.info(    
+        logger.debug(    
             "RAW GEMINI RESPONSE:\n{}",
             raw_response,
         )
@@ -160,8 +173,17 @@ class InvestigationService:
         # ------------------------------------------------------------------
         # Parse report
         # ------------------------------------------------------------------
+        timer.start("Parser")
         report = self._report_parser.parse(
             raw_response,
+        )
+        timer.stop("Parser")
+
+        logger.info(
+            "Investigation complete | Risk={} | Confidence={} | Findings={}",
+            report.risk_level,
+            report.confidence,
+            len(report.findings),
         )
 
         logger.info(
@@ -189,5 +211,5 @@ class InvestigationService:
             cache_key,
             response,
         )
-
+        timer.summary()
         return response

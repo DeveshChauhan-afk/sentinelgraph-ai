@@ -11,6 +11,7 @@ from threading import Lock
 from typing import Any
 
 from loguru import logger
+from app.core.config import settings
 
 
 class InvestigationCache:
@@ -22,6 +23,12 @@ class InvestigationCache:
         self._ttl = timedelta(seconds=ttl_seconds)
         self._cache: dict[str, tuple[datetime, Any]] = {}
         self._lock = Lock()
+        self._hits = 0
+        self._misses = 0
+        logger.info(
+            "Investigation cache initialized (TTL={} seconds)",
+            settings.INVESTIGATION_CACHE_TTL,
+        )
 
     def get(self, key: str) -> Any | None:
         """
@@ -31,17 +38,19 @@ class InvestigationCache:
             item = self._cache.get(key)
 
             if item is None:
-                logger.debug("Cache MISS: {}", key)
+                self._misses += 1
+                logger.info("Cache MISS: {}", key)
                 return None
 
             expires_at, value = item
 
             if datetime.utcnow() > expires_at:
-                logger.debug("Cache EXPIRED: {}", key)
+                logger.info("Cache EXPIRED: {}", key)
                 del self._cache[key]
                 return None
-
-            logger.debug("Cache HIT: {}", key)
+            
+            self._hits += 1
+            logger.info("Cache HIT: {}", key)
             return value
 
     def set(self, key: str, value: Any) -> None:
@@ -69,5 +78,14 @@ class InvestigationCache:
             self._cache.clear()
 
             logger.info("Investigation cache cleared.")
-    # Shared singleton cache instance
-investigation_cache = InvestigationCache()
+
+    def stats(self) -> dict[str, int]:
+        return {
+            "hits": self._hits,
+            "misses": self._misses,
+        }
+# Shared singleton cache instance
+
+investigation_cache = InvestigationCache(
+    ttl_seconds=settings.INVESTIGATION_CACHE_TTL,
+)
