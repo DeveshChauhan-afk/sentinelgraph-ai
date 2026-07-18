@@ -114,3 +114,19 @@ class NetworkSummaryResponse(BaseModel):
     emails: int
 
     organizations: int
+
+
+class TopRiskEntityResponse(BaseModel):
+    """
+    Response describing a high-risk entity.
+    """
+
+    entity: GraphNode
+
+    incident_count: int
+
+    neighbor_count: int
+
+    risk_score: int
+
+    risk_level: str

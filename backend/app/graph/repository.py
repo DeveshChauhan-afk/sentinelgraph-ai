@@ -32,6 +32,7 @@ from app.graph.exceptions import GraphQueryError
 from app.graph.query_results import (
     NeighborQueryResult,
     IncidentQueryResult,
+    TopRiskEntityResult,
 )
 
 from app.graph.query_results import (
@@ -1038,3 +1039,81 @@ class GraphRepository:
             emails=record["emails"],
             organizations=record["organizations"],
         )
+    
+    async def get_top_risk_entities(
+        self,
+        limit: int = 10,
+    ) -> list[TopRiskEntityResult]:
+        """
+        Retrieve the highest-risk entities in the graph.
+        """
+
+        logger.debug(
+            "Retrieving top risk entities.",
+        )
+
+        query = """
+        MATCH (entity)
+        WHERE NOT entity:Complaint
+
+        OPTIONAL MATCH (entity)<-[:MENTIONS]-(incident:Complaint)
+
+        WITH
+            entity,
+            count(DISTINCT incident) AS incident_count
+
+        OPTIONAL MATCH (entity)--(neighbor)
+
+        RETURN
+            entity,
+            labels(entity) AS labels,
+            incident_count,
+            count(DISTINCT neighbor) AS neighbor_count
+
+        ORDER BY
+            incident_count DESC,
+            neighbor_count DESC
+
+        LIMIT $limit
+        """
+
+        try:
+            async with self._driver.session() as session:
+                result = await session.run(
+                    query,
+                    limit=limit,
+                )
+
+                entities = []
+
+                async for record in result:
+                    entities.append(
+                        TopRiskEntityResult(
+                            entity=self._map_node(
+                                record["entity"],
+                                record["labels"],
+                            ),
+                            incident_count=record["incident_count"],
+                            neighbor_count=record["neighbor_count"],
+                        )
+                    )
+
+                return entities
+
+        except Neo4jError as exc:
+            logger.exception(
+                "Failed to retrieve top risk entities.",
+            )
+
+            raise GraphQueryError(
+                "Failed to retrieve top risk entities.",
+            ) from exc
+
+        except Exception as exc:
+            logger.exception(
+                "Neo4j connection failed.",
+            )
+
+            raise GraphConnectionError(
+                "Neo4j connection failed.",
+            ) from exc

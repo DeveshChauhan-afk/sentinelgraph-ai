@@ -68,3 +68,15 @@ class NetworkSummaryResult(BaseModel):
     emails: int
 
     organizations: int
+
+
+class TopRiskEntityResult(BaseModel):
+    """
+    Repository result for a high-risk entity.
+    """
+
+    entity: GraphNode
+
+    incident_count: int
+
+    neighbor_count: int

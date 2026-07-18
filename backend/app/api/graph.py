@@ -6,7 +6,7 @@ from __future__ import annotations
 
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Query
 
 from app.api.dependencies import get_graph_query_service
 from app.graph.exceptions import GraphEntityNotFoundError
@@ -16,6 +16,7 @@ from app.graph.query_models import GraphNeighborsResponse
 from app.graph.query_models import (
     GraphNeighborsResponse,
     RelatedIncidentsResponse,
+    TopRiskEntityResponse,
 )
 from app.graph.query_models import EntityRiskResponse
 from app.graph.query_models import FraudRingResponse
@@ -138,3 +139,23 @@ async def get_network_summary(
     """
 
     return await service.get_network_summary()
+
+@router.get(
+    "/network/top-risk",
+    response_model=list[TopRiskEntityResponse],
+)
+async def get_top_risk_entities(
+    limit: int = Query(
+        default=10,
+        ge=1,
+        le=100,
+    ),
+    service: GraphQueryService = Depends(
+        get_graph_query_service,
+    ),
+) -> list[TopRiskEntityResponse]:
+    """
+    Retrieve the highest-risk entities in the graph.
+    """
+
+    return await service.get_top_risk_entities(limit)

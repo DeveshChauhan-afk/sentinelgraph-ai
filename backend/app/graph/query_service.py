@@ -18,6 +18,7 @@ from app.graph.query_models import RelatedIncidentsResponse
 from app.graph.query_models import (
     GraphNeighborsResponse,
     RelatedIncidentsResponse,
+    TopRiskEntityResponse,
 )
 
 from app.graph.query_models import (
@@ -336,3 +337,54 @@ class GraphQueryService:
             emails=result.emails,
             organizations=result.organizations,
         )
+    
+    def _calculate_risk(
+        self,
+        incident_count: int,
+        neighbor_count: int,
+    ) -> tuple[int, str]:
+        score = min(incident_count * 25, 50)
+
+        if neighbor_count > 3:
+            score += 20
+
+        score = min(score, 100)
+
+        if score >= 70:
+            level = "HIGH"
+        elif score >= 40:
+            level = "MEDIUM"
+        else:
+            level = "LOW"
+
+        return score, level
+    
+    async def get_top_risk_entities(
+        self,
+        limit: int = 10,
+    ) -> list[TopRiskEntityResponse]:
+        """
+        Retrieve the highest-risk entities.
+        """
+
+        results = await self._repository.get_top_risk_entities(limit)
+
+        response = []
+
+        for result in results:
+            score, level = self._calculate_risk(
+                result.incident_count,
+                result.neighbor_count,
+            )
+
+            response.append(
+                TopRiskEntityResponse(
+                    entity=result.entity,
+                    incident_count=result.incident_count,
+                    neighbor_count=result.neighbor_count,
+                    risk_score=score,
+                    risk_level=level,
+                )
+            )
+
+        return response
