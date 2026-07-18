@@ -14,7 +14,6 @@ from app.graph.models import GraphNode
 from app.graph.query_service import GraphQueryService
 from app.graph.query_models import GraphNeighborsResponse
 from app.graph.query_models import (
-    GraphNeighborsResponse,
     RelatedIncidentsResponse,
     TopRiskEntityResponse,
 )
@@ -51,6 +50,7 @@ async def get_entity(
             detail=str(exc),
         ) from exc
 
+
 @router.get(
     "/entity/{value}/neighbors",
     response_model=GraphNeighborsResponse,
@@ -74,6 +74,7 @@ async def get_neighbors(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=str(exc),
         ) from exc
+
 
 @router.get(
     "/entity/{value}/incidents",
@@ -99,6 +100,7 @@ async def get_related_incidents(
             detail=str(exc),
         ) from exc
 
+
 @router.get(
     "/entity/{value}/risk",
     response_model=EntityRiskResponse,
@@ -111,6 +113,7 @@ async def get_entity_risk(
     Retrieve risk assessment for a graph entity.
     """
     return await service.get_entity_risk(value)
+
 
 @router.get(
     "/entity/{value}/ring",
@@ -127,6 +130,7 @@ async def get_fraud_ring(
     """
     return await service.get_fraud_ring(value)
 
+
 @router.get(
     "/network/summary",
     response_model=NetworkSummaryResponse,
@@ -141,6 +145,7 @@ async def get_network_summary(
     """
 
     return await service.get_network_summary()
+
 
 @router.get(
     "/network/top-risk",
@@ -162,6 +167,7 @@ async def get_top_risk_entities(
 
     return await service.get_top_risk_entities(limit)
 
+
 @router.get(
     "/path",
     response_model=PathResponse,
@@ -182,6 +188,7 @@ async def get_shortest_path(
         target,
     )
 
+
 @router.get(
     "/entity/{value}/shared",
     response_model=SharedEntityResponse,
@@ -199,4 +206,3 @@ async def get_shared_entity(
     return await service.get_shared_entity(
         value,
     )
-

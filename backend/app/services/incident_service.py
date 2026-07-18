@@ -104,11 +104,7 @@ class IncidentService(BaseService[IncidentRepository]):
 
             if existing:
                 raise DuplicateCaseReferenceError(
-                    (
-                        "Case reference "
-                        f"'{incident_data.case_reference}' "
-                        "already exists."
-                    )
+                    (f"Case reference '{incident_data.case_reference}' already exists.")
                 )
 
         logger.info(

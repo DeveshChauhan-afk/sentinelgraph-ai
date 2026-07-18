@@ -16,8 +16,6 @@ from app.graph.query_models import GraphNeighborsResponse
 from app.graph.query_models import RelatedIncidentsResponse
 
 from app.graph.query_models import (
-    GraphNeighborsResponse,
-    RelatedIncidentsResponse,
     TopRiskEntityResponse,
 )
 
@@ -29,6 +27,7 @@ from app.graph.query_models import FraudRingResponse
 from app.graph.query_models import NetworkSummaryResponse
 from app.graph.query_models import PathResponse
 from app.graph.query_models import SharedEntityResponse
+
 
 class GraphQueryService:
     """
@@ -87,7 +86,7 @@ class GraphQueryService:
             )
 
         return entity
-    
+
     async def get_neighbors(
         self,
         value: str,
@@ -127,25 +126,25 @@ class GraphQueryService:
             entity=result.entity,
             neighbors=result.neighbors,
         )
-    
+
     async def get_related_incidents(
         self,
         value: str,
     ) -> RelatedIncidentsResponse:
         """
-    Retrieve all complaints connected to an entity.
+        Retrieve all complaints connected to an entity.
 
-    Args:
-        value:
-            Entity value.
+        Args:
+            value:
+                Entity value.
 
-    Returns:
-        Entity together with its related complaint nodes.
+        Returns:
+            Entity together with its related complaint nodes.
 
-    Raises:
-        GraphEntityNotFoundError:
-            If the entity does not exist.
-    """
+        Raises:
+            GraphEntityNotFoundError:
+                If the entity does not exist.
+        """
         logger.info(
             "Retrieving related incidents for graph entity '{}'.",
             value,
@@ -169,24 +168,24 @@ class GraphQueryService:
             entity=result.entity,
             incidents=result.incidents,
         )
-    
+
     async def get_entity_risk(
-    self,
-    value: str,
+        self,
+        value: str,
     ) -> EntityRiskResponse:
         """
-    Retrieve risk assessment for a graph entity.
+        Retrieve risk assessment for a graph entity.
 
-    Args:
-        value:
-            Entity value.
+        Args:
+            value:
+                Entity value.
 
-    Returns:
-        EntityRiskResponse.
+        Returns:
+            EntityRiskResponse.
 
-    Raises:
-        GraphEntityNotFoundError:
-            If the entity does not exist.
+        Raises:
+            GraphEntityNotFoundError:
+                If the entity does not exist.
         """
         logger.info(
             "Calculating risk for graph entity '{}'.",
@@ -212,39 +211,27 @@ class GraphQueryService:
 
         if result.incident_count > 0:
             score += min(result.incident_count * 25, 50)
-            reasons.append(
-                f"Linked to {result.incident_count} complaint(s)."
-            )
+            reasons.append(f"Linked to {result.incident_count} complaint(s).")
 
         if result.neighbor_count > 3:
             score += 20
-            reasons.append(
-                "Connected to multiple entities."
-            )
+            reasons.append("Connected to multiple entities.")
 
         if result.phone_count > 1:
             score += 10
-            reasons.append(
-                "Associated with multiple phone numbers."
-            )
+            reasons.append("Associated with multiple phone numbers.")
 
         if result.upi_count > 1:
             score += 10
-            reasons.append(
-                "Associated with multiple UPI IDs."
-            )
+            reasons.append("Associated with multiple UPI IDs.")
 
         if result.email_count > 1:
             score += 5
-            reasons.append(
-                "Associated with multiple email addresses."
-            )
+            reasons.append("Associated with multiple email addresses.")
 
         if result.organization_count > 1:
             score += 5
-            reasons.append(
-                "Associated with multiple organizations."
-            )
+            reasons.append("Associated with multiple organizations.")
 
         score = min(score, 100)
 
@@ -271,7 +258,7 @@ class GraphQueryService:
             ),
             reasons=reasons,
         )
-    
+
     async def get_fraud_ring(
         self,
         value: str,
@@ -316,7 +303,7 @@ class GraphQueryService:
             total_nodes=len(result.nodes),
             total_incidents=len(result.incidents),
         )
-    
+
     async def get_network_summary(
         self,
     ) -> NetworkSummaryResponse:
@@ -339,7 +326,7 @@ class GraphQueryService:
             emails=result.emails,
             organizations=result.organizations,
         )
-    
+
     def _calculate_risk(
         self,
         incident_count: int,
@@ -360,7 +347,7 @@ class GraphQueryService:
             level = "LOW"
 
         return score, level
-    
+
     async def get_top_risk_entities(
         self,
         limit: int = 10,
@@ -390,7 +377,7 @@ class GraphQueryService:
             )
 
         return response
-    
+
     async def get_shortest_path(
         self,
         source: str,
@@ -423,7 +410,7 @@ class GraphQueryService:
             length=result.length,
             nodes=result.nodes,
         )
-    
+
     async def get_shared_entity(
         self,
         value: str,
@@ -437,9 +424,7 @@ class GraphQueryService:
         )
 
         if result is None:
-            raise GraphEntityNotFoundError(
-                f"Entity '{value}' not found."
-            )
+            raise GraphEntityNotFoundError(f"Entity '{value}' not found.")
 
         return SharedEntityResponse(
             entity=result.entity,

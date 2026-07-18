@@ -29,30 +29,6 @@ class RelatedIncidentsResponse(BaseModel):
 
 class RiskMetrics(BaseModel):
     """
-    Raw graph metrics used for risk analysis.
-    """
-
-    incident_count: int
-    neighbor_count: int
-    phone_count: int
-    upi_count: int
-    email_count: int
-    organization_count: int
-
-
-class EntityRiskResponse(BaseModel):
-    """
-    Risk assessment for a graph entity.
-    """
-
-    entity: GraphNode
-    risk_score: int
-    risk_level: str
-    metrics: RiskMetrics
-    reasons: list[str]
-
-class RiskMetrics(BaseModel):
-    """
     Risk metrics returned by the API.
     """
 
@@ -131,6 +107,7 @@ class TopRiskEntityResponse(BaseModel):
 
     risk_level: str
 
+
 class PathResponse(BaseModel):
     """
     API response representing the shortest path.
@@ -141,6 +118,7 @@ class PathResponse(BaseModel):
     length: int
 
     nodes: list[GraphNode]
+
 
 class SharedEntityResponse(BaseModel):
     """

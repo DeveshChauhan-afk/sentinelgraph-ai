@@ -36,14 +36,14 @@ from app.graph.query_results import (
 )
 
 from app.graph.query_results import (
-    NeighborQueryResult,
-    IncidentQueryResult,
     RiskMetricsResult,
 )
 from app.graph.query_results import FraudRingResult
 from app.graph.query_results import NetworkSummaryResult
 from app.graph.query_results import PathResult
 from app.graph.query_results import SharedEntityResult
+from typing import Any
+
 
 class GraphRepository:
     """
@@ -281,7 +281,7 @@ class GraphRepository:
             node=record["n"],
             labels=record["labels"],
         )
-    
+
     async def find_neighbors(
         self,
         value: str,
@@ -374,28 +374,28 @@ class GraphRepository:
             entity=entity,
             neighbors=neighbors,
         )
-    
+
     async def find_related_incidents(
         self,
         value: str,
     ) -> RelatedIncidentsResponse | None:
         """
-    Retrieve all complaint nodes connected to an entity.
+        Retrieve all complaint nodes connected to an entity.
 
-    Args:
-        value:
-            Entity value (phone number, UPI ID, email, etc.).
+        Args:
+            value:
+                Entity value (phone number, UPI ID, email, etc.).
 
-    Returns:
-        RelatedIncidentsResponse if the entity exists, otherwise None.
+        Returns:
+            RelatedIncidentsResponse if the entity exists, otherwise None.
 
-    Raises:
-        GraphConnectionError:
-            If a Neo4j connection cannot be established.
+        Raises:
+            GraphConnectionError:
+                If a Neo4j connection cannot be established.
 
-        GraphQueryError:
-            If the graph query fails.
-    """
+            GraphQueryError:
+                If the graph query fails.
+        """
         logger.debug(
             "Finding related incidents for entity '{}'.",
             value,
@@ -464,7 +464,7 @@ class GraphRepository:
                 )
             )
 
-        return IncidentQueryResult (
+        return IncidentQueryResult(
             entity=entity,
             incidents=incidents,
         )
@@ -706,7 +706,7 @@ class GraphRepository:
             )
 
             raise GraphPersistenceError("Unable to persist relationship.") from exc
-        
+
     async def get_risk_metrics(
         self,
         value: str,
@@ -828,7 +828,7 @@ class GraphRepository:
             email_count=record["email_count"],
             organization_count=record["organization_count"],
         )
-    
+
     async def find_fraud_ring(
         self,
         value: str,
@@ -929,7 +929,7 @@ class GraphRepository:
             nodes=nodes,
             incidents=incidents,
         )
-    
+
     async def get_network_summary(
         self,
     ) -> NetworkSummaryResult:
@@ -1041,7 +1041,7 @@ class GraphRepository:
             emails=record["emails"],
             organizations=record["organizations"],
         )
-    
+
     async def get_top_risk_entities(
         self,
         limit: int = 10,
@@ -1119,7 +1119,6 @@ class GraphRepository:
             raise GraphConnectionError(
                 "Neo4j connection failed.",
             ) from exc
-        
 
     async def find_shortest_path(
         self,
@@ -1194,7 +1193,6 @@ class GraphRepository:
             length=len(graph_nodes) - 1,
             nodes=graph_nodes,
         )
-    
 
     async def find_shared_entity(
         self,
@@ -1262,3 +1260,20 @@ class GraphRepository:
             entity=entity,
             complaints=complaints,
         )
+
+    def _map_nodes(
+        self,
+        nodes: list[Any],
+    ) -> list[GraphNode]:
+        """
+        Convert Neo4j nodes into GraphNode models.
+        """
+
+        return [
+            self._map_node(
+                node,
+                list(node.labels),
+            )
+            for node in nodes
+            if node is not None
+        ]

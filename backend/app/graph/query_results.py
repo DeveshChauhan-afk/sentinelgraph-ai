@@ -41,6 +41,7 @@ class RiskMetricsResult(BaseModel):
     email_count: int
     organization_count: int
 
+
 class FraudRingResult(BaseModel):
     """
     Repository result representing an entire connected fraud ring.
@@ -49,6 +50,7 @@ class FraudRingResult(BaseModel):
     entity: GraphNode
     nodes: list[GraphNode]
     incidents: list[GraphNode]
+
 
 class NetworkSummaryResult(BaseModel):
     """
@@ -81,6 +83,7 @@ class TopRiskEntityResult(BaseModel):
 
     neighbor_count: int
 
+
 class PathResult(BaseModel):
     """
     Repository result representing the shortest path.
@@ -91,6 +94,7 @@ class PathResult(BaseModel):
     length: int
 
     nodes: list[GraphNode]
+
 
 class SharedEntityResult(BaseModel):
     """

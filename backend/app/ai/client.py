@@ -81,7 +81,7 @@ class GeminiClient(AIClient):
                 If generation fails.
         """
         logger.info(
-            "Sending request to Gemini " "(model={}, prompt_length={})",
+            "Sending request to Gemini (model={}, prompt_length={})",
             self._settings.GEMINI_MODEL,
             len(prompt),
         )
@@ -104,7 +104,7 @@ class GeminiClient(AIClient):
             duration = time.perf_counter() - start_time
 
             logger.info(
-                "Gemini response received " "(duration={:.2f}s, response_length={})",
+                "Gemini response received (duration={:.2f}s, response_length={})",
                 duration,
                 len(text),
             )

@@ -67,7 +67,7 @@ class GraphService:
             entities=entities,
         )
         logger.debug(
-            "Graph built successfully " "(nodes={}, relationships={}).",
+            "Graph built successfully (nodes={}, relationships={}).",
             len(graph.nodes),
             len(graph.relationships),
         )

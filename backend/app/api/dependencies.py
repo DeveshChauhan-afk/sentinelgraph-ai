@@ -61,6 +61,7 @@ def get_graph_service(
         repository=repository,
     )
 
+
 def get_graph_query_service(
     repository: GraphRepository = Depends(
         get_graph_repository,
@@ -72,6 +73,7 @@ def get_graph_query_service(
     return GraphQueryService(
         repository=repository,
     )
+
 
 def get_incident_repository(
     session: AsyncSession = Depends(get_db),

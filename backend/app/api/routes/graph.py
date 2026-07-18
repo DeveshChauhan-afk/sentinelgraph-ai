@@ -40,7 +40,8 @@ async def get_entity(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=str(exc),
         ) from exc
-    
+
+
 @router.get(
     "/entity/{value}/ring",
     response_model=FraudRingResponse,
