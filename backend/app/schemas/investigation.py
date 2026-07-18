@@ -7,6 +7,13 @@ from __future__ import annotations
 from enum import Enum
 
 from pydantic import BaseModel, Field
+from app.graph.query_models import (
+    EntityRiskResponse,
+    FraudRingResponse,
+    GraphNeighborsResponse,
+    RelatedIncidentsResponse,
+    SharedEntityResponse,
+)
 
 
 class InvestigationTargetType(str, Enum):
@@ -54,25 +61,19 @@ class ConnectedEntity(BaseModel):
 
 class InvestigationEvidence(BaseModel):
     """
-    Structured graph evidence retrieved from Neo4j.
+    Complete graph evidence collected for an investigation.
+    This object acts as the Graph-RAG retrieval context.
     """
 
-    complaint_count: int = 0
+    neighbors: GraphNeighborsResponse
 
-    related_complaints: list[str] = Field(default_factory=list)
-    connected_entities: list[ConnectedEntity] = Field(default_factory=list)
-    shortest_paths: list[str] = Field(default_factory=list)
-    shared_entities: list[str] = Field(default_factory=list)
+    related_incidents: RelatedIncidentsResponse
 
-    findings: list[str] = Field(default_factory=list)
-    key_entities: list[str] = Field(default_factory=list)
-    recommended_actions: list[str] = Field(default_factory=list)
-    connected_entities: list[ConnectedEntity] = []
-    fraud_ring_detected: bool = False
+    risk: EntityRiskResponse
 
-    shortest_paths: list[str] = []
-    shared_entities: list[str] = []
-    risk_score: float = 0.0
+    fraud_ring: FraudRingResponse
+
+    shared_entities: SharedEntityResponse
 
 
 class InvestigationReport(BaseModel):
