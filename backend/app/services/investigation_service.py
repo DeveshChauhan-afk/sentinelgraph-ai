@@ -18,6 +18,7 @@ from app.schemas.investigation import (
 from app.ai.client import GeminiClient
 from app.services.investigation.prompt_builder import PromptBuilder
 from app.services.investigation.report_parser import ReportParser
+from app.services.investigation.cache import investigation_cache
 
 
 
@@ -42,6 +43,7 @@ class InvestigationService:
         self._ai_client = ai_client
         self._prompt_builder = prompt_builder
         self._report_parser = report_parser
+        self._cache = investigation_cache
 
     async def build_evidence(
         self,
@@ -113,18 +115,51 @@ class InvestigationService:
             request.target_value,
         )
 
+        # ------------------------------------------------------------------
+        # Check cache first
+        # ------------------------------------------------------------------
+        cache_key = (
+            f"{request.target_type.value}:{request.target_value.strip().lower()}"
+        )
+
+        cached_response = self._cache.get(cache_key)
+
+        if cached_response is not None:
+            logger.info(
+                "Returning cached investigation for '{}'.",
+                cache_key,
+            )
+            return cached_response
+
+        # ------------------------------------------------------------------
+        # Build evidence
+        # ------------------------------------------------------------------
         evidence = await self.build_evidence(
             request,
         )
 
+        # ------------------------------------------------------------------
+        # Build prompt
+        # ------------------------------------------------------------------
         prompt = self._prompt_builder.build(
             evidence,
         )
 
+        # ------------------------------------------------------------------
+        # Query Gemini
+        # ------------------------------------------------------------------
         raw_response = await self._ai_client.generate_content(
             prompt,
         )
 
+        logger.info(    
+            "RAW GEMINI RESPONSE:\n{}",
+            raw_response,
+        )
+
+        # ------------------------------------------------------------------
+        # Parse report
+        # ------------------------------------------------------------------
         report = self._report_parser.parse(
             raw_response,
         )
@@ -134,8 +169,25 @@ class InvestigationService:
             request.target_value,
         )
 
-        return InvestigationResponse(
-            target=request.target_value,
+        logger.info(
+            "Creating InvestigationResponse: target_type={} target_value={}",
+            request.target_type,
+            request.target_value,
+        )
+
+        response = InvestigationResponse(
+            target_type=request.target_type,
+            target_value=request.target_value,
             evidence=evidence,
             report=report,
         )
+
+        # ------------------------------------------------------------------
+        # Store in cache
+        # ------------------------------------------------------------------
+        self._cache.set(
+            cache_key,
+            response,
+        )
+
+        return response

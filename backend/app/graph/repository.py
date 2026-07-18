@@ -736,38 +736,32 @@ class GraphRepository:
         query = """
         MATCH (entity {value: $value})
 
-        CALL () {
-            WITH entity
+        CALL (entity) {
             OPTIONAL MATCH (entity)-[]-(neighbor)
             RETURN count(DISTINCT neighbor) AS neighbor_count
         }
 
-        CALL () {
-            WITH entity
+        CALL (entity) {
             OPTIONAL MATCH (entity)-[:MENTIONS]-(incident:Complaint)
             RETURN count(DISTINCT incident) AS incident_count
         }
 
-        CALL () {
-            WITH entity
+        CALL (entity) {
             OPTIONAL MATCH (entity)-[]-(phone:Phone)
             RETURN count(DISTINCT phone) AS phone_count
         }
 
-        CALL () {
-            WITH entity
+        CALL (entity) {
             OPTIONAL MATCH (entity)-[]-(upi:UPI)
             RETURN count(DISTINCT upi) AS upi_count
         }
 
-        CALL () {
-            WITH entity
+        CALL (entity) {
             OPTIONAL MATCH (entity)-[]-(email:Email)
             RETURN count(DISTINCT email) AS email_count
         }
 
-        CALL () {
-            WITH entity
+        CALL (entity) {
             OPTIONAL MATCH (entity)-[]-(organization:Organization)
             RETURN count(DISTINCT organization) AS organization_count
         }

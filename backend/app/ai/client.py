@@ -28,6 +28,7 @@ from app.ai.exceptions import (
     AIRateLimitError,
 )
 from app.core.config import Settings
+from app.schemas.investigation import InvestigationReport
 
 
 class GeminiClient(AIClient):
@@ -61,6 +62,8 @@ class GeminiClient(AIClient):
         return types.GenerateContentConfig(
             temperature=self._settings.LLM_TEMPERATURE,
             max_output_tokens=self._settings.LLM_MAX_TOKENS,
+            response_mime_type="application/json",
+            response_schema=InvestigationReport,
         )
 
     async def generate_content(
@@ -84,6 +87,7 @@ class GeminiClient(AIClient):
             "Sending request to Gemini (model={}, prompt_length={})",
             self._settings.GEMINI_MODEL,
             len(prompt),
+            self._settings.LLM_MAX_TOKENS,
         )
 
         start_time = time.perf_counter()
@@ -94,6 +98,16 @@ class GeminiClient(AIClient):
                 model=self._settings.GEMINI_MODEL,
                 contents=prompt,
                 config=self._build_generation_config(),
+            )
+
+            logger.info(
+                "Finish reason: {}",
+                response.candidates[0].finish_reason,
+            )
+
+            logger.debug(
+                "Raw Gemini response object:\n{}",
+                response,
             )
 
             text = getattr(response, "text", None)

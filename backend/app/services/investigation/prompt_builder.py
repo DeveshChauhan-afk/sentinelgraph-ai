@@ -1,3 +1,4 @@
+#app/service/investigation/prompt_builder
 """
 Prompt builder for Graph-RAG investigations.
 """
@@ -38,105 +39,159 @@ class PromptBuilder:
         neighbors = "\n".join(
             f"- {self._format_node(node)}"
             for node in evidence.neighbors.neighbors
-        )
+        ) or "None"
 
         incidents = "\n".join(
             f"- {self._format_node(node)}"
             for node in evidence.related_incidents.incidents
-        )
+        ) or "None"
 
-        ring_nodes = "\n".join(
+        ring_members = "\n".join(
             f"- {self._format_node(node)}"
             for node in evidence.fraud_ring.nodes
-        )
+        ) or "None"
 
         shared = "\n".join(
             f"- {self._format_node(node)}"
             for node in evidence.shared_entities.complaints
-        )
+        ) or "None"
 
         reasons = "\n".join(
             f"- {reason}"
             for reason in evidence.risk.reasons
-        )
+        ) or "None"
+
+        metrics = evidence.risk.metrics
 
         return f"""
-You are an expert cybercrime investigator.
+    SYSTEM ROLE
 
-Your task is to analyze the fraud intelligence graph below.
+    You are SentinelGraph AI.
 
-==============================
-TARGET ENTITY
-==============================
+    You are an expert cybercrime investigator specializing in:
 
-{entity}
+    - Financial fraud
+    - Digital arrest scams
+    - UPI fraud
+    - Identity theft
+    - Fraud rings
+    - Organized cybercrime
 
-==============================
-RISK ASSESSMENT
-==============================
+    You MUST base every conclusion exclusively on the supplied graph evidence.
 
-Risk Score: {evidence.risk.risk_score}
-Risk Level: {evidence.risk.risk_level}
+    Never fabricate entities, complaints, relationships, dates, organizations, or risk factors that are not present in the evidence.
 
-Reasons:
+    You ONLY use the graph evidence provided.
 
-{reasons}
+    If evidence is insufficient, explicitly state that.
 
-==============================
-CONNECTED ENTITIES
-==============================
+    ================================================
 
-{neighbors if neighbors else "None"}
+    GRAPH EVIDENCE
 
-==============================
-RELATED COMPLAINTS
-==============================
+    ================================================
 
-{incidents if incidents else "None"}
+    Target Entity Under Investigation
 
-==============================
-FRAUD RING
-==============================
+    {entity}
 
-Total Nodes:
-{evidence.fraud_ring.total_nodes}
+    ------------------------------------------------
 
-Total Complaints:
-{evidence.fraud_ring.total_incidents}
+    Risk Assessment
 
-Members:
+    Risk Score: {evidence.risk.risk_score}
 
-{ring_nodes if ring_nodes else "None"}
+    Risk Level: {evidence.risk.risk_level}
 
-==============================
-SHARED COMPLAINTS
-==============================
+    Reasons
 
-{shared if shared else "None"}
+    {reasons}
 
-==============================
-INSTRUCTIONS
-==============================
+    Metrics
 
-Generate a professional investigation report.
+    - Complaint Count: {metrics.incident_count}
+    - Neighbor Count: {metrics.neighbor_count}
+    - Phone Count: {metrics.phone_count}
+    - UPI Count: {metrics.upi_count}
+    - Email Count: {metrics.email_count}
+    - Organization Count: {metrics.organization_count}
 
-The report should contain:
+    ------------------------------------------------
 
-1. Executive Summary
+    Connected Entities
 
-2. Risk Assessment
+    {neighbors}
 
-3. Fraud Ring Analysis
+    ------------------------------------------------
 
-4. Key Evidence
+    Related Complaints
 
-5. Recommended Actions
+    {incidents}
 
-6. Overall Conclusion
+    ------------------------------------------------
 
-Only use the evidence provided above.
+    Fraud Ring
 
-Do not fabricate any facts.
+    Ring Size:
+    {evidence.fraud_ring.total_nodes}
 
-If evidence is insufficient, clearly state that.
-""".strip()
+    Incident Count:
+    {evidence.fraud_ring.total_incidents}
+
+    Members
+
+    {ring_members}
+
+    ------------------------------------------------
+
+    Shared Complaints
+
+    {shared}
+
+    ================================================
+
+    TASK
+
+    ================================================
+
+    Analyze the graph evidence.
+
+    Determine:
+
+    • Assess the likelihood that the entity is associated with fraudulent activity based solely on the provided evidence.
+    • Whether there is evidence of organized fraud.
+    • Which graph connections contributed to the conclusion.
+    • Whether investigators should prioritize this case.
+
+    ================================================
+
+    OUTPUT FORMAT
+
+    ================================================
+
+    Include a confidence score between 0 and 100 that reflects how strongly the supplied graph evidence supports your conclusions.
+    Each item in key_evidence must reference specific evidence from the supplied graph, not opinions.
+    Recommendations must be directly supported by the supplied evidence. Do not recommend actions based on assumptions or missing information.
+    Return ONLY a valid JSON object.
+
+    The JSON must contain exactly these fields:
+
+    confidence
+    executive_summary
+    risk_assessment
+    fraud_ring_analysis
+    key_evidence
+    recommended_actions
+    overall_conclusion
+
+    Do not output any text before or after the JSON.
+
+    Do NOT include markdown.
+
+    Do NOT include code fences.
+
+    Do NOT include explanations outside the JSON.
+
+    If the supplied evidence is weak or incomplete,
+    state that clearly instead of making assumptions.
+    """.strip()
