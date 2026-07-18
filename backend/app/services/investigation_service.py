@@ -16,13 +16,6 @@ from app.schemas.investigation import (
     InvestigationResponse,
 )
 from app.ai.client import GeminiClient
-from app.graph.query_service import GraphQueryService
-from app.schemas.investigation import (
-    InvestigationEvidence,
-    InvestigationReport,
-    InvestigationRequest,
-    InvestigationResponse,
-)
 from app.services.investigation.prompt_builder import PromptBuilder
 from app.services.investigation.report_parser import ReportParser
 

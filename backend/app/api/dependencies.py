@@ -1,3 +1,4 @@
+#app/api/dependencies.py
 """
 Application dependency providers.
 
@@ -22,6 +23,9 @@ from app.services.entity_extraction_service import (
 )
 from app.services.incident_service import IncidentService
 from app.graph.query_service import GraphQueryService
+from app.services.investigation.prompt_builder import PromptBuilder
+from app.services.investigation.report_parser import ReportParser
+from app.services.investigation_service import InvestigationService
 
 
 def get_ai_client() -> GeminiClient:
@@ -72,6 +76,44 @@ def get_graph_query_service(
     """
     return GraphQueryService(
         repository=repository,
+    )
+
+def get_prompt_builder() -> PromptBuilder:
+    """
+    Return the Graph-RAG prompt builder.
+    """
+    return PromptBuilder()
+
+
+def get_report_parser() -> ReportParser:
+    """
+    Return the Graph-RAG report parser.
+    """
+    return ReportParser()
+
+
+def get_investigation_service(
+    graph_service: GraphQueryService = Depends(
+        get_graph_query_service,
+    ),
+    ai_client: GeminiClient = Depends(
+        get_ai_client,
+    ),
+    prompt_builder: PromptBuilder = Depends(
+        get_prompt_builder,
+    ),
+    report_parser: ReportParser = Depends(
+        get_report_parser,
+    ),
+) -> InvestigationService:
+    """
+    Return the investigation service.
+    """
+    return InvestigationService(
+        graph_service=graph_service,
+        ai_client=ai_client,
+        prompt_builder=prompt_builder,
+        report_parser=report_parser,
     )
 
 

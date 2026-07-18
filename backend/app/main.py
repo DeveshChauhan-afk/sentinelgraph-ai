@@ -8,6 +8,7 @@ from app.core.events import shutdown, startup
 from app.core.exceptions import global_exception_handler
 from app.core.logger import get_logger
 from app.core.middleware import RequestLoggingMiddleware
+from app.api import investigation
 
 logger = get_logger(__name__)
 
@@ -34,6 +35,11 @@ def create_application() -> FastAPI:
     application.add_middleware(RequestLoggingMiddleware)
     application.add_exception_handler(Exception, global_exception_handler)
     application.include_router(api_router, prefix=settings.API_V1_PREFIX)
+    app.include_router(
+    investigation.router,
+    prefix="/api/v1/investigations",
+    tags=["Investigations"],
+    )
 
     logger.info("FastAPI application created and routes registered.")
 
