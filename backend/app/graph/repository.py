@@ -43,6 +43,7 @@ from app.graph.query_results import NetworkSummaryResult
 from app.graph.query_results import PathResult
 from app.graph.query_results import SharedEntityResult
 from typing import Any
+from neo4j.graph import Path
 
 
 class GraphRepository:
@@ -1271,3 +1272,56 @@ class GraphRepository:
             for node in nodes
             if node is not None
         ]
+
+    async def get_subgraph(
+        self,
+        node_id: str,
+        depth: int = 2,
+    ) -> list[Path]:
+        """
+        Retrieve a neighborhood subgraph centered around a graph node.
+
+        Args:
+            node_id:
+                Graph node identifier (e.g. phone:+919876543210).
+
+            depth:
+                Maximum traversal depth.
+
+        Returns:
+            List of Neo4j Path objects.
+        """
+        logger.debug(
+            "Fetching visualization subgraph for node '{}' (depth={}).",
+            node_id,
+            depth,
+        )
+
+        query = f"""
+        MATCH (start {{id: $node_id}})
+        MATCH path = (start)-[*1..{depth}]-(neighbor)
+        WHERE ALL(
+            node IN nodes(path)
+            WHERE single(x IN nodes(path) WHERE x = node)
+        )
+        RETURN DISTINCT path
+        """
+
+        async with self._driver.session() as session:
+            result = await session.run(
+                query,
+                node_id=node_id,
+            )
+
+            paths: list[Path] = [
+                record["path"]
+                async for record in result
+            ]
+
+        logger.debug(
+            "Retrieved {} graph paths for node '{}'.",
+            len(paths),
+            node_id,
+        )
+
+        return paths

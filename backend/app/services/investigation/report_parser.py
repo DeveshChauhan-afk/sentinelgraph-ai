@@ -51,9 +51,7 @@ class ReportParser:
                 "No JSON object found in LLM response:\n{}",
                 response,
             )
-            raise ValueError(
-                "LLM response did not contain valid JSON."
-            )
+            raise ValueError("LLM response did not contain valid JSON.")
 
         cleaned = cleaned[start : end + 1]
 

@@ -48,7 +48,7 @@ class InvestigationCache:
                 logger.info("Cache EXPIRED: {}", key)
                 del self._cache[key]
                 return None
-            
+
             self._hits += 1
             logger.info("Cache HIT: {}", key)
             return value
@@ -84,6 +84,8 @@ class InvestigationCache:
             "hits": self._hits,
             "misses": self._misses,
         }
+
+
 # Shared singleton cache instance
 
 investigation_cache = InvestigationCache(

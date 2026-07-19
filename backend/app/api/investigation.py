@@ -1,4 +1,4 @@
-#app/api/investigations.py
+# app/api/investigations.py
 """
 Graph-RAG investigation API routes.
 """

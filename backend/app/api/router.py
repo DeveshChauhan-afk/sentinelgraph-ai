@@ -2,6 +2,9 @@
 
 from fastapi import APIRouter
 from app.api import health, version, auth, complaints, investigation, graph
+from app.api.graph_visualization import (
+    router as graph_visualization_router,
+)
 
 api_router = APIRouter()
 
@@ -13,3 +16,6 @@ api_router.include_router(
     investigation.router, prefix="/investigation", tags=["Investigation"]
 )
 api_router.include_router(graph.router, prefix="/graph", tags=["Graph Intelligence"])
+api_router.include_router(
+    graph_visualization_router,
+)

@@ -1,4 +1,4 @@
-#app/api/dependencies.py
+# app/api/dependencies.py
 """
 Application dependency providers.
 
@@ -77,6 +77,7 @@ def get_graph_query_service(
     return GraphQueryService(
         repository=repository,
     )
+
 
 def get_prompt_builder() -> PromptBuilder:
     """

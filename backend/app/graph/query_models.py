@@ -1,4 +1,4 @@
-#app/graph/query_models.py
+# app/graph/query_models.py
 """
 Graph query models.
 """

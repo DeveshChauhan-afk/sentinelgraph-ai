@@ -1,4 +1,4 @@
-#app/service/investigation/prompt_builder
+# app/service/investigation/prompt_builder
 """
 Prompt builder for Graph-RAG investigations.
 """
@@ -36,30 +36,37 @@ class PromptBuilder:
             evidence.neighbors.entity,
         )
 
-        neighbors = "\n".join(
-            f"- {self._format_node(node)}"
-            for node in evidence.neighbors.neighbors
-        ) or "None"
+        neighbors = (
+            "\n".join(
+                f"- {self._format_node(node)}" for node in evidence.neighbors.neighbors
+            )
+            or "None"
+        )
 
-        incidents = "\n".join(
-            f"- {self._format_node(node)}"
-            for node in evidence.related_incidents.incidents
-        ) or "None"
+        incidents = (
+            "\n".join(
+                f"- {self._format_node(node)}"
+                for node in evidence.related_incidents.incidents
+            )
+            or "None"
+        )
 
-        ring_members = "\n".join(
-            f"- {self._format_node(node)}"
-            for node in evidence.fraud_ring.nodes
-        ) or "None"
+        ring_members = (
+            "\n".join(
+                f"- {self._format_node(node)}" for node in evidence.fraud_ring.nodes
+            )
+            or "None"
+        )
 
-        shared = "\n".join(
-            f"- {self._format_node(node)}"
-            for node in evidence.shared_entities.complaints
-        ) or "None"
+        shared = (
+            "\n".join(
+                f"- {self._format_node(node)}"
+                for node in evidence.shared_entities.complaints
+            )
+            or "None"
+        )
 
-        reasons = "\n".join(
-            f"- {reason}"
-            for reason in evidence.risk.reasons
-        ) or "None"
+        reasons = "\n".join(f"- {reason}" for reason in evidence.risk.reasons) or "None"
 
         metrics = evidence.risk.metrics
 

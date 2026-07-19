@@ -24,7 +24,6 @@ from app.services.investigation.performance import (
 )
 
 
-
 class InvestigationService:
     """
     Service responsible for collecting graph evidence for an
@@ -72,10 +71,8 @@ class InvestigationService:
             request.target_value,
         )
 
-        related_incidents = (
-            await self._graph_service.get_related_incidents(
-                request.target_value,
-            )
+        related_incidents = await self._graph_service.get_related_incidents(
+            request.target_value,
         )
 
         risk = await self._graph_service.get_entity_risk(
@@ -86,10 +83,8 @@ class InvestigationService:
             request.target_value,
         )
 
-        shared_entities = (
-            await self._graph_service.get_shared_entity(
-                request.target_value,
-            )
+        shared_entities = await self._graph_service.get_shared_entity(
+            request.target_value,
         )
 
         logger.info(
@@ -104,7 +99,7 @@ class InvestigationService:
             fraud_ring=fraud_ring,
             shared_entities=shared_entities,
         )
-    
+
     async def investigate(
         self,
         request: InvestigationRequest,
@@ -165,7 +160,7 @@ class InvestigationService:
         )
         timer.stop("Gemini")
 
-        logger.debug(    
+        logger.debug(
             "RAW GEMINI RESPONSE:\n{}",
             raw_response,
         )

@@ -23,9 +23,7 @@ class InvestigationTimer:
 
     def stop(self, stage: str) -> None:
         if stage in self._marks:
-            self._marks[stage] = (
-                perf_counter() - self._marks[stage]
-            ) * 1000
+            self._marks[stage] = (perf_counter() - self._marks[stage]) * 1000
 
     def summary(self) -> None:
         total = (perf_counter() - self._start) * 1000
