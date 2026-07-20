@@ -44,6 +44,9 @@ from app.graph.query_results import PathResult
 from app.graph.query_results import SharedEntityResult
 from typing import Any
 from neo4j.graph import Path
+from app.schemas.analytics import GraphSummary
+from app.schemas.analytics import TopConnectedEntity
+from app.schemas.analytics import SharedEntityAnalysis
 
 
 class GraphRepository:
@@ -1325,3 +1328,303 @@ class GraphRepository:
         )
 
         return paths
+    
+    async def get_graph_summary(
+        self,
+    ) -> GraphSummary:
+        """
+        Retrieve overall statistics about the fraud intelligence graph.
+
+        Returns:
+            GraphSummary containing node, relationship, and entity counts.
+        """
+        logger.debug(
+            "Fetching graph summary statistics.",
+        )
+
+        query = """
+        CALL {
+            MATCH (n)
+            RETURN count(n) AS total_nodes
+        }
+
+        CALL {
+            MATCH ()-[r]->()
+            RETURN count(r) AS total_edges
+        }
+
+        CALL {
+            MATCH (n:Complaint)
+            RETURN count(n) AS complaints
+        }
+
+        CALL {
+            MATCH (n:Phone)
+            RETURN count(n) AS phones
+        }
+
+        CALL {
+            MATCH (n:Email)
+            RETURN count(n) AS emails
+        }
+
+        CALL {
+            MATCH (n:UPI)
+            RETURN count(n) AS upis
+        }
+
+        CALL {
+            MATCH (n:Organization)
+            RETURN count(n) AS organizations
+        }
+
+        CALL {
+            MATCH (n:Person)
+            RETURN count(n) AS persons
+        }
+
+        CALL {
+            MATCH (n:Location)
+            RETURN count(n) AS locations
+        }
+
+        CALL {
+            MATCH (n:BankAccount)
+            RETURN count(n) AS bank_accounts
+        }
+
+        CALL {
+            MATCH (n)
+            OPTIONAL MATCH (n)-[r]-()
+            WITH n, count(r) AS degree
+            RETURN avg(degree) AS average_degree
+        }
+
+        RETURN
+            total_nodes,
+            total_edges,
+            complaints,
+            phones,
+            emails,
+            upis,
+            organizations,
+            persons,
+            locations,
+            bank_accounts,
+            coalesce(average_degree, 0.0) AS average_degree
+        """
+
+        async with self._driver.session() as session:
+            result = await session.run(query)
+            record = await result.single()
+
+        if record is None:
+            logger.warning(
+                "Unable to retrieve graph summary statistics.",
+            )
+
+            return GraphSummary(
+                total_nodes=0,
+                total_edges=0,
+                complaints=0,
+                phones=0,
+                emails=0,
+                upis=0,
+                organizations=0,
+                persons=0,
+                locations=0,
+                bank_accounts=0,
+                average_degree=0.0,
+            )
+
+        summary = GraphSummary(
+            total_nodes=record["total_nodes"],
+            total_edges=record["total_edges"],
+            complaints=record["complaints"],
+            phones=record["phones"],
+            emails=record["emails"],
+            upis=record["upis"],
+            organizations=record["organizations"],
+            persons=record["persons"],
+            locations=record["locations"],
+            bank_accounts=record["bank_accounts"],
+            average_degree=round(record["average_degree"], 2),
+        )
+
+        logger.debug(
+            "Graph summary statistics retrieved successfully.",
+        )
+
+        return summary
+    
+    async def get_top_connected_entities(
+        self,
+        limit: int = 10,
+    ) -> list[TopConnectedEntity]:
+        """
+        Retrieve the most connected non-complaint entities.
+
+        Args:
+            limit:
+                Maximum number of entities to return.
+
+        Returns:
+            Ranked list of connected entities.
+        """
+        logger.debug(
+            "Fetching top connected entities (limit={}).",
+            limit,
+        )
+
+        query = """
+        MATCH (entity)
+        WHERE NOT entity:Complaint
+
+        OPTIONAL MATCH (entity)-[r]-()
+        WITH
+            entity,
+            count(DISTINCT r) AS connection_count
+
+        OPTIONAL MATCH (entity)<-[:MENTIONS]-(c:Complaint)
+        WITH
+            entity,
+            connection_count,
+            count(DISTINCT c) AS complaint_count
+
+        RETURN
+            entity,
+            connection_count,
+            complaint_count
+
+        ORDER BY
+            connection_count DESC,
+            complaint_count DESC,
+            entity.id
+
+        LIMIT $limit
+        """
+
+        async with self._driver.session() as session:
+            result = await session.run(
+                query,
+                limit=limit,
+            )
+
+            records = [
+                record
+                async for record in result
+            ]
+
+        entities: list[TopConnectedEntity] = []
+
+        for record in records:
+            node = record["entity"]
+
+            properties = dict(node)
+            labels = list(node.labels)
+
+            entity_type = labels[0] if labels else "UNKNOWN"
+
+            label = properties.get(
+                "value",
+                properties["id"],
+            )
+
+            entities.append(
+                TopConnectedEntity(
+                    id=properties["id"],
+                    label=label,
+                    type=entity_type,
+                    connection_count=record["connection_count"],
+                    complaint_count=record["complaint_count"],
+                )
+            )
+
+        logger.debug(
+            "Retrieved {} top connected entities.",
+            len(entities),
+        )
+
+        return entities
+    
+    async def get_shared_entities(
+        self,
+        minimum_complaints: int = 2,
+    ) -> list[SharedEntityAnalysis]:
+        """
+        Retrieve entities referenced by multiple complaints.
+
+        Args:
+            minimum_complaints:
+                Minimum number of complaints sharing an entity.
+
+        Returns:
+            Shared entity analysis.
+        """
+        logger.debug(
+            "Fetching shared entities (minimum_complaints={}).",
+            minimum_complaints,
+        )
+
+        query = """
+        MATCH (c:Complaint)-[:MENTIONS]->(entity)
+        WHERE NOT entity:Complaint
+
+        WITH
+            entity,
+            collect(DISTINCT c.id) AS complaint_ids,
+            count(DISTINCT c) AS complaint_count
+
+        WHERE complaint_count >= $minimum_complaints
+
+        RETURN
+            entity,
+            complaint_count,
+            complaint_ids
+
+        ORDER BY
+            complaint_count DESC,
+            entity.id
+        """
+
+        async with self._driver.session() as session:
+            result = await session.run(
+                query,
+                minimum_complaints=minimum_complaints,
+            )
+
+            records = [
+                record
+                async for record in result
+            ]
+
+        shared_entities: list[SharedEntityAnalysis] = []
+
+        for record in records:
+            node = record["entity"]
+
+            properties = dict(node)
+
+            labels = list(node.labels)
+
+            shared_entities.append(
+                SharedEntityAnalysis(
+                    entity_id=properties["id"],
+                    entity_label=properties.get(
+                        "value",
+                        properties["id"],
+                    ),
+                    entity_type=labels[0] if labels else "UNKNOWN",
+                    complaint_count=record["complaint_count"],
+                    complaint_ids=record["complaint_ids"],
+                )
+            )
+
+        logger.debug(
+            "Retrieved {} shared entities.",
+            len(shared_entities),
+        )
+
+        return shared_entities
+        
+        
