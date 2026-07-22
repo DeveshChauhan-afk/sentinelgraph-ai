@@ -221,19 +221,19 @@ http://localhost:8000/docs
 
 ## Swagger Documentation
 
-(swagger.png)
+![swagger](swagger.png)
 
 ---
 
 ## Complaint Registration
 
-(complaint_registration.png)
+![complaint_registration](complaint_registration.png)
 
 ---
 
 ## PostgreSQL Database
 
-(postgre.png)
+![postgre](postgre.png)
 
 ---
 
