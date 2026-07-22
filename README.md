@@ -221,19 +221,19 @@ http://localhost:8000/docs
 
 ## Swagger Documentation
 
-> *(Insert Swagger Screenshot)*
+(swagger.png)
 
 ---
 
 ## Complaint Registration
 
-> *(Insert API Response Screenshot)*
+(complaint_registration.png)
 
 ---
 
 ## PostgreSQL Database
 
-> *(Insert PostgreSQL Screenshot)*
+(postgre.png)
 
 ---
 
