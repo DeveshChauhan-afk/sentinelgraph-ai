@@ -30,7 +30,6 @@ class ExtractedEntity(BaseModel):
         ...,
         min_length=1,
         description="Normalized value of the extracted entity.",
-        examples=["9876543210"],
     )
 
     confidence: float = Field(
@@ -38,7 +37,6 @@ class ExtractedEntity(BaseModel):
         ge=0.0,
         le=1.0,
         description="Confidence score assigned by the AI model.",
-        examples=[0.98],
     )
 
 

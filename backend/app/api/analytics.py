@@ -10,7 +10,7 @@ from loguru import logger
 from app.schemas.analytics import GraphSummary
 from app.services.analytics.analytics_service import AnalyticsService
 from app.schemas.analytics import TopConnectedEntity, SharedEntityAnalysis
-from fastapi import APIRouter, HTTPException, Query, status
+from fastapi import Query
 
 router = APIRouter(
     prefix="/analytics",
@@ -27,31 +27,26 @@ async def get_graph_summary() -> GraphSummary:
     """
     Retrieve overall statistics for the fraud intelligence graph.
     """
-    logger.info(
-        "Graph summary request received."
-    )
+    logger.info("Graph summary request received.")
 
     service = AnalyticsService()
 
     try:
         summary = await service.get_graph_summary()
 
-        logger.info(
-            "Graph summary returned successfully."
-        )
+        logger.info("Graph summary returned successfully.")
 
         return summary
 
     except Exception:
-        logger.exception(
-            "Failed to retrieve graph summary."
-        )
+        logger.exception("Failed to retrieve graph summary.")
 
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Failed to retrieve graph summary.",
         )
-    
+
+
 @router.get(
     "/top-connected",
     response_model=list[TopConnectedEntity],
@@ -96,7 +91,8 @@ async def get_top_connected_entities(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Failed to retrieve top connected entities.",
         )
-    
+
+
 @router.get(
     "/shared-entities",
     response_model=list[SharedEntityAnalysis],

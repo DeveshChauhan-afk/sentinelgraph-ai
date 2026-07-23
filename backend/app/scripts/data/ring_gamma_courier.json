@@ -1,0 +1,58 @@
+[
+  {
+    "title": "International Parcel Customs Fee Scam",
+    "description": "I received an SMS stating that my international parcel was being held by Express Logistics India. The message directed me to visit https://trackparcel-support.in and contact customer support at +91 9123456780. I was instructed to pay ₹8,900 to UPI ID customfees@paytm for customs clearance. After making the payment, the tracking website stopped working.",
+    "reporter_type": "citizen",
+    "source": "web_portal",
+    "case_reference": null
+  },
+  {
+    "title": "Fake Delivery Charge Fraud",
+    "description": "A caller from +91 9123456780 claimed to be from Express Logistics India and informed me that my parcel required an additional delivery charge. I transferred ₹2,500 to customfees@paytm after checking the tracking details on https://trackparcel-support.in. My parcel never arrived.",
+    "reporter_type": "citizen",
+    "source": "web_portal",
+    "case_reference": null
+  },
+  {
+    "title": "Parcel Insurance Payment Scam",
+    "description": "I was told that my shipment required mandatory insurance before delivery. The representative from Express Logistics India instructed me to pay ₹5,400 through customfees@paytm. The communication came from +91 9123456780 and the tracking page was https://trackparcel-support.in. The shipment was fake.",
+    "reporter_type": "citizen",
+    "source": "web_portal",
+    "case_reference": null
+  },
+  {
+    "title": "Address Verification Courier Scam",
+    "description": "A fraudster pretending to work for Express Logistics India called me from +91 9123456780 and claimed my parcel could not be delivered due to an address mismatch. I was asked to pay ₹1,800 using customfees@paytm after verifying the parcel on https://trackparcel-support.in. The parcel did not exist.",
+    "reporter_type": "citizen",
+    "source": "web_portal",
+    "case_reference": null
+  },
+  {
+    "title": "Courier GST Collection Fraud",
+    "description": "I received an email claiming my imported parcel required GST payment before release. The email directed me to https://trackparcel-support.in and customer support number +91 9123456780. I transferred ₹7,600 to customfees@paytm but never received any shipment.",
+    "reporter_type": "citizen",
+    "source": "web_portal",
+    "case_reference": null
+  },
+  {
+    "title": "Redelivery Fee Scam",
+    "description": "Express Logistics India informed me that my delivery had failed and required a redelivery fee of ₹950. I made the payment to customfees@paytm after speaking with +91 9123456780 and checking the parcel status on https://trackparcel-support.in. It turned out to be fraudulent.",
+    "reporter_type": "citizen",
+    "source": "web_portal",
+    "case_reference": null
+  },
+  {
+    "title": "Courier Holding Charge Scam",
+    "description": "I received a call stating that my parcel was being held at a warehouse. The caller asked me to pay ₹3,200 to customfees@paytm. The caller identified themselves as Express Logistics India using phone number +91 9123456780 and directed me to https://trackparcel-support.in. The parcel never existed.",
+    "reporter_type": "citizen",
+    "source": "web_portal",
+    "case_reference": null
+  },
+  {
+    "title": "International Shipment Release Fraud",
+    "description": "Someone pretending to be from Express Logistics India claimed my overseas shipment required immediate release charges. I transferred ₹9,800 to customfees@paytm after confirming the fake tracking details at https://trackparcel-support.in. The fraudster became unreachable afterwards.",
+    "reporter_type": "citizen",
+    "source": "web_portal",
+    "case_reference": null
+  }
+]

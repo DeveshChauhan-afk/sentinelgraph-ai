@@ -1,0 +1,22 @@
+2026-07-22 20:18:25.857 | INFO     | app.services.investigation.cache:__init__:28 - Investigation cache initialized (TTL=300 seconds)
+2026-07-22 20:18:25.960 | INFO     | app.main:create_application:38 - FastAPI application created and routes registered.
+INFO:     Started server process [13048]
+INFO:     Waiting for application startup.
+[32m2026-07-22 20:18:26[0m | [1mINFO    [0m | [36mlogger[0m | [36msetup_logger[0m | [36m65[0m | Logger initialized.
+[32m2026-07-22 20:18:26[0m | [1mINFO    [0m | [36mneo4j[0m | [36mconnect_neo4j[0m | [36m26[0m | Connecting to Neo4j...
+[32m2026-07-22 20:18:27[0m | [32m[1mSUCCESS [0m | [36mneo4j[0m | [36mconnect_neo4j[0m | [36m38[0m | Connected to Neo4j.
+[32m2026-07-22 20:18:27[0m | [1mINFO    [0m | [36mevents[0m | [36mstartup[0m | [36m18[0m | 
+==================================================
+SentinelGraph AI - Digital Public Safety Platform
+Status: ONLINE
+==================================================
+
+[32m2026-07-22 20:18:27[0m | [1mINFO    [0m | [36mevents[0m | [36mstartup[0m | [36m19[0m | Configuration validation complete.
+[32m2026-07-22 20:18:27[0m | [1mINFO    [0m | [36mevents[0m | [36mstartup[0m | [36m20[0m | Application ready.
+INFO:     Application startup complete.
+ERROR:    [Errno 10048] error while attempting to bind on address ('127.0.0.1', 8000): [winerror 10048] only one usage of each socket address (protocol/network address/port) is normally permitted
+INFO:     Waiting for application shutdown.
+[32m2026-07-22 20:18:27[0m | [1mINFO    [0m | [36mneo4j[0m | [36mdisconnect_neo4j[0m | [36m54[0m | Neo4j connection closed.
+[32m2026-07-22 20:18:27[0m | [1mINFO    [0m | [36mevents[0m | [36mshutdown[0m | [36m25[0m | SentinelGraph AI shutting down...
+[32m2026-07-22 20:18:27[0m | [1mINFO    [0m | [36mevents[0m | [36mshutdown[0m | [36m26[0m | Shutdown complete.
+INFO:     Application shutdown complete.

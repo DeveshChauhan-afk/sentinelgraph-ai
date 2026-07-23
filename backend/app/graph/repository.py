@@ -31,7 +31,6 @@ from app.graph.query_models import RelatedIncidentsResponse
 from app.graph.exceptions import GraphQueryError
 from app.graph.query_results import (
     NeighborQueryResult,
-    IncidentQueryResult,
     TopRiskEntityResult,
 )
 
@@ -44,7 +43,7 @@ from app.graph.query_results import PathResult
 from app.graph.query_results import SharedEntityResult
 from typing import Any
 from neo4j.graph import Path
-from app.schemas.analytics import GraphSummary
+from app.schemas.analytics import FraudRingSummary, GraphSummary
 from app.schemas.analytics import TopConnectedEntity
 from app.schemas.analytics import SharedEntityAnalysis
 
@@ -132,87 +131,6 @@ class GraphRepository:
             duration_ms=duration_ms,
         )
 
-    '''async def find_entity(
-        self,
-        value: str,
-    ) -> GraphNode | None:
-        """
-        Find a graph entity by its value.
-
-        Args:
-            value:
-                Entity value (phone number, email, UPI ID, etc.).
-
-        Returns:
-            The matching graph node if found, otherwise None.
-
-        Raises:
-            GraphConnectionError:
-                If a Neo4j connection cannot be established.
-
-            GraphPersistenceError:
-                If the query execution fails.
-        """
-        logger.debug(
-            "Searching graph entity with value '{}'.",
-            value,
-        )
-
-        query = """
-        MATCH (n)
-        WHERE n.value = $value
-        RETURN n, labels(n) AS labels
-        LIMIT 1
-        """
-
-        try:
-            async with self._driver.session() as session:
-                result = await session.run(
-                    query,
-                    value=value,
-                )
-
-                record = await result.single()
-
-        except Neo4jError as exc:
-            logger.exception(
-                "Failed to query graph entity '{}'.",
-                value,
-            )
-
-            raise GraphPersistenceError("Failed to query graph entity.") from exc
-
-        except Exception as exc:
-            logger.exception("Unable to connect to Neo4j.")
-
-            raise GraphConnectionError("Neo4j connection failed.") from exc
-
-        if record is None:
-            logger.debug(
-                "No graph entity found for '{}'.",
-                value,
-            )
-            return None
-
-        node = record["n"]
-        labels = record["labels"]
-
-        if not labels:
-            logger.warning(
-                "Graph node '{}' has no labels.",
-                node["id"],
-            )
-            return None
-
-        properties = dict(node)
-        properties.pop("id", None)
-
-        return GraphNode(
-            id=node["id"],
-            label=GraphLabel(labels[0]),
-            properties=properties,
-        )'''
-
     async def find_entity(
         self,
         value: str,
@@ -241,7 +159,7 @@ class GraphRepository:
 
         query = """
         MATCH (n)
-        WHERE n.value = $value
+        WHERE n.lookup_value = $value
         RETURN n, labels(n) AS labels
         LIMIT 1
         """
@@ -286,6 +204,64 @@ class GraphRepository:
             labels=record["labels"],
         )
 
+    async def _get_connected_complaints(
+        self,
+        entity: GraphNode,
+    ) -> list[GraphNode]:
+        """
+        Return complaints connected to the supplied node.
+        """
+
+        if entity.label == GraphLabel.COMPLAINT:
+            query = """
+            MATCH (complaint:Complaint {lookup_value:$value})
+            MATCH (complaint)-[:MENTIONS]->(e)
+            MATCH (e)<-[:MENTIONS]-(related:Complaint)
+            WHERE related <> complaint
+            RETURN DISTINCT related, labels(related) AS labels
+            """
+        else:
+            query = """
+            MATCH (entity {lookup_value:$value})
+            MATCH (entity)<-[:MENTIONS]-(complaint:Complaint)
+            RETURN DISTINCT complaint, labels(complaint) AS labels
+            """
+
+        try:
+            async with self._driver.session() as session:
+                result = await session.run(
+                    query,
+                    value=entity.properties["lookup_value"],
+                )
+
+                records = await result.data()
+
+        except Neo4jError as exc:
+            logger.exception("Failed to retrieve connected complaints.")
+            raise GraphQueryError("Failed to retrieve connected complaints.") from exc
+
+        except Exception as exc:
+            logger.exception("Unable to connect to Neo4j.")
+            raise GraphConnectionError("Neo4j connection failed.") from exc
+
+        complaints: list[GraphNode] = []
+
+        for record in records:
+            node = (
+                record["related"]
+                if entity.label == GraphLabel.COMPLAINT
+                else record["complaint"]
+            )
+
+            complaints.append(
+                self._map_node(
+                    node=node,
+                    labels=record["labels"],
+                )
+            )
+
+        return complaints
+
     async def find_neighbors(
         self,
         value: str,
@@ -313,7 +289,7 @@ class GraphRepository:
         )
 
         query = """
-        MATCH (entity {value: $value})
+        MATCH (entity {lookup_value: $value})
         OPTIONAL MATCH (entity)-[]-(neighbor)
         RETURN entity,
             labels(entity) AS entity_labels,
@@ -384,11 +360,11 @@ class GraphRepository:
         value: str,
     ) -> RelatedIncidentsResponse | None:
         """
-        Retrieve all complaint nodes connected to an entity.
+        Retrieve all complaint nodes connected to the supplied node.
 
         Args:
             value:
-                Entity value (phone number, UPI ID, email, etc.).
+                Lookup value of the target node.
 
         Returns:
             RelatedIncidentsResponse if the entity exists, otherwise None.
@@ -400,31 +376,19 @@ class GraphRepository:
             GraphQueryError:
                 If the graph query fails.
         """
+
         logger.debug(
-            "Finding related incidents for entity '{}'.",
+            "Finding related incidents for '{}'.",
             value,
         )
 
-        query = """
-        MATCH (entity {value: $value})
-        OPTIONAL MATCH (entity)-[:MENTIONS]-(incident:Complaint)
+        entity = await self.find_entity(value)
 
-        RETURN entity,
-            labels(entity) AS entity_labels,
-            collect({
-               node: incident,
-               labels: labels(incident)
-           }) AS incidents
-        """
+        if entity is None:
+            return None
 
         try:
-            async with self._driver.session() as session:
-                result = await session.run(
-                    query,
-                    value=value,
-                )
-
-                record = await result.single()
+            incidents = await self._get_connected_complaints(entity)
 
         except Neo4jError as exc:
             logger.exception(
@@ -436,6 +400,9 @@ class GraphRepository:
                 "Failed to retrieve related incidents.",
             ) from exc
 
+        except GraphConnectionError:
+            raise
+
         except Exception as exc:
             logger.exception(
                 "Unable to connect to Neo4j.",
@@ -445,30 +412,7 @@ class GraphRepository:
                 "Neo4j connection failed.",
             ) from exc
 
-        if record is None or record["entity"] is None:
-            return None
-
-        entity = self._map_node(
-            node=record["entity"],
-            labels=record["entity_labels"],
-        )
-
-        incidents: list[GraphNode] = []
-
-        for item in record["incidents"]:
-            node = item["node"]
-
-            if node is None:
-                continue
-
-            incidents.append(
-                self._map_node(
-                    node=node,
-                    labels=item["labels"],
-                )
-            )
-
-        return IncidentQueryResult(
+        return RelatedIncidentsResponse(
             entity=entity,
             incidents=incidents,
         )
@@ -717,37 +661,19 @@ class GraphRepository:
     ) -> RiskMetricsResult | None:
         """
         Retrieve graph metrics required for risk analysis.
-
-        Args:
-            value:
-                Entity value (phone number, UPI ID, email, etc.).
-
-        Returns:
-            RiskMetricsResult if the entity exists, otherwise None.
-
-        Raises:
-            GraphConnectionError:
-                If a Neo4j connection cannot be established.
-
-            GraphQueryError:
-                If the query execution fails.
         """
+
         logger.debug(
-            "Retrieving risk metrics for entity '{}'.",
+            "Retrieving risk metrics for '{}'.",
             value,
         )
 
         query = """
-        MATCH (entity {value: $value})
+        MATCH (entity {lookup_value: $value})
 
         CALL (entity) {
             OPTIONAL MATCH (entity)-[]-(neighbor)
             RETURN count(DISTINCT neighbor) AS neighbor_count
-        }
-
-        CALL (entity) {
-            OPTIONAL MATCH (entity)-[:MENTIONS]-(incident:Complaint)
-            RETURN count(DISTINCT incident) AS incident_count
         }
 
         CALL (entity) {
@@ -773,7 +699,6 @@ class GraphRepository:
         RETURN
             entity,
             labels(entity) AS entity_labels,
-            incident_count,
             neighbor_count,
             phone_count,
             upi_count,
@@ -817,9 +742,12 @@ class GraphRepository:
             labels=record["entity_labels"],
         )
 
+        # Reuse the centralized traversal logic
+        incidents = await self._get_connected_complaints(entity)
+
         return RiskMetricsResult(
             entity=entity,
-            incident_count=record["incident_count"],
+            incident_count=len(incidents),
             neighbor_count=record["neighbor_count"],
             phone_count=record["phone_count"],
             upi_count=record["upi_count"],
@@ -854,7 +782,7 @@ class GraphRepository:
         )
 
         query = """
-        MATCH (entity {value:$value})
+        MATCH (entity {lookup_value:$value})
 
         MATCH (entity)-[*0..6]-(connected)
 
@@ -1134,8 +1062,8 @@ class GraphRepository:
         )
 
         query = """
-        MATCH (source {value: $source})
-        MATCH (target {value: $target})
+        MATCH (source {lookup_value: $source})
+        MATCH (target {lookup_value: $target})
 
         MATCH path = shortestPath(
             (source)-[*..10]-(target)
@@ -1197,7 +1125,7 @@ class GraphRepository:
         value: str,
     ) -> SharedEntityResult | None:
         """
-        Find all complaints connected to an entity.
+        Find all complaints connected to the supplied node.
         """
 
         logger.debug(
@@ -1205,54 +1133,34 @@ class GraphRepository:
             value,
         )
 
-        query = """
-        MATCH (entity {value: $value})
+        entity = await self.find_entity(value)
 
-        OPTIONAL MATCH
-            (entity)<-[:MENTIONS]-(complaint:Complaint)
-
-        RETURN
-            entity,
-            labels(entity) AS labels,
-            collect(DISTINCT complaint) AS complaints
-        """
+        if entity is None:
+            return None
 
         try:
-            async with self._driver.session() as session:
-                result = await session.run(
-                    query,
-                    value=value,
-                )
-
-                record = await result.single()
+            complaints = await self._get_connected_complaints(entity)
 
         except Neo4jError as exc:
-            logger.exception("Shared entity query failed.")
+            logger.exception(
+                "Shared entity query failed.",
+            )
 
             raise GraphQueryError(
                 "Failed to retrieve shared entity analysis.",
             ) from exc
 
+        except GraphConnectionError:
+            raise
+
         except Exception as exc:
-            logger.exception("Neo4j connection failed.")
+            logger.exception(
+                "Neo4j connection failed.",
+            )
 
             raise GraphConnectionError(
                 "Neo4j connection failed.",
             ) from exc
-
-        if record is None:
-            return None
-
-        entity = self._map_node(
-            record["entity"],
-            record["labels"],
-        )
-
-        complaints = [
-            self._map_node(node, ["Complaint"])
-            for node in record["complaints"]
-            if node is not None
-        ]
 
         return SharedEntityResult(
             entity=entity,
@@ -1316,10 +1224,7 @@ class GraphRepository:
                 node_id=node_id,
             )
 
-            paths: list[Path] = [
-                record["path"]
-                async for record in result
-            ]
+            paths: list[Path] = [record["path"] async for record in result]
 
         logger.debug(
             "Retrieved {} graph paths for node '{}'.",
@@ -1328,7 +1233,7 @@ class GraphRepository:
         )
 
         return paths
-    
+
     async def get_graph_summary(
         self,
     ) -> GraphSummary:
@@ -1456,7 +1361,7 @@ class GraphRepository:
         )
 
         return summary
-    
+
     async def get_top_connected_entities(
         self,
         limit: int = 10,
@@ -1510,10 +1415,7 @@ class GraphRepository:
                 limit=limit,
             )
 
-            records = [
-                record
-                async for record in result
-            ]
+            records = [record async for record in result]
 
         entities: list[TopConnectedEntity] = []
 
@@ -1526,7 +1428,7 @@ class GraphRepository:
             entity_type = labels[0] if labels else "UNKNOWN"
 
             label = properties.get(
-                "value",
+                "lookup_value",
                 properties["id"],
             )
 
@@ -1546,7 +1448,7 @@ class GraphRepository:
         )
 
         return entities
-    
+
     async def get_shared_entities(
         self,
         minimum_complaints: int = 2,
@@ -1593,10 +1495,7 @@ class GraphRepository:
                 minimum_complaints=minimum_complaints,
             )
 
-            records = [
-                record
-                async for record in result
-            ]
+            records = [record async for record in result]
 
         shared_entities: list[SharedEntityAnalysis] = []
 
@@ -1611,7 +1510,7 @@ class GraphRepository:
                 SharedEntityAnalysis(
                     entity_id=properties["id"],
                     entity_label=properties.get(
-                        "value",
+                        "lookup_value",
                         properties["id"],
                     ),
                     entity_type=labels[0] if labels else "UNKNOWN",
@@ -1626,5 +1525,224 @@ class GraphRepository:
         )
 
         return shared_entities
-        
-        
+
+    async def get_fraud_rings(
+        self,
+    ) -> list[FraudRingSummary]:
+        """
+        Detect connected fraud rings.
+
+        Returns:
+            Summary of each fraud ring.
+        """
+
+        logger.debug(
+            "Detecting fraud rings.",
+        )
+
+        query = """
+        MATCH (n)
+        WHERE NOT n:Complaint
+
+        CALL {
+            WITH n
+            MATCH (n)
+            OPTIONAL MATCH (n)-[*]-(connected)
+            WHERE NOT connected:Complaint
+            RETURN collect(DISTINCT connected) + n AS component
+        }
+
+        WITH apoc.coll.toSet(component) AS component
+
+        WITH DISTINCT component
+
+        WHERE size(component) > 1
+
+        UNWIND component AS entity
+
+        OPTIONAL MATCH (entity)<-[:MENTIONS]-(c:Complaint)
+
+        WITH
+            component,
+            collect(DISTINCT c) AS complaints
+
+        WITH
+            component,
+            complaints,
+            size(component) AS entity_count,
+            size(complaints) AS complaint_count
+
+        OPTIONAL MATCH (a)-[r]-(b)
+        WHERE a IN component
+        AND b IN component
+
+        WITH
+            component,
+            entity_count,
+            complaint_count,
+            count(DISTINCT r) AS relationship_count
+
+        RETURN
+            toString(id(component[0])) AS ring_id,
+            entity_count,
+            complaint_count,
+            relationship_count
+
+        ORDER BY
+            complaint_count DESC,
+            entity_count DESC
+        """
+
+        try:
+            async with self._driver.session() as session:
+                result = await session.run(query)
+                records = await result.data()
+
+        except Neo4jError as exc:
+            logger.exception(
+                "Fraud ring detection failed.",
+            )
+
+            raise GraphQueryError(
+                "Failed to detect fraud rings.",
+            ) from exc
+
+        except Exception as exc:
+            logger.exception(
+                "Neo4j connection failed.",
+            )
+
+            raise GraphConnectionError(
+                "Neo4j connection failed.",
+            ) from exc
+
+        rings: list[FraudRingSummary] = []
+
+        for record in records:
+            entity_count = record["entity_count"]
+            complaint_count = record["complaint_count"]
+            relationship_count = record["relationship_count"]
+
+            # Same scoring heuristic used elsewhere
+            risk_score = min(
+                100.0,
+                complaint_count * 5 + entity_count * 2 + relationship_count,
+            )
+
+            rings.append(
+                FraudRingSummary(
+                    ring_id=record["ring_id"],
+                    entity_count=entity_count,
+                    complaint_count=complaint_count,
+                    relationship_count=relationship_count,
+                    risk_score=risk_score,
+                )
+            )
+
+        return rings
+
+
+    async def get_investigation_timeline_data(
+        self,
+        value: str,
+    ) -> list[dict] | None:
+        """
+        Retrieve chronological complaint evidence for timeline reconstruction.
+
+        Args:
+            value:
+                Lookup value of the investigation target.
+
+        Returns:
+            Chronological complaint evidence, or None if the target does not exist.
+
+        Raises:
+            GraphConnectionError:
+                If Neo4j cannot be reached.
+
+            GraphQueryError:
+                If the graph query fails.
+        """
+
+        logger.debug(
+            "Building investigation timeline for '{}'.",
+            value,
+        )
+
+        entity = await self.find_entity(value)
+
+        if entity is None:
+            return None
+
+        if entity.label == GraphLabel.COMPLAINT:
+            query = """
+            MATCH (target:Complaint {lookup_value:$value})
+            MATCH (target)-[:MENTIONS]->(:Phone|UPI|Email|BankAccount|Organization|Person|Location|URL)<-[:MENTIONS]-(c:Complaint)
+            WITH collect(DISTINCT target) + collect(DISTINCT c) AS complaints
+            UNWIND complaints AS complaint
+            OPTIONAL MATCH (complaint)-[:MENTIONS]->(e)
+            RETURN DISTINCT
+                complaint,
+                labels(complaint) AS complaint_labels,
+                complaint.created_at AS created_at,
+                collect(DISTINCT e) AS entities
+            ORDER BY created_at ASC
+            """
+        else:
+            query = """
+            MATCH (target {lookup_value:$value})
+            MATCH (target)<-[:MENTIONS]-(complaint:Complaint)
+            OPTIONAL MATCH (complaint)-[:MENTIONS]->(e)
+            RETURN
+                complaint,
+                labels(complaint) AS complaint_labels,
+                complaint.created_at AS created_at,
+                collect(DISTINCT e) AS entities
+            ORDER BY created_at ASC
+            """
+
+        try:
+            async with self._driver.session() as session:
+                result = await session.run(
+                    query,
+                    value=value,
+                )
+
+                records = await result.data()
+
+        except Neo4jError as exc:
+            logger.exception(
+                "Failed to build investigation timeline for '{}'.",
+                value,
+            )
+
+            raise GraphQueryError(
+                "Failed to retrieve investigation timeline.",
+            ) from exc
+
+        except Exception as exc:
+            logger.exception(
+                "Unable to connect to Neo4j.",
+            )
+
+            raise GraphConnectionError(
+                "Neo4j connection failed.",
+            ) from exc
+
+        timeline: list[dict] = []
+
+        for record in records:
+            timeline.append(
+                {
+                    "complaint": self._map_node(
+                        node=record["complaint"],
+                        labels=record["complaint_labels"],
+                    ),
+                    "created_at": record["created_at"],
+                    "entities": self._map_nodes(
+                        record["entities"],
+                    ),
+                }
+            )
+
+        return timeline

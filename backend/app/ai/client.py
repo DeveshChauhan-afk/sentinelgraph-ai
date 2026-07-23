@@ -17,6 +17,7 @@ import time
 from google import genai
 from google.genai import types
 from loguru import logger
+from pydantic import BaseModel
 
 from app.ai.base import AIClient
 from app.ai.exceptions import (
@@ -52,7 +53,10 @@ class GeminiClient(AIClient):
         except Exception as exc:
             raise AIConfigurationError("Failed to initialize Gemini client.") from exc
 
-    def _build_generation_config(self) -> types.GenerateContentConfig:
+    def _build_generation_config(
+        self,
+        response_schema: type[BaseModel] | None = InvestigationReport,
+    ) -> types.GenerateContentConfig:
         """
         Build Gemini generation configuration.
 
@@ -63,18 +67,22 @@ class GeminiClient(AIClient):
             temperature=self._settings.LLM_TEMPERATURE,
             max_output_tokens=self._settings.LLM_MAX_TOKENS,
             response_mime_type="application/json",
-            response_schema=InvestigationReport,
+            response_schema=response_schema,
         )
 
     async def generate_content(
         self,
         prompt: str,
+        response_schema: type[BaseModel] | None = InvestigationReport,
     ) -> str:
         """
         Generate content using Gemini.
 
         Args:
             prompt: Prompt sent to Gemini.
+
+            response_schema: Schema for this specific response. Defaults to the
+                investigation-report schema for the existing investigation flow.
 
         Returns:
             Generated text response.
@@ -97,7 +105,7 @@ class GeminiClient(AIClient):
                 self._client.models.generate_content,
                 model=self._settings.GEMINI_MODEL,
                 contents=prompt,
-                config=self._build_generation_config(),
+                config=self._build_generation_config(response_schema),
             )
 
             logger.info(

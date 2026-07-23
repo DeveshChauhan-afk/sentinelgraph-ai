@@ -33,15 +33,11 @@ class AnalyticsService:
         """
         Retrieve graph-wide summary statistics.
         """
-        logger.info(
-            "Generating graph summary analytics."
-        )
+        logger.info("Generating graph summary analytics.")
 
         summary = await self._repository.get_graph_summary()
 
-        logger.info(
-            "Graph summary generated successfully."
-        )
+        logger.info("Graph summary generated successfully.")
 
         return summary
 
@@ -74,7 +70,7 @@ class AnalyticsService:
         )
 
         return entities
-    
+
     async def get_shared_entities(
         self,
         minimum_complaints: int = 2,

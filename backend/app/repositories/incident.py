@@ -112,3 +112,12 @@ class IncidentRepository(BaseRepository[Incident]):
         )
         result = await self.session.execute(stmt)
         return list(result.scalars().all())
+
+    async def get_all(self) -> list[Incident]:
+        """
+        Retrieve all incidents ordered by creation time.
+        """
+        result = await self._session.execute(
+            select(Incident).order_by(Incident.created_at)
+        )
+        return list(result.scalars().all())

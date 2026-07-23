@@ -1,3 +1,4 @@
+# app/services/investigation_service.py
 """
 Graph-RAG investigation service.
 
@@ -173,6 +174,8 @@ class InvestigationService:
             raw_response,
         )
         timer.stop("Parser")
+
+        timer.stop("Gemini")
 
         logger.info(
             "Investigation complete | Risk={} | Confidence={} | Findings={}",

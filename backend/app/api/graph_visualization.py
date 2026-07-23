@@ -21,7 +21,6 @@ router = APIRouter(
 )
 
 
-
 @router.get(
     "/visualization/{node_id}",
     response_model=GraphResponse,

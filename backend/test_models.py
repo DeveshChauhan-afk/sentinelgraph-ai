@@ -1,8 +1,13 @@
+from dotenv import load_dotenv
+import os
 from google import genai
 
-from app.core.config import settings
+load_dotenv()
 
-client = genai.Client(api_key=settings.GEMINI_API_KEY.get_secret_value())
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
-for model in client.models.list():
-    print(model.name)
+response = client.models.generate_content(
+    model="gemini-3.5-flash-lite", contents="Say hello."
+)
+
+print(response.text)

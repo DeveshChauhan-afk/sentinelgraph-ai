@@ -1,3 +1,5 @@
+# app/graph/builder.py
+
 """
 Graph builder for Fraud Intelligence Graph.
 
@@ -127,6 +129,7 @@ class GraphBuilder:
             label=GraphLabel.COMPLAINT,
             properties={
                 "complaint_id": str(complaint_id),
+                "lookup_value": str(complaint_id),
             },
         )
 
@@ -149,6 +152,7 @@ class GraphBuilder:
                     properties={
                         "value": entity.value,
                         "confidence": entity.confidence,
+                        "lookup_value": entity.value,
                     },
                 )
 

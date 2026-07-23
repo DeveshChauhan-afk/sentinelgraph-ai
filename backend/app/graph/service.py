@@ -61,6 +61,15 @@ class GraphService:
             "Building fraud intelligence graph for complaint '{}'.",
             complaint_id,
         )
+        logger.debug(
+            "Graph builder received extracted entities for complaint '{}' "
+            "(counts={}).",
+            complaint_id,
+            {
+                name: len(getattr(entities, name))
+                for name in ExtractedEntities.model_fields
+            },
+        )
 
         graph = self._builder.build(
             complaint_id=complaint_id,

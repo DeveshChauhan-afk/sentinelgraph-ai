@@ -1,0 +1,44 @@
+[
+  {
+    "title": "QR Code Payment Scam",
+    "description": "A stranger claimed they needed to send me money and asked me to scan a QR code. After scanning it, ₹9,500 was deducted from my bank account instead of being credited.",
+    "reporter_type": "citizen",
+    "source": "web_portal",
+    "case_reference": null
+  },
+  {
+    "title": "Fake Electricity Bill Scam",
+    "description": "I received an SMS stating that my electricity connection would be disconnected unless I paid an overdue bill immediately. The message contained a fraudulent payment link. After making the payment, I discovered the electricity department had not sent the message.",
+    "reporter_type": "citizen",
+    "source": "web_portal",
+    "case_reference": null
+  },
+  {
+    "title": "Fraudulent Charity Donation Request",
+    "description": "I received a social media message requesting donations for flood relief. The campaign appeared genuine, but after donating ₹15,000 I learned the charity organization did not exist.",
+    "reporter_type": "citizen",
+    "source": "web_portal",
+    "case_reference": null
+  },
+  {
+    "title": "Job Offer Registration Scam",
+    "description": "A company offered me a work-from-home position but requested a registration fee of ₹4,500 before issuing the appointment letter. After payment, all contact details became inactive.",
+    "reporter_type": "citizen",
+    "source": "web_portal",
+    "case_reference": null
+  },
+  {
+    "title": "Fake Customer Care Refund Scam",
+    "description": "I searched online for customer care of an e-commerce website and called the first number that appeared. The representative convinced me to install a remote access application to process a refund. Money was transferred from my account without authorization.",
+    "reporter_type": "citizen",
+    "source": "web_portal",
+    "case_reference": null
+  },
+  {
+    "title": "Matrimonial Profile Fraud",
+    "description": "I met someone through a matrimonial website who claimed to be working abroad. After several conversations they requested financial assistance for an emergency. I transferred ₹55,000 before realizing the profile was fake.",
+    "reporter_type": "citizen",
+    "source": "web_portal",
+    "case_reference": null
+  }
+]

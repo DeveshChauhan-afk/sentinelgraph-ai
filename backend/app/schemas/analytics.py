@@ -125,6 +125,7 @@ class FraudRingSummary(BaseModel):
         description="Computed fraud risk score.",
     )
 
+
 class SharedEntityAnalysis(BaseModel):
     """
     Represents a shared entity linking multiple complaints.

@@ -1,0 +1,72 @@
+[
+  {
+    "title": "Fake SBI KYC Verification Call",
+    "description": "I received a call from +91 9876543210 from a person claiming to be an executive of State Bank of India. He said my KYC had expired and my account would be frozen unless I completed verification immediately. I was instructed to transfer ₹48,500 to UPI ID securekyc@ibl. After making the payment, the caller disconnected and became unreachable.",
+    "reporter_type": "citizen",
+    "source": "web_portal",
+    "case_reference": null
+  },
+  {
+    "title": "PAN Verification Fraud in SBI",
+    "description": "Someone called me from +91 9876543210 claiming my PAN was not linked with my State Bank of India account. They asked me to pay ₹12,000 through securekyc@ibl to avoid account suspension. After payment, the number was switched off.",
+    "reporter_type": "citizen",
+    "source": "web_portal",
+    "case_reference": null
+  },
+  {
+    "title": "Fake RBI and SBI KYC Update",
+    "description": "A caller claiming to represent RBI and State Bank of India contacted me from +91 9876543210. I was told to complete KYC verification by sending ₹24,000 to securekyc@ibl. They promised the money would be refunded after verification but I lost the amount.",
+    "reporter_type": "citizen",
+    "source": "web_portal",
+    "case_reference": null
+  },
+  {
+    "title": "Debit Card Block Scam",
+    "description": "A fraudster pretending to be from State Bank of India informed me that my debit card had been blocked due to incomplete KYC. I was instructed to transfer ₹9,500 to securekyc@ibl using phone number +91 9876543210. After payment, there was no response.",
+    "reporter_type": "citizen",
+    "source": "web_portal",
+    "case_reference": null
+  },
+  {
+    "title": "CKYC Renewal Fraud",
+    "description": "I received a call from +91 9876543210 saying my CKYC registration had expired. The caller claimed to be an SBI officer and directed me to pay ₹18,000 to securekyc@ibl to complete the renewal. Later I realized it was a scam.",
+    "reporter_type": "citizen",
+    "source": "web_portal",
+    "case_reference": null
+  },
+  {
+    "title": "Aadhaar Linking Scam",
+    "description": "A person claiming to work for State Bank of India called from +91 9876543210 and informed me that my Aadhaar was not linked with my account. I was instructed to transfer ₹15,500 to securekyc@ibl as a verification charge. The fraudster disappeared after receiving the money.",
+    "reporter_type": "citizen",
+    "source": "web_portal",
+    "case_reference": null
+  },
+  {
+    "title": "Internet Banking Activation Fraud",
+    "description": "I was contacted by a fake SBI customer support executive from +91 9876543210 who claimed my internet banking could only be activated after paying ₹5,000 to securekyc@ibl. After transferring the money, the caller stopped responding.",
+    "reporter_type": "citizen",
+    "source": "web_portal",
+    "case_reference": null
+  },
+  {
+    "title": "Mobile Number Verification Scam",
+    "description": "The caller from +91 9876543210 informed me that my registered mobile number required urgent verification with State Bank of India. Believing the caller, I transferred ₹8,000 to securekyc@ibl. The phone became unreachable afterwards.",
+    "reporter_type": "citizen",
+    "source": "web_portal",
+    "case_reference": null
+  },
+  {
+    "title": "SBI Account Freeze Threat",
+    "description": "A fraudster using phone number +91 9876543210 claimed my SBI account would be permanently frozen due to expired KYC. I paid ₹31,000 through UPI ID securekyc@ibl hoping to restore my account. The fraudster vanished after receiving the payment.",
+    "reporter_type": "citizen",
+    "source": "web_portal",
+    "case_reference": null
+  },
+  {
+    "title": "Fake SBI Account Verification Fee",
+    "description": "A caller claiming to be an officer from State Bank of India contacted me from +91 9876543210 and requested ₹27,000 for mandatory account verification through securekyc@ibl. After transferring the money, I was unable to contact the person again.",
+    "reporter_type": "citizen",
+    "source": "web_portal",
+    "case_reference": null
+  }
+]

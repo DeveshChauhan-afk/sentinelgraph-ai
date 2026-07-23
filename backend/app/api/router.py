@@ -13,7 +13,13 @@ api_router.include_router(health.router, prefix="/health", tags=["General"])
 api_router.include_router(version.router, prefix="/version", tags=["General"])
 api_router.include_router(auth.router, prefix="/auth", tags=["Auth"])
 api_router.include_router(complaints.router, prefix="/complaints", tags=["Complaints"])
-api_router.include_router(investigation.router, prefix="/investigation", tags=["Investigation"])
+api_router.include_router(
+    investigation.router, prefix="/investigation", tags=["Investigation"]
+)
 api_router.include_router(graph.router, prefix="/graph", tags=["Graph Intelligence"])
-api_router.include_router(graph_visualization_router,)
-api_router.include_router(analytics.router,)
+api_router.include_router(
+    graph_visualization_router,
+)
+api_router.include_router(
+    analytics.router,
+)

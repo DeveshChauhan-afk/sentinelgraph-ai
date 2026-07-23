@@ -6,6 +6,8 @@ Defines the contract that all AI providers must implement.
 
 from abc import ABC, abstractmethod
 
+from pydantic import BaseModel
+
 
 class AIClient(ABC):
     """
@@ -13,12 +15,18 @@ class AIClient(ABC):
     """
 
     @abstractmethod
-    async def generate_content(self, prompt: str) -> str:
+    async def generate_content(
+        self,
+        prompt: str,
+        response_schema: type[BaseModel] | None = None,
+    ) -> str:
         """
         Generate text content from the supplied prompt.
 
         Args:
             prompt: Input prompt.
+
+            response_schema: Optional schema Gemini must use for its JSON response.
 
         Returns:
             Generated text response.

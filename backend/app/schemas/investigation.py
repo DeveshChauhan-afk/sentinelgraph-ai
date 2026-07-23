@@ -1,3 +1,4 @@
+#app/schemas/investigation.py
 """
 Schemas for Graph-RAG fraud investigations.
 """
@@ -14,7 +15,6 @@ from app.graph.query_models import (
     RelatedIncidentsResponse,
     SharedEntityResponse,
 )
-
 
 class InvestigationTargetType(str, Enum):
     """

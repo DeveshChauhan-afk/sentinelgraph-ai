@@ -44,7 +44,10 @@ class EntityExtractionService:
             complaint,
         )
 
-        response = await self._ai_client.generate_content(prompt)
+        response = await self._ai_client.generate_content(
+            prompt,
+            response_schema=ExtractedEntities,
+        )
 
         try:
             entities = ExtractedEntities.model_validate_json(
@@ -56,6 +59,17 @@ class EntityExtractionService:
                 "Gemini returned an invalid structured response."
             ) from exc
 
-        logger.info("Entity extraction completed successfully.")
+        entity_counts = {
+            name: len(getattr(entities, name))
+            for name in ExtractedEntities.model_fields
+        }
+        logger.debug(
+            "Validated extracted entities (counts={}, entities={}).",
+            entity_counts,
+            entities.model_dump(mode="json"),
+        )
+        logger.info(
+            "Entity extraction completed successfully (counts={}).", entity_counts
+        )
 
         return entities
