@@ -245,7 +245,7 @@ http://localhost:8000/docs
 
 ## AI Investigation Report
 
-> *(Insert Investigation Report Screenshot)*
+![investigation](investigation.png)
 
 ---
 
