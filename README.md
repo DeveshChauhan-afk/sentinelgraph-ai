@@ -50,7 +50,7 @@ Instead of treating every complaint as an isolated record, SentinelGraph AI extr
 
 # 🏗️ System Architecture
 
-> *(Insert your High-Level Architecture Diagram here)*
+![hld](hld.png)
 
 ```
 Complaint
