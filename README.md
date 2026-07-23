@@ -125,7 +125,7 @@ sentinelgraph-ai/
 ## Clone Repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/SentinelGraph-AI.git
+git clone https://github.com/DeveshChauhan-afk/SentinelGraph-AI.git
 
 cd SentinelGraph-AI
 ```
