@@ -239,7 +239,7 @@ http://localhost:8000/docs
 
 ## Neo4j Knowledge Graph
 
-> *(Insert Neo4j Screenshot)*
+![neo4j](neo4j.png)
 
 ---
 
