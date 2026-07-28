@@ -117,7 +117,7 @@ class IncidentRepository(BaseRepository[Incident]):
         """
         Retrieve all incidents ordered by creation time.
         """
-        result = await self._session.execute(
+        result = await self.session.execute(
             select(Incident).order_by(Incident.created_at)
         )
         return list(result.scalars().all())

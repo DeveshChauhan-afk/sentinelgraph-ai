@@ -1746,3 +1746,68 @@ class GraphRepository:
             )
 
         return timeline
+
+    async def clear_graph(self) -> None:
+        """
+        Delete all nodes and relationships from Neo4j.
+        """
+        query = "MATCH (n) DETACH DELETE n"
+        try:
+            async with self._driver.session() as session:
+                await session.run(query)
+            logger.info("Existing Neo4j graph deleted.")
+        except Neo4jError as exc:
+            logger.exception("Failed to clear Neo4j graph.")
+            raise GraphPersistenceError("Failed to clear Neo4j graph.") from exc
+        except Exception as exc:
+            logger.exception("Unable to connect to Neo4j.")
+            raise GraphConnectionError("Neo4j connection failed.") from exc
+
+    async def verify_complaint_timestamps(self) -> tuple[int, int]:
+        """
+        Return count of Complaint nodes and count of Complaint nodes with created_at timestamp.
+        """
+        query = """
+        MATCH (c:Complaint)
+        RETURN count(c) AS complaints, count(c.created_at) AS timestamps
+        """
+        try:
+            async with self._driver.session() as session:
+                result = await session.run(query)
+                record = await result.single()
+                if record is None:
+                    return 0, 0
+                return record["complaints"], record["timestamps"]
+        except Neo4jError as exc:
+            logger.exception("Failed to verify complaint timestamps.")
+            raise GraphQueryError("Failed to verify complaint timestamps.") from exc
+        except Exception as exc:
+            logger.exception("Unable to connect to Neo4j.")
+            raise GraphConnectionError("Neo4j connection failed.") from exc
+
+    async def get_sample_complaint_timestamps(
+        self,
+        limit: int = 5,
+    ) -> list[tuple[str, str]]:
+        """
+        Retrieve sample complaint lookup values and created_at timestamps.
+        """
+        query = """
+        MATCH (c:Complaint)
+        RETURN c.lookup_value AS lookup_value, c.created_at AS created_at
+        LIMIT $limit
+        """
+        try:
+            async with self._driver.session() as session:
+                result = await session.run(query, limit=limit)
+                records = await result.data()
+                return [
+                    (record["lookup_value"], record["created_at"])
+                    for record in records
+                ]
+        except Neo4jError as exc:
+            logger.exception("Failed to fetch sample complaint timestamps.")
+            raise GraphQueryError("Failed to fetch sample complaint timestamps.") from exc
+        except Exception as exc:
+            logger.exception("Unable to connect to Neo4j.")
+            raise GraphConnectionError("Neo4j connection failed.") from exc

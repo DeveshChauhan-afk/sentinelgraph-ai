@@ -7,6 +7,7 @@ Fraud Intelligence Graph.
 
 from __future__ import annotations
 
+from datetime import datetime
 from uuid import UUID
 
 from loguru import logger
@@ -42,6 +43,7 @@ class GraphService:
     async def build_and_persist(
         self,
         complaint_id: UUID,
+        created_at: datetime,
         entities: ExtractedEntities,
     ) -> GraphPersistenceResult:
         """
@@ -50,6 +52,9 @@ class GraphService:
         Args:
             complaint_id:
                 Complaint identifier.
+
+            created_at:
+                Complaint creation timestamp.
 
             entities:
                 Extracted entities from the AI pipeline.
@@ -73,6 +78,7 @@ class GraphService:
 
         graph = self._builder.build(
             complaint_id=complaint_id,
+            created_at=created_at,
             entities=entities,
         )
         logger.debug(

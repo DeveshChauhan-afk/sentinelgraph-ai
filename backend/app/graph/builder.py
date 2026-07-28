@@ -6,6 +6,7 @@ Graph builder for Fraud Intelligence Graph.
 Transforms extracted entities into provider-independent graph objects.
 """
 
+from datetime import datetime
 from uuid import UUID
 
 from app.graph.models import (
@@ -29,6 +30,7 @@ class GraphBuilder:
     def build(
         self,
         complaint_id: UUID,
+        created_at: datetime,
         entities: ExtractedEntities,
     ) -> GraphData:
         """
@@ -40,6 +42,7 @@ class GraphBuilder:
 
         complaint = self._create_complaint_node(
             complaint_id,
+            created_at,
         )
 
         nodes[complaint.id] = complaint
@@ -123,6 +126,7 @@ class GraphBuilder:
     def _create_complaint_node(
         self,
         complaint_id: UUID,
+        created_at: datetime,
     ) -> GraphNode:
         return GraphNode(
             id=f"complaint:{complaint_id}",
@@ -130,6 +134,7 @@ class GraphBuilder:
             properties={
                 "complaint_id": str(complaint_id),
                 "lookup_value": str(complaint_id),
+                "created_at": created_at.isoformat(),
             },
         )
 
@@ -163,3 +168,5 @@ class GraphBuilder:
                     type=RelationshipType.MENTIONS,
                 )
             )
+
+

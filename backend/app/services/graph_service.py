@@ -4,12 +4,13 @@ Graph service.
 Coordinates graph construction and persistence.
 """
 
+from datetime import datetime
 from uuid import UUID
 
 from loguru import logger
 
 from app.graph.builder import GraphBuilder
-from app.graph.models import GraphData
+from app.graph.models import GraphData, GraphPersistenceResult
 from app.graph.repository import GraphRepository
 from app.schemas.entity_extraction import ExtractedEntities
 
@@ -30,8 +31,9 @@ class GraphService:
     async def build_and_save_graph(
         self,
         complaint_id: UUID,
+        created_at: datetime,
         entities: ExtractedEntities,
-    ) -> None:
+    ) -> GraphPersistenceResult:
         """
         Build and persist the fraud intelligence graph.
 
@@ -39,8 +41,14 @@ class GraphService:
             complaint_id:
                 Complaint identifier.
 
+            created_at:
+                Complaint creation timestamp.
+
             entities:
                 Extracted entities.
+
+        Returns:
+            GraphPersistenceResult stats.
         """
         logger.info(
             "Building graph for complaint {}.",
@@ -49,6 +57,7 @@ class GraphService:
 
         graph: GraphData = self._builder.build(
             complaint_id=complaint_id,
+            created_at=created_at,
             entities=entities,
         )
 
@@ -58,8 +67,10 @@ class GraphService:
             len(graph.relationships),
         )
 
-        await self._repository.save_graph(graph)
+        result = await self._repository.save_graph(graph)
 
         logger.info(
             "Graph persisted successfully.",
         )
+
+        return result

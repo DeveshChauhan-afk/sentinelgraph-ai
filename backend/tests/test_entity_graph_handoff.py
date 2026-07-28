@@ -1,6 +1,5 @@
-"""Regression tests for entity extraction's graph handoff."""
-
 import asyncio
+from datetime import datetime, timezone
 from uuid import uuid4
 
 from google.genai import _transformers
@@ -37,13 +36,18 @@ def test_investigation_json_is_silently_coerced_to_empty_entities() -> None:
     """
 
     entities = ExtractedEntities.model_validate_json(investigation_json)
-    graph = GraphBuilder().build(uuid4(), entities)
+    now = datetime.now(timezone.utc)
+    complaint_id = uuid4()
+    graph = GraphBuilder().build(complaint_id, now, entities)
 
     assert entities.model_dump() == {
         name: [] for name in ExtractedEntities.model_fields
     }
     assert len(graph.nodes) == 1
     assert graph.relationships == []
+    assert graph.nodes[0].properties["created_at"] == now.isoformat()
+    assert graph.nodes[0].properties["complaint_id"] == str(complaint_id)
+    assert graph.nodes[0].properties["lookup_value"] == str(complaint_id)
 
 
 def test_entity_json_builds_entity_nodes_and_mentions_relationships() -> None:
@@ -56,10 +60,23 @@ def test_entity_json_builds_entity_nodes_and_mentions_relationships() -> None:
         }
         """)
 
-    graph = GraphBuilder().build(uuid4(), entities)
+    now = datetime.now(timezone.utc)
+    graph = GraphBuilder().build(uuid4(), now, entities)
 
     assert len(graph.nodes) == 3
     assert len(graph.relationships) == 2
+
+    # Verify Complaint node contains complaint_id, lookup_value, created_at
+    complaint_node = next(n for n in graph.nodes if n.label.value == "Complaint")
+    assert "complaint_id" in complaint_node.properties
+    assert "lookup_value" in complaint_node.properties
+    assert "created_at" in complaint_node.properties
+    assert complaint_node.properties["created_at"] == now.isoformat()
+
+    # Verify entity nodes do not contain created_at
+    entity_nodes = [n for n in graph.nodes if n.label.value != "Complaint"]
+    for entity_node in entity_nodes:
+        assert "created_at" not in entity_node.properties
 
 
 def test_extraction_requests_the_extracted_entities_schema() -> None:

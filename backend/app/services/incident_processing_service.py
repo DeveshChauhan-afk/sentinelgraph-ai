@@ -101,6 +101,7 @@ class IncidentProcessingService:
 
             await self._graph_service.build_and_persist(
                 complaint_id=incident.id,
+                created_at=incident.created_at,
                 entities=entities,
             )
 
