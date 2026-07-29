@@ -1,7 +1,7 @@
 # app/api/router.py
 
 from fastapi import APIRouter
-from app.api import health, version, auth, complaints, investigation, graph
+from app.api import health, version, auth, complaints, investigation, graph, timeline
 from app.api.graph_visualization import (
     router as graph_visualization_router,
 )
@@ -23,3 +23,7 @@ api_router.include_router(
 api_router.include_router(
     analytics.router,
 )
+api_router.include_router(
+    timeline.router, prefix="/timeline", tags=["Timeline Engine"]
+)
+

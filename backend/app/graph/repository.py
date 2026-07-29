@@ -8,6 +8,7 @@ contains no business logic.
 
 from __future__ import annotations
 
+from datetime import datetime
 from time import perf_counter
 
 from loguru import logger
@@ -203,6 +204,354 @@ class GraphRepository:
             node=record["n"],
             labels=record["labels"],
         )
+
+    async def get_connected_complaints(
+        self,
+        entity_value: str,
+    ) -> list[dict[str, Any]]:
+        """
+        Locate starting entity/complaint and retrieve all connected Complaint nodes.
+
+        Args:
+            entity_value:
+                Lookup value of the starting entity or complaint.
+
+        Returns:
+            List of plain dictionaries containing complaint_id, lookup_value, created_at.
+
+        Raises:
+            GraphConnectionError:
+                If a database connection cannot be established.
+            GraphQueryError:
+                If query execution fails.
+        """
+        logger.debug(
+            "Retrieving connected complaints for entity '{}'.",
+            entity_value,
+        )
+
+        query = """
+        MATCH (target {lookup_value: $entity_value})
+        OPTIONAL MATCH (target)<-[:MENTIONS]-(c1:Complaint)
+        OPTIONAL MATCH (target)-[:MENTIONS]->()<-[:MENTIONS]-(c2:Complaint)
+        WITH target,
+             collect(DISTINCT c1) + collect(DISTINCT c2) + (CASE WHEN target:Complaint THEN [target] ELSE [] END) AS raw_complaints
+        UNWIND raw_complaints AS c
+        WITH DISTINCT c
+        WHERE c IS NOT NULL
+        RETURN DISTINCT
+            c.complaint_id AS complaint_id,
+            c.lookup_value AS lookup_value,
+            c.created_at AS created_at
+        """
+
+        try:
+            async with self._driver.session() as session:
+                result = await session.run(
+                    query,
+                    entity_value=entity_value,
+                )
+                records = await result.data()
+
+        except Neo4jError as exc:
+            logger.exception(
+                "Failed to retrieve connected complaints for '{}'.",
+                entity_value,
+            )
+            raise GraphQueryError(
+                "Failed to retrieve connected complaints.",
+            ) from exc
+
+        except Exception as exc:
+            logger.exception("Unable to connect to Neo4j.")
+            raise GraphConnectionError("Neo4j connection failed.") from exc
+
+        complaints: list[dict[str, Any]] = []
+
+        for record in records:
+            created_at = record.get("created_at")
+            if isinstance(created_at, str):
+                try:
+                    created_at = datetime.fromisoformat(created_at.replace("Z", "+00:00"))
+                except ValueError:
+                    pass
+
+            complaints.append(
+                {
+                    "complaint_id": record.get("complaint_id"),
+                    "lookup_value": record.get("lookup_value"),
+                    "created_at": created_at,
+                }
+            )
+
+        return complaints
+
+    async def get_entity_occurrences(
+        self,
+        entity_value: str,
+    ) -> list[dict[str, Any]]:
+        """
+        Retrieve all entity occurrences across the investigated network.
+
+        Args:
+            entity_value:
+                Lookup value of the starting target entity or complaint.
+
+        Returns:
+            List of plain dictionaries containing entity_type, lookup_value, complaint_id, created_at.
+
+        Raises:
+            GraphConnectionError:
+                If a database connection cannot be established.
+            GraphQueryError:
+                If query execution fails.
+        """
+        logger.debug(
+            "Retrieving entity occurrences for target '{}'.",
+            entity_value,
+        )
+
+        query = """
+        MATCH (target {lookup_value: $entity_value})
+        OPTIONAL MATCH (target)<-[:MENTIONS]-(c1:Complaint)
+        OPTIONAL MATCH (target)-[:MENTIONS]->()<-[:MENTIONS]-(c2:Complaint)
+        WITH target,
+             collect(DISTINCT c1) + collect(DISTINCT c2) + (CASE WHEN target:Complaint THEN [target] ELSE [] END) AS raw_complaints
+        UNWIND raw_complaints AS c
+        WITH DISTINCT c
+        WHERE c IS NOT NULL
+        MATCH (c)-[:MENTIONS]->(e)
+        RETURN DISTINCT
+            labels(e)[0] AS entity_type,
+            e.lookup_value AS lookup_value,
+            c.complaint_id AS complaint_id,
+            c.created_at AS created_at
+        """
+
+        try:
+            async with self._driver.session() as session:
+                result = await session.run(
+                    query,
+                    entity_value=entity_value,
+                )
+                records = await result.data()
+
+        except Neo4jError as exc:
+            logger.exception(
+                "Failed to retrieve entity occurrences for '{}'.",
+                entity_value,
+            )
+            raise GraphQueryError(
+                "Failed to retrieve entity occurrences.",
+            ) from exc
+
+        except Exception as exc:
+            logger.exception("Unable to connect to Neo4j.")
+            raise GraphConnectionError("Neo4j connection failed.") from exc
+
+        occurrences: list[dict[str, Any]] = []
+
+        for record in records:
+            created_at = record.get("created_at")
+            if isinstance(created_at, str):
+                try:
+                    created_at = datetime.fromisoformat(
+                        created_at.replace("Z", "+00:00")
+                    )
+                except ValueError:
+                    pass
+
+            occurrences.append(
+                {
+                    "entity_type": record.get("entity_type"),
+                    "lookup_value": record.get("lookup_value"),
+                    "complaint_id": record.get("complaint_id"),
+                    "created_at": created_at,
+                }
+            )
+
+        return occurrences
+
+    async def get_timeline_statistics(
+        self,
+        entity_value: str,
+    ) -> dict[str, int]:
+        """
+        Retrieve raw node and entity counts for the target investigation network.
+
+        Args:
+            entity_value:
+                Lookup value of the target entity or complaint.
+
+        Returns:
+            Plain dictionary containing counts for complaints, phones, upis, emails,
+            urls, bank_accounts, organizations, people, locations.
+
+        Raises:
+            GraphConnectionError:
+                If database connection fails.
+            GraphQueryError:
+                If Cypher execution fails.
+        """
+        logger.debug(
+            "Retrieving timeline statistics for target '{}'.",
+            entity_value,
+        )
+
+        query = """
+        MATCH (target {lookup_value: $entity_value})
+        OPTIONAL MATCH (target)<-[:MENTIONS]-(c1:Complaint)
+        OPTIONAL MATCH (target)-[:MENTIONS]->()<-[:MENTIONS]-(c2:Complaint)
+        WITH target,
+             collect(DISTINCT c1) + collect(DISTINCT c2) + (CASE WHEN target:Complaint THEN [target] ELSE [] END) AS raw_complaints
+        UNWIND raw_complaints AS c
+        WITH DISTINCT c
+        WHERE c IS NOT NULL
+        OPTIONAL MATCH (c)-[:MENTIONS]->(e)
+        RETURN
+            count(DISTINCT c) AS complaints,
+            count(DISTINCT CASE WHEN 'Phone' IN labels(e) THEN e END) AS phones,
+            count(DISTINCT CASE WHEN 'UPI' IN labels(e) THEN e END) AS upis,
+            count(DISTINCT CASE WHEN 'Email' IN labels(e) THEN e END) AS emails,
+            count(DISTINCT CASE WHEN 'URL' IN labels(e) THEN e END) AS urls,
+            count(DISTINCT CASE WHEN 'BankAccount' IN labels(e) THEN e END) AS bank_accounts,
+            count(DISTINCT CASE WHEN 'Organization' IN labels(e) THEN e END) AS organizations,
+            count(DISTINCT CASE WHEN 'Person' IN labels(e) THEN e END) AS people,
+            count(DISTINCT CASE WHEN 'Location' IN labels(e) THEN e END) AS locations
+        """
+
+        try:
+            async with self._driver.session() as session:
+                result = await session.run(
+                    query,
+                    entity_value=entity_value,
+                )
+                record = await result.single()
+
+        except Neo4jError as exc:
+            logger.exception(
+                "Failed to retrieve timeline statistics for '{}'.",
+                entity_value,
+            )
+            raise GraphQueryError(
+                "Failed to retrieve timeline statistics.",
+            ) from exc
+
+        except Exception as exc:
+            logger.exception("Unable to connect to Neo4j.")
+            raise GraphConnectionError("Neo4j connection failed.") from exc
+
+        if record is None:
+            return {
+                "complaints": 0,
+                "phones": 0,
+                "upis": 0,
+                "emails": 0,
+                "urls": 0,
+                "bank_accounts": 0,
+                "organizations": 0,
+                "people": 0,
+                "locations": 0,
+            }
+
+        return {
+            "complaints": record.get("complaints", 0) or 0,
+            "phones": record.get("phones", 0) or 0,
+            "upis": record.get("upis", 0) or 0,
+            "emails": record.get("emails", 0) or 0,
+            "urls": record.get("urls", 0) or 0,
+            "bank_accounts": record.get("bank_accounts", 0) or 0,
+            "organizations": record.get("organizations", 0) or 0,
+            "people": record.get("people", 0) or 0,
+            "locations": record.get("locations", 0) or 0,
+        }
+
+    async def get_network_evolution_data(
+        self,
+        entity_value: str,
+    ) -> list[dict[str, Any]]:
+        """
+        Retrieve raw complaint and entity association records for network evolution analysis.
+
+        Args:
+            entity_value:
+                Lookup value of the target entity or complaint.
+
+        Returns:
+            List of plain dictionaries containing complaint_id, created_at, entity_type, lookup_value.
+
+        Raises:
+            GraphConnectionError:
+                If database connection fails.
+            GraphQueryError:
+                If Cypher execution fails.
+        """
+        logger.debug(
+            "Retrieving network evolution data for target '{}'.",
+            entity_value,
+        )
+
+        query = """
+        MATCH (target {lookup_value: $entity_value})
+        OPTIONAL MATCH (target)<-[:MENTIONS]-(c1:Complaint)
+        OPTIONAL MATCH (target)-[:MENTIONS]->()<-[:MENTIONS]-(c2:Complaint)
+        WITH target,
+             collect(DISTINCT c1) + collect(DISTINCT c2) + (CASE WHEN target:Complaint THEN [target] ELSE [] END) AS raw_complaints
+        UNWIND raw_complaints AS c
+        WITH DISTINCT c
+        WHERE c IS NOT NULL
+        MATCH (c)-[:MENTIONS]->(e)
+        RETURN
+            c.complaint_id AS complaint_id,
+            c.created_at AS created_at,
+            labels(e)[0] AS entity_type,
+            e.lookup_value AS lookup_value
+        """
+
+        try:
+            async with self._driver.session() as session:
+                result = await session.run(
+                    query,
+                    entity_value=entity_value,
+                )
+                records = await result.data()
+
+        except Neo4jError as exc:
+            logger.exception(
+                "Failed to retrieve network evolution data for '{}'.",
+                entity_value,
+            )
+            raise GraphQueryError(
+                "Failed to retrieve network evolution data.",
+            ) from exc
+
+        except Exception as exc:
+            logger.exception("Unable to connect to Neo4j.")
+            raise GraphConnectionError("Neo4j connection failed.") from exc
+
+        evolution_data: list[dict[str, Any]] = []
+
+        for record in records:
+            created_at = record.get("created_at")
+            if isinstance(created_at, str):
+                try:
+                    created_at = datetime.fromisoformat(
+                        created_at.replace("Z", "+00:00")
+                    )
+                except ValueError:
+                    pass
+
+            evolution_data.append(
+                {
+                    "complaint_id": record.get("complaint_id"),
+                    "created_at": created_at,
+                    "entity_type": record.get("entity_type"),
+                    "lookup_value": record.get("lookup_value"),
+                }
+            )
+
+        return evolution_data
+
 
     async def _get_connected_complaints(
         self,

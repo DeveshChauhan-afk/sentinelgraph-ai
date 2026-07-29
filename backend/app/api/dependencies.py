@@ -150,3 +150,74 @@ def get_incident_service(
         entity_extraction_service=entity_extraction_service,
         graph_service=graph_service,
     )
+
+
+def get_entity_analysis_service() -> EntityAnalysisService:
+    """
+    Return the entity analysis service.
+    """
+    from app.services.entity_analysis_service import EntityAnalysisService
+
+    return EntityAnalysisService()
+
+
+def get_timeline_analysis_service() -> TimelineAnalysisService:
+    """
+    Return the timeline analysis service.
+    """
+    from app.services.timeline_analysis_service import TimelineAnalysisService
+
+    return TimelineAnalysisService()
+
+
+def get_fraud_evolution_service() -> FraudEvolutionService:
+    """
+    Return the fraud evolution service.
+    """
+    from app.services.fraud_evolution_service import FraudEvolutionService
+
+    return FraudEvolutionService()
+
+
+def get_evidence_engine() -> EvidenceEngine:
+    """
+    Return the evidence engine.
+    """
+    from app.services.evidence_engine import EvidenceEngine
+
+    return EvidenceEngine()
+
+
+def get_timeline_service(
+    repository: GraphRepository = Depends(
+        get_graph_repository,
+    ),
+    entity_analysis_service: EntityAnalysisService = Depends(
+        get_entity_analysis_service,
+    ),
+    timeline_analysis_service: TimelineAnalysisService = Depends(
+        get_timeline_analysis_service,
+    ),
+    fraud_evolution_service: FraudEvolutionService = Depends(
+        get_fraud_evolution_service,
+    ),
+    evidence_engine: EvidenceEngine = Depends(
+        get_evidence_engine,
+    ),
+) -> TimelineService:
+    """
+    Return the timeline service.
+    """
+    from app.services.timeline_service import TimelineService
+
+    return TimelineService(
+        repository=repository,
+        entity_analysis_service=entity_analysis_service,
+        timeline_analysis_service=timeline_analysis_service,
+        fraud_evolution_service=fraud_evolution_service,
+        evidence_engine=evidence_engine,
+    )
+
+
+
+
