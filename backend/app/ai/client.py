@@ -79,10 +79,13 @@ class GeminiClient(LLMClient, AIClient):
 
         start_time = time.perf_counter()
 
+        from app.schemas.report import ProfessionalInvestigationReport
+
         config = types.GenerateContentConfig(
             temperature=prompt.constraints.temperature,
             max_output_tokens=prompt.constraints.max_tokens,
             response_mime_type="application/json",
+            response_schema=ProfessionalInvestigationReport,
         )
 
         try:

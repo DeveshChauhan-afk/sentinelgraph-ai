@@ -34,6 +34,7 @@ from app.schemas.investigation_report_context import (
 )
 from app.schemas.prompt import (
     DeveloperInstructions,
+    ExpectedReportSchema,
     ExpectedReportSection,
     ExpectedReportStructure,
     PromptConstraints,
@@ -96,6 +97,7 @@ __all__ = [
     "DeveloperInstructions",
     "SerializedContext",
     "ExpectedReportSection",
+    "ExpectedReportSchema",
     "ExpectedReportStructure",
     "PromptMetrics",
     "PromptMetadata",

@@ -196,6 +196,12 @@ class PromptBuilder:
         if not request.expected_structure.sections:
             raise ValueError("Prompt validation failed: expected_structure sections are empty.")
 
+        if not request.expected_structure.expected_schema.json_skeleton:
+            raise ValueError("Prompt validation failed: expected_schema json_skeleton is empty.")
+
+        if not request.developer_instructions.output_formatting_rules:
+            raise ValueError("Prompt validation failed: output_formatting_rules are missing.")
+
         if not request.metadata.prompt_hash:
             raise ValueError("Prompt validation failed: prompt_hash is missing.")
 

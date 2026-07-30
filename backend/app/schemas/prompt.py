@@ -1,13 +1,15 @@
 """
-Schemas for PromptBuilder & Prompt Templates (Sprint 9 Phase 3.5 Refinements).
+Schemas for PromptBuilder & Prompt Templates (Sprint 9 Phase 4.1 Hotfix).
 
 Provides strongly typed, provider-independent, immutable prompt models with
-fingerprinting, diagnostics, output contract definitions, and context compression metrics.
+deterministic JSON output contracts (ExpectedReportSchema), fingerprinting,
+diagnostics, and context compression metrics.
 """
 
 from __future__ import annotations
 
 from datetime import datetime, timezone
+
 from pydantic import BaseModel, ConfigDict, Field
 
 
@@ -53,20 +55,30 @@ class DeveloperInstructions(BaseModel):
     style_guidelines: tuple[str, ...] = Field(
         ..., description="Style and tone rules."
     )
+    output_formatting_rules: tuple[str, ...] = Field(
+        default_factory=tuple, description="Strict JSON formatting rules prohibiting markdown."
+    )
     handling_uncertainty: tuple[str, ...] = Field(
         default_factory=tuple, description="Data quality & uncertainty rules."
     )
 
     def render(self) -> str:
-        """Render developer instructions, citation rules, and style guidelines."""
+        """Render developer instructions, citation rules, formatting rules, and style guidelines."""
         citations = "\n".join(f"- {c}" for c in self.citation_instructions)
         styles = "\n".join(f"- {s}" for s in self.style_guidelines)
+        formatting = (
+            "\n".join(f"- {f}" for f in self.output_formatting_rules)
+            if self.output_formatting_rules
+            else ""
+        )
         uncertainty = (
             "\n".join(f"- {u}" for u in self.handling_uncertainty)
             if self.handling_uncertainty
             else ""
         )
         res = f"CITATION GUIDELINES:\n{citations}\n\nSTYLE GUIDELINES:\n{styles}"
+        if formatting:
+            res += f"\n\nSTRICT JSON OUTPUT RULES:\n{formatting}"
         if uncertainty:
             res += f"\n\nHANDLING UNCERTAINTY:\n{uncertainty}"
         return res
@@ -100,15 +112,37 @@ class ExpectedReportSection(BaseModel):
     )
 
 
+class ExpectedReportSchema(BaseModel):
+    """
+    Deterministic schema specification defining the exact JSON output contract.
+    """
+
+    model_config = ConfigDict(frozen=True)
+
+    json_skeleton: str = Field(
+        ..., description="Canonical JSON skeleton string with exact field names."
+    )
+    required_field_names: tuple[str, ...] = Field(
+        ..., description="Top-level required field names."
+    )
+
+
 class ExpectedReportStructure(BaseModel):
     """
-    Structured output contract defining the expected report sections for Phase 4 parsing.
+    Structured output contract defining expected report sections and canonical JSON schema.
     """
 
     model_config = ConfigDict(frozen=True)
 
     sections: tuple[ExpectedReportSection, ...] = Field(
         ..., description="Ordered report sections."
+    )
+    expected_schema: ExpectedReportSchema = Field(
+        default_factory=lambda: ExpectedReportSchema(
+            json_skeleton='{"report_id": "string", "target_value": "string"}',
+            required_field_names=("report_id", "target_value"),
+        ),
+        description="Deterministic JSON schema skeleton.",
     )
 
 
@@ -251,7 +285,10 @@ class PromptRequest(BaseModel):
             "=== INVESTIGATION REPORT CONTEXT (DETERMINISTIC DATA) ===",
             self.context.json_data,
             "",
-            "=== REQUIRED REPORT OUTPUT STRUCTURE ===",
+            "=== CANONICAL JSON OUTPUT SKELETON (MANDATORY EXACT FIELD NAMES) ===",
+            self.expected_structure.expected_schema.json_skeleton,
+            "",
+            "=== REQUIRED REPORT OUTPUT SECTIONS ===",
             "\n".join(
                 f"- [{s.section_id}] {s.title}: {s.description}"
                 for s in self.expected_structure.sections

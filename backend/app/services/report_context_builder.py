@@ -111,6 +111,7 @@ class ReportContextBuilder:
             report_context_version="1.0",
             generated_from_summary_version=summary.metadata.summary_version,
             generated_by="ReportContextBuilder",
+            generated_at=summary.metadata.generated_at,
         )
 
     def _build_overview(
@@ -313,7 +314,8 @@ class ReportContextBuilder:
         """Transform InvestigationFindings into report-ready findings with provenance."""
         report_findings: list[ReportCriticalFinding] = []
 
-        for f in summary.findings:
+        findings_source = getattr(summary, "critical_findings", None) or getattr(summary, "findings", ())
+        for f in findings_source:
             report_findings.append(
                 ReportCriticalFinding(
                     finding_id=f.finding_id,
