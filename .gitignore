@@ -4,3 +4,4 @@ backend/.env
 backend/logs/
 *.log
 *.log.zip
+

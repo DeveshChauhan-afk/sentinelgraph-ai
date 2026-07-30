@@ -1,9 +1,16 @@
 from .base import SentinelGraphError
 from .incident import (
-    IncidentNotFoundError,
-    DuplicateCaseReferenceError,
-    InvalidIncidentStateError,
     BusinessValidationError,
+    DuplicateCaseReferenceError,
+    IncidentNotFoundError,
+    InvalidIncidentStateError,
+)
+from .investigation import (
+    InvalidReportSchemaError,
+    LLMProviderError,
+    LLMTimeoutError,
+    PromptValidationError,
+    ReportParsingError,
 )
 
 __all__ = [
@@ -12,4 +19,9 @@ __all__ = [
     "DuplicateCaseReferenceError",
     "InvalidIncidentStateError",
     "BusinessValidationError",
+    "PromptValidationError",
+    "LLMProviderError",
+    "LLMTimeoutError",
+    "ReportParsingError",
+    "InvalidReportSchemaError",
 ]

@@ -219,5 +219,92 @@ def get_timeline_service(
     )
 
 
+def get_investigation_summary_service(
+    timeline_service: TimelineService = Depends(
+        get_timeline_service,
+    ),
+    entity_analysis_service: EntityAnalysisService = Depends(
+        get_entity_analysis_service,
+    ),
+    timeline_analysis_service: TimelineAnalysisService = Depends(
+        get_timeline_analysis_service,
+    ),
+    fraud_evolution_service: FraudEvolutionService = Depends(
+        get_fraud_evolution_service,
+    ),
+    evidence_engine: EvidenceEngine = Depends(
+        get_evidence_engine,
+    ),
+) -> InvestigationSummaryService:
+    """
+    Return the investigation summary service.
+    """
+    from app.services.investigation_summary_service import (
+        InvestigationSummaryService,
+    )
+
+    return InvestigationSummaryService(
+        timeline_service=timeline_service,
+        entity_analysis_service=entity_analysis_service,
+        timeline_analysis_service=timeline_analysis_service,
+        fraud_evolution_service=fraud_evolution_service,
+        evidence_engine=evidence_engine,
+    )
+
+
+def get_report_context_builder() -> ReportContextBuilder:
+    """
+    Return the ReportContextBuilder service.
+    """
+    from app.services.report_context_builder import ReportContextBuilder
+
+    return ReportContextBuilder()
+
+
+def get_llm_client(
+    ai_client: GeminiClient = Depends(get_ai_client),
+) -> LLMClient:
+    """
+    Return the application LLMClient provider instance.
+    """
+    return ai_client
+
+
+def get_investigation_report_service(
+    summary_service: InvestigationSummaryService = Depends(
+        get_investigation_summary_service,
+    ),
+    context_builder: ReportContextBuilder = Depends(
+        get_report_context_builder,
+    ),
+    prompt_builder: PromptBuilder = Depends(
+        get_prompt_builder,
+    ),
+    llm_client: LLMClient = Depends(
+        get_llm_client,
+    ),
+    report_parser: ReportParser = Depends(
+        get_report_parser,
+    ),
+) -> InvestigationReportService:
+    """
+    Return the investigation report orchestration service.
+    """
+    from app.services.investigation_report_service import (
+        InvestigationReportService,
+    )
+
+    return InvestigationReportService(
+        summary_service=summary_service,
+        context_builder=context_builder,
+        prompt_builder=prompt_builder,
+        llm_client=llm_client,
+        report_parser=report_parser,
+    )
+
+
+
+
+
 
 
