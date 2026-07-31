@@ -17,8 +17,6 @@ from fastapi.testclient import TestClient
 from app.ai.llm_client import LLMClient
 from app.exceptions.investigation import (
     InvalidReportSchemaError,
-    LLMProviderError,
-    LLMTimeoutError,
     ReportParsingError,
 )
 from app.main import app
@@ -34,18 +32,8 @@ from app.schemas.prompt import (
     SystemPrompt,
 )
 from app.schemas.report import (
-    ConclusionSection,
-    EvidenceSection,
-    EvolutionSection,
-    ExecutiveSummarySection,
-    FindingSection,
-    InvestigationScopeSection,
-    LimitationSection,
     ProfessionalInvestigationReport,
-    RecommendationSection,
     ReportTelemetry,
-    TimelineMilestone,
-    TimelineSection,
 )
 from app.services.investigation.report_parser import ReportParser
 from app.services.investigation_report_service import InvestigationReportService

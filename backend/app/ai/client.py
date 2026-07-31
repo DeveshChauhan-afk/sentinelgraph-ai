@@ -180,7 +180,6 @@ class GeminiClient(LLMClient, AIClient):
             self._settings.GEMINI_MODEL,
             len(prompt),
         )
-        start_time = time.perf_counter()
         try:
             response = await asyncio.to_thread(
                 self._client.models.generate_content,

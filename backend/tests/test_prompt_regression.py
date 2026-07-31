@@ -4,7 +4,6 @@ Prompt Regression & Determinism Tests (Sprint 9.5 Phase 9.5.5).
 
 from __future__ import annotations
 
-import pytest
 
 from app.evaluation.golden_dataset import get_golden_scenarios
 from app.services.prompt_builder import PromptBuilder

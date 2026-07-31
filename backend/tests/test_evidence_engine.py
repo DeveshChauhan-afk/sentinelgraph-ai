@@ -8,7 +8,6 @@ from app.schemas.timeline import (
     EvidenceType,
     EvolutionEventType,
     FraudEvolutionEvent,
-    TimelineStatistics,
 )
 from app.services.evidence_engine import EvidenceEngine
 

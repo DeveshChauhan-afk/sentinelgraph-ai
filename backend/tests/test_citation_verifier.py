@@ -4,7 +4,6 @@ Unit tests for CitationVerifier (Sprint 9.5 Phase 9.5.2).
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
 import pytest
 
 from app.evaluation.citation_verifier import CitationVerificationResult, CitationVerifier

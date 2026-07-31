@@ -1,3 +1,4 @@
+#app/services/entity_analysis_service.py
 """
 Entity Analysis Service for Timeline Reconstruction.
 

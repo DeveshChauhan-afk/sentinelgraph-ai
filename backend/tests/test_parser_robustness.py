@@ -7,7 +7,7 @@ from __future__ import annotations
 import json
 import pytest
 
-from app.exceptions.investigation import InvalidReportSchemaError, ReportParsingError
+from app.exceptions.investigation import ReportParsingError
 from app.schemas.llm_response import LLMMetadata, LLMResponse, LLMUsage
 from app.schemas.prompt import (
     DeveloperInstructions,

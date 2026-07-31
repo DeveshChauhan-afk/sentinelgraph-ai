@@ -1,3 +1,4 @@
+
 """
 Timeline Analysis Service.
 
@@ -7,7 +8,6 @@ and rule-based insights without using AI or external models.
 
 from __future__ import annotations
 
-from typing import Any
 
 from loguru import logger
 

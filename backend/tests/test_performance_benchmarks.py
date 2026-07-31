@@ -21,17 +21,7 @@ from app.schemas.prompt import (
     SystemPrompt,
 )
 from app.schemas.report import (
-    ConclusionSection,
-    EvidenceSection,
-    EvolutionSection,
-    ExecutiveSummarySection,
-    FindingSection,
-    InvestigationScopeSection,
-    LimitationSection,
     ProfessionalInvestigationReport,
-    RecommendationSection,
-    ReportTelemetry,
-    TimelineSection,
 )
 from app.services.report_context_builder import ReportContextBuilder
 

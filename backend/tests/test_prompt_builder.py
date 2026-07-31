@@ -8,17 +8,14 @@ prompt ordering stability, and validation rule enforcement.
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
 
 import pytest
 from pydantic import ValidationError
 
 from app.prompts.templates import (
-    PromptTemplate,
     PromptTemplateRegistry,
     get_executive_report_template,
 )
-from app.schemas.investigation_report_context import InvestigationReportContext
 from app.schemas.prompt import (
     DeveloperInstructions,
     ExpectedReportStructure,

@@ -30,7 +30,7 @@ from app.schemas.investigation_report_context import (
     ReportTimelineHighlights,
 )
 from app.schemas.investigation_summary import InvestigationSummary
-from app.schemas.timeline import EvidenceSeverity, EvolutionEventType, TimelineEvent
+from app.schemas.timeline import TimelineEvent
 
 
 class ReportContextBuilder:

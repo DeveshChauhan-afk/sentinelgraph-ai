@@ -26,7 +26,19 @@ from app.graph.query_service import GraphQueryService
 from app.services.investigation.prompt_builder import PromptBuilder
 from app.services.investigation.report_parser import ReportParser
 from app.services.investigation_service import InvestigationService
-
+from app.services.entity_analysis_service import EntityAnalysisService
+from app.services.timeline_analysis_service import TimelineAnalysisService
+from app.services.fraud_evolution_service import FraudEvolutionService
+from app.services.evidence_engine import EvidenceEngine
+from app.services.timeline_service import TimelineService
+from app.services.investigation_summary_service import (
+        InvestigationSummaryService,
+    )
+from app.services.report_context_builder import ReportContextBuilder
+from app.services.investigation_report_service import (
+        InvestigationReportService,
+    )
+from app.ai.llm_client import LLMClient
 
 def get_ai_client() -> GeminiClient:
     """
@@ -156,7 +168,6 @@ def get_entity_analysis_service() -> EntityAnalysisService:
     """
     Return the entity analysis service.
     """
-    from app.services.entity_analysis_service import EntityAnalysisService
 
     return EntityAnalysisService()
 
@@ -165,7 +176,7 @@ def get_timeline_analysis_service() -> TimelineAnalysisService:
     """
     Return the timeline analysis service.
     """
-    from app.services.timeline_analysis_service import TimelineAnalysisService
+    
 
     return TimelineAnalysisService()
 
@@ -174,7 +185,7 @@ def get_fraud_evolution_service() -> FraudEvolutionService:
     """
     Return the fraud evolution service.
     """
-    from app.services.fraud_evolution_service import FraudEvolutionService
+    
 
     return FraudEvolutionService()
 
@@ -183,7 +194,7 @@ def get_evidence_engine() -> EvidenceEngine:
     """
     Return the evidence engine.
     """
-    from app.services.evidence_engine import EvidenceEngine
+    
 
     return EvidenceEngine()
 
@@ -208,7 +219,7 @@ def get_timeline_service(
     """
     Return the timeline service.
     """
-    from app.services.timeline_service import TimelineService
+    
 
     return TimelineService(
         repository=repository,
@@ -239,9 +250,7 @@ def get_investigation_summary_service(
     """
     Return the investigation summary service.
     """
-    from app.services.investigation_summary_service import (
-        InvestigationSummaryService,
-    )
+    
 
     return InvestigationSummaryService(
         timeline_service=timeline_service,
@@ -256,7 +265,7 @@ def get_report_context_builder() -> ReportContextBuilder:
     """
     Return the ReportContextBuilder service.
     """
-    from app.services.report_context_builder import ReportContextBuilder
+    
 
     return ReportContextBuilder()
 
@@ -290,9 +299,7 @@ def get_investigation_report_service(
     """
     Return the investigation report orchestration service.
     """
-    from app.services.investigation_report_service import (
-        InvestigationReportService,
-    )
+    
 
     return InvestigationReportService(
         summary_service=summary_service,

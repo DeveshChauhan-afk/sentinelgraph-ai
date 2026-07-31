@@ -26,9 +26,6 @@ from app.schemas.investigation_report_context import (
     ReportSupportingEvidence,
     ReportTimelineHighlights,
 )
-from app.schemas.investigation_summary import (
-    InvestigationSummary,
-)
 from app.schemas.timeline import (
     EntityTimelineInfo,
     EvidenceSeverity,

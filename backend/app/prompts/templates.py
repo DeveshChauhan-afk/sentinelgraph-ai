@@ -7,7 +7,6 @@ JSON output contracts and ExpectedReportSchema skeleton definitions.
 
 from __future__ import annotations
 
-import json
 from pydantic import BaseModel, ConfigDict, Field
 
 from app.schemas.prompt import (
