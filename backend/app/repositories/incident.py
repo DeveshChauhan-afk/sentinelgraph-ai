@@ -113,11 +113,21 @@ class IncidentRepository(BaseRepository[Incident]):
         result = await self.session.execute(stmt)
         return list(result.scalars().all())
 
-    async def get_all(self) -> list[Incident]:
+    from sqlalchemy import select
+
+    async def get_all(
+        self,
+        skip: int = 0,
+        limit: int = 100,
+    ) -> list[Incident]:
         """
-        Retrieve all incidents ordered by creation time.
+        Retrieve incidents ordered by creation time with pagination.
         """
         result = await self.session.execute(
-            select(Incident).order_by(Incident.created_at)
+            select(Incident)
+            .order_by(Incident.created_at.desc())   # newest first (recommended)
+            .offset(skip)
+            .limit(limit)
         )
+
         return list(result.scalars().all())

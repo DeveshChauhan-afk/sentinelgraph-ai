@@ -52,7 +52,14 @@ async def list_complaints(
     """
     incidents = await service.list_incidents(skip=skip, limit=limit)
 
-    return [IncidentListResponse.model_validate(incident) for incident in incidents]
+    response = []
+
+    for incident in incidents:
+        dto = IncidentListResponse.model_validate(incident)
+        dto.graph_node_id = f"complaint:{incident.id}"
+        response.append(dto)
+
+    return response
 
 
 @router.get(
