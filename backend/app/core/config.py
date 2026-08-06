@@ -26,6 +26,12 @@ class Settings(BaseSettings):
     DEBUG: bool = False
 
     # =========================
+    # Logging Configuration
+    # =========================
+    LOG_TO_FILE: bool = False
+    LOG_LEVEL: str = "INFO"
+
+    # =========================
     # Security
     # =========================
     SECRET_KEY: SecretStr

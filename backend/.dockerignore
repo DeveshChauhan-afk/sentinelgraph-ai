@@ -1,0 +1,46 @@
+# Version Control & CI/CD
+.git
+.github
+
+# Python Caches & Compiled Bytecode
+__pycache__
+*.py[cod]
+*$py.class
+.pytest_cache
+.ruff_cache
+.mypy_cache
+
+# Environments & Virtual Environments
+.venv
+venv
+ENV/
+env/
+
+# Environment Variables & Secrets
+.env
+.env.*
+!.env.example
+
+# Development Logs & Local Outputs
+logs
+*.log
+htmlcov
+.coverage
+.coverage.*
+
+# Test Suite (not needed in production image)
+tests
+
+# IDE & Editor Configurations
+.idea
+.vscode
+*.swp
+*.swo
+
+# Local Databases & Storage
+*.db
+*.sqlite
+*.sqlite3
+
+# Documentation & Miscellaneous
+README.md
