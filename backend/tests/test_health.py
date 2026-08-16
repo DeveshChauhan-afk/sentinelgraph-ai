@@ -1,6 +1,7 @@
 """
-Unit tests for production health endpoints (/health/live, /health/ready, /health)
-and concrete dependency health checkers (Postgres, Neo4j, Gemini).
+Unit tests for production health endpoints (/health/live, /health/ready, /health),
+concrete dependency health checkers (Postgres, Neo4j, Gemini),
+and HealthService aggregation.
 """
 
 import asyncio
@@ -15,6 +16,7 @@ from app.core.health.gemini import GeminiConfigHealthChecker
 from app.core.health.models import HealthStatus
 from app.core.health.neo4j import Neo4jHealthChecker
 from app.core.health.postgres import PostgresHealthChecker
+from app.core.health.service import HealthService
 from app.main import app
 
 client = TestClient(app)
@@ -319,3 +321,158 @@ async def test_gemini_config_checker_missing_model():
     assert result.status == HealthStatus.UNHEALTHY
     assert result.critical is False
     assert result.message == "Service check failed"
+
+
+# ============================================================================
+# HealthService Aggregation Unit Tests
+# ============================================================================
+
+
+class MockDependencyChecker(BaseHealthChecker):
+    def __init__(self, name: str, critical: bool, should_succeed: bool):
+        super().__init__(name=name, critical=critical, timeout=1.0)
+        self.should_succeed = should_succeed
+
+    async def _check_health(self) -> None:
+        if not self.should_succeed:
+            raise RuntimeError(f"Simulated failure for {self.name}")
+
+
+@pytest.mark.asyncio
+async def test_health_service_all_healthy():
+    checkers = [
+        MockDependencyChecker("postgres", critical=True, should_succeed=True),
+        MockDependencyChecker("neo4j", critical=True, should_succeed=True),
+        MockDependencyChecker("gemini", critical=False, should_succeed=True),
+    ]
+    service = HealthService(checkers=checkers)
+    deps = await service.check_dependencies()
+
+    assert len(deps) == 3
+    assert deps["postgres"].status == HealthStatus.HEALTHY
+    assert deps["neo4j"].status == HealthStatus.HEALTHY
+    assert deps["gemini"].status == HealthStatus.HEALTHY
+    assert service.determine_status(deps) == HealthStatus.HEALTHY
+    assert service.determine_readiness(deps) is True
+
+
+@pytest.mark.asyncio
+async def test_health_service_degraded_non_critical_failure():
+    checkers = [
+        MockDependencyChecker("postgres", critical=True, should_succeed=True),
+        MockDependencyChecker("neo4j", critical=True, should_succeed=True),
+        MockDependencyChecker("gemini", critical=False, should_succeed=False),
+    ]
+    service = HealthService(checkers=checkers)
+    deps = await service.check_dependencies()
+
+    assert deps["postgres"].status == HealthStatus.HEALTHY
+    assert deps["neo4j"].status == HealthStatus.HEALTHY
+    assert deps["gemini"].status == HealthStatus.UNHEALTHY
+    assert service.determine_status(deps) == HealthStatus.DEGRADED
+    assert service.determine_readiness(deps) is True
+
+
+@pytest.mark.asyncio
+async def test_health_service_unhealthy_postgres_failure():
+    checkers = [
+        MockDependencyChecker("postgres", critical=True, should_succeed=False),
+        MockDependencyChecker("neo4j", critical=True, should_succeed=True),
+        MockDependencyChecker("gemini", critical=False, should_succeed=True),
+    ]
+    service = HealthService(checkers=checkers)
+    deps = await service.check_dependencies()
+
+    assert deps["postgres"].status == HealthStatus.UNHEALTHY
+    assert deps["neo4j"].status == HealthStatus.HEALTHY
+    assert deps["gemini"].status == HealthStatus.HEALTHY
+    assert service.determine_status(deps) == HealthStatus.UNHEALTHY
+    assert service.determine_readiness(deps) is False
+
+
+@pytest.mark.asyncio
+async def test_health_service_unhealthy_neo4j_failure():
+    checkers = [
+        MockDependencyChecker("postgres", critical=True, should_succeed=True),
+        MockDependencyChecker("neo4j", critical=True, should_succeed=False),
+        MockDependencyChecker("gemini", critical=False, should_succeed=True),
+    ]
+    service = HealthService(checkers=checkers)
+    deps = await service.check_dependencies()
+
+    assert deps["postgres"].status == HealthStatus.HEALTHY
+    assert deps["neo4j"].status == HealthStatus.UNHEALTHY
+    assert deps["gemini"].status == HealthStatus.HEALTHY
+    assert service.determine_status(deps) == HealthStatus.UNHEALTHY
+    assert service.determine_readiness(deps) is False
+
+
+@pytest.mark.asyncio
+async def test_health_service_multiple_critical_failures():
+    checkers = [
+        MockDependencyChecker("postgres", critical=True, should_succeed=False),
+        MockDependencyChecker("neo4j", critical=True, should_succeed=False),
+        MockDependencyChecker("gemini", critical=False, should_succeed=False),
+    ]
+    service = HealthService(checkers=checkers)
+    deps = await service.check_dependencies()
+
+    assert deps["postgres"].status == HealthStatus.UNHEALTHY
+    assert deps["neo4j"].status == HealthStatus.UNHEALTHY
+    assert deps["gemini"].status == HealthStatus.UNHEALTHY
+    assert service.determine_status(deps) == HealthStatus.UNHEALTHY
+    assert service.determine_readiness(deps) is False
+
+
+@pytest.mark.asyncio
+async def test_health_service_empty_checkers():
+    service = HealthService(checkers=[])
+    deps = await service.check_dependencies()
+
+    assert deps == {}
+    assert service.determine_status(deps) == HealthStatus.HEALTHY
+    assert service.determine_readiness(deps) is True
+
+
+class BarrierCheckerA(BaseHealthChecker):
+    def __init__(self, entered_a: asyncio.Event, entered_b: asyncio.Event):
+        super().__init__(name="barrier_a", critical=True, timeout=2.0)
+        self.entered_a = entered_a
+        self.entered_b = entered_b
+
+    async def _check_health(self) -> None:
+        self.entered_a.set()
+        await asyncio.wait_for(self.entered_b.wait(), timeout=1.0)
+
+
+class BarrierCheckerB(BaseHealthChecker):
+    def __init__(self, entered_a: asyncio.Event, entered_b: asyncio.Event):
+        super().__init__(name="barrier_b", critical=True, timeout=2.0)
+        self.entered_a = entered_a
+        self.entered_b = entered_b
+
+    async def _check_health(self) -> None:
+        self.entered_b.set()
+        await asyncio.wait_for(self.entered_a.wait(), timeout=1.0)
+
+
+@pytest.mark.asyncio
+async def test_health_service_concurrent_execution():
+    """
+    Verifies that checkers execute concurrently using an asyncio.Event barrier.
+    If executed sequentially, BarrierCheckerA would hang and timeout waiting for
+    BarrierCheckerB's event.
+    """
+    event_a = asyncio.Event()
+    event_b = asyncio.Event()
+
+    checker_a = BarrierCheckerA(event_a, event_b)
+    checker_b = BarrierCheckerB(event_a, event_b)
+
+    service = HealthService(checkers=[checker_a, checker_b])
+    deps = await service.check_dependencies()
+
+    assert deps["barrier_a"].status == HealthStatus.HEALTHY
+    assert deps["barrier_b"].status == HealthStatus.HEALTHY
+    assert service.determine_status(deps) == HealthStatus.HEALTHY
+    assert service.determine_readiness(deps) is True
