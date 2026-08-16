@@ -31,8 +31,11 @@ def create_application() -> FastAPI:
         debug=settings.DEBUG,
     )
 
+    from app.api.health import router as health_router
+
     application.add_middleware(RequestLoggingMiddleware)
     application.add_exception_handler(Exception, global_exception_handler)
+    application.include_router(health_router, prefix="/health", tags=["Health"])
     application.include_router(api_router, prefix=settings.API_V1_PREFIX)
 
     logger.info("FastAPI application created and routes registered.")

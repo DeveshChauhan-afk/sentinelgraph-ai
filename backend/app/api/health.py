@@ -1,46 +1,77 @@
 # app/api/health.py
 
-from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy import text
+from fastapi import APIRouter, Depends, Response, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.db.database import get_db
-from app.core.config import settings
-from app.core.logger import get_logger
 
-logger = get_logger(__name__)
+from app.db.database import get_db
+from app.services.health_service import HealthService
+
 router = APIRouter()
 
 
 @router.get(
-    "/",
-    summary="Application health check",
+    "/live",
+    summary="Process liveness probe",
+    status_code=status.HTTP_200_OK,
     tags=["Health"],
 )
-async def health_check(db: AsyncSession = Depends(get_db)):
+async def liveness_check() -> dict:
     """
-    Perform a liveness and readiness check.
+    Process liveness check. Always returns 200 OK while app is running.
+    Does not touch databases or external services.
+    """
+    return HealthService.check_liveness()
 
-    Verifies PostgreSQL connectivity. If database is unreachable,
-    returns 503 Service Unavailable.
+
+@router.get(
+    "/ready",
+    summary="Application readiness probe",
+    tags=["Health"],
+)
+async def readiness_check(
+    response: Response,
+    db: AsyncSession = Depends(get_db),
+) -> dict:
     """
-    try:
-        # Execute a simple query to verify connection
-        await db.execute(text("SELECT 1"))
+    Readiness probe for database & service dependency health.
+    Returns 200 OK when ready, 503 Service Unavailable when unready.
+    """
+    result = await HealthService.check_readiness(db)
+    if not result["is_ready"]:
+        response.status_code = status.HTTP_503_SERVICE_UNAVAILABLE
         return {
-            "status": "healthy",
-            "database": "connected",
-            "service": settings.PROJECT_NAME,
+            "status": "unready",
+            "dependencies": result["details"],
         }
-    except Exception:
-        # Log the full traceback for operational debugging
-        logger.exception("Database health check failed.")
 
-        # Raise 503 Service Unavailable for orchestrators (Kubernetes/Docker)
-        raise HTTPException(
-            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail={
-                "status": "unhealthy",
-                "database": "disconnected",
-                "service": settings.PROJECT_NAME,
-            },
-        )
+    return {
+        "status": "ready",
+        "dependencies": result["details"],
+    }
+
+
+@router.get(
+    "",
+    summary="Operational health summary",
+    tags=["Health"],
+    include_in_schema=True,
+)
+@router.get(
+    "/",
+    summary="Operational health summary",
+    tags=["Health"],
+    include_in_schema=False,
+)
+async def health_summary(
+    response: Response,
+    db: AsyncSession = Depends(get_db),
+) -> dict:
+    """
+    Provides structured operational health summary of application and dependencies.
+    Returns 200 OK if healthy, 503 if unhealthy.
+    """
+    summary = await HealthService.get_health_summary(db)
+    if summary["status"] != "healthy":
+        response.status_code = status.HTTP_503_SERVICE_UNAVAILABLE
+
+    return summary
