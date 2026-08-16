@@ -7,6 +7,7 @@ from typing import Any
 from loguru import logger as loguru_logger
 
 from app.core.config import settings
+from app.core.context import get_request_id
 
 # Define log directory and file path (no filesystem side-effects during import)
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -23,6 +24,14 @@ LOG_FORMAT = (
 )
 
 
+def _correlation_patcher(record: dict) -> None:
+    """
+    Injects the active request correlation ID from contextvars into Loguru records.
+    """
+    req_id = get_request_id()
+    record["extra"]["request_id"] = req_id if req_id else "-"
+
+
 def setup_logger() -> None:
     """
     Configures the global logger with console and optional rotating file handlers.
@@ -30,6 +39,9 @@ def setup_logger() -> None:
     """
     # Remove default handler
     loguru_logger.remove()
+
+    # Configure global patcher for correlation ID propagation
+    loguru_logger.configure(patcher=_correlation_patcher)
 
     # Add Console Handler (Colorful)
     loguru_logger.add(
