@@ -1,5 +1,5 @@
 """
-Unit tests for production health endpoints (/health/live, /health/ready, /health),
+Unit and integration tests for production health endpoints (/health/live, /health/ready, /health),
 concrete dependency health checkers (Postgres, Neo4j, Gemini),
 and HealthService aggregation.
 """
@@ -10,10 +10,11 @@ from fastapi.testclient import TestClient
 import pytest
 from pydantic import SecretStr
 
-from app.core.config import Settings
+from app.api.health import get_health_service
+from app.core.config import Settings, settings
 from app.core.health.base import BaseHealthChecker
 from app.core.health.gemini import GeminiConfigHealthChecker
-from app.core.health.models import HealthStatus
+from app.core.health.models import DependencyHealth, HealthStatus
 from app.core.health.neo4j import Neo4jHealthChecker
 from app.core.health.postgres import PostgresHealthChecker
 from app.core.health.service import HealthService
@@ -22,76 +23,239 @@ from app.main import app
 client = TestClient(app)
 
 
+# ============================================================================
+# HTTP Health Endpoints Tests
+# ============================================================================
+
+
 def test_liveness_endpoint():
     """
-    Test GET /health/live returns HTTP 200 and healthy status.
+    Test GET /health/live returns HTTP 200 with LivenessResponse and does not invoke HealthService.
     """
-    response = client.get("/health/live")
-    assert response.status_code == 200
-    assert response.json() == {"status": "healthy"}
+    with patch.object(HealthService, "check_dependencies") as mock_check:
+        response = client.get("/health/live")
+        assert response.status_code == 200
+        data = response.json()
+        assert data["status"] == "healthy"
+        assert "timestamp" in data
+        mock_check.assert_not_called()
 
-    # Also verify via API v1 prefix
-    v1_response = client.get("/api/v1/health/live")
-    assert v1_response.status_code == 200
-    assert v1_response.json() == {"status": "healthy"}
+        # Also verify via API v1 prefix
+        v1_response = client.get("/api/v1/health/live")
+        assert v1_response.status_code == 200
+        assert v1_response.json()["status"] == "healthy"
+        mock_check.assert_not_called()
 
 
-@patch("app.services.health_service.HealthService.check_postgres", new_callable=AsyncMock)
-@patch("app.services.health_service.HealthService.check_neo4j", new_callable=AsyncMock)
-@patch("app.services.health_service.HealthService.check_gemini", return_value=True)
-def test_readiness_endpoint_success(mock_gemini, mock_neo4j, mock_postgres):
+def test_readiness_endpoint_all_healthy():
     """
     Test GET /health/ready returns HTTP 200 when all dependencies are healthy.
     """
-    mock_postgres.return_value = True
-    mock_neo4j.return_value = True
+    mock_deps = {
+        "postgres": DependencyHealth(
+            name="postgres", status=HealthStatus.HEALTHY, latency_ms=1.5, critical=True
+        ),
+        "neo4j": DependencyHealth(
+            name="neo4j", status=HealthStatus.HEALTHY, latency_ms=2.0, critical=True
+        ),
+        "gemini": DependencyHealth(
+            name="gemini", status=HealthStatus.HEALTHY, latency_ms=0.1, critical=False
+        ),
+    }
+    mock_service = HealthService(checkers=[])
+    mock_service.check_dependencies = AsyncMock(return_value=mock_deps)
 
-    response = client.get("/health/ready")
-    assert response.status_code == 200
-    data = response.json()
-    assert data["status"] == "ready"
-    assert data["dependencies"]["postgres"] == "healthy"
-    assert data["dependencies"]["neo4j"] == "healthy"
-    assert data["dependencies"]["gemini"] == "configured"
+    app.dependency_overrides[get_health_service] = lambda: mock_service
+    try:
+        response = client.get("/health/ready")
+        assert response.status_code == 200
+        data = response.json()
+        assert data["status"] == "healthy"
+        assert data["is_ready"] is True
+        assert data["dependencies"]["postgres"]["status"] == "healthy"
+        assert data["dependencies"]["neo4j"]["status"] == "healthy"
+        assert data["dependencies"]["gemini"]["status"] == "healthy"
+
+        # Also verify via API v1 prefix
+        v1_response = client.get("/api/v1/health/ready")
+        assert v1_response.status_code == 200
+        assert v1_response.json()["is_ready"] is True
+    finally:
+        app.dependency_overrides.clear()
 
 
-@patch("app.services.health_service.HealthService.check_postgres", new_callable=AsyncMock)
-@patch("app.services.health_service.HealthService.check_neo4j", new_callable=AsyncMock)
-@patch("app.services.health_service.HealthService.check_gemini", return_value=True)
-def test_readiness_endpoint_failure(mock_gemini, mock_neo4j, mock_postgres):
+def test_readiness_endpoint_degraded_soft_failure():
     """
-    Test GET /health/ready returns HTTP 503 when a required dependency fails.
+    Test GET /health/ready returns HTTP 200 and status=degraded when non-critical Gemini fails.
     """
-    mock_postgres.return_value = False
-    mock_neo4j.return_value = True
+    mock_deps = {
+        "postgres": DependencyHealth(
+            name="postgres", status=HealthStatus.HEALTHY, latency_ms=1.5, critical=True
+        ),
+        "neo4j": DependencyHealth(
+            name="neo4j", status=HealthStatus.HEALTHY, latency_ms=2.0, critical=True
+        ),
+        "gemini": DependencyHealth(
+            name="gemini",
+            status=HealthStatus.UNHEALTHY,
+            latency_ms=0.1,
+            critical=False,
+            message="Service check failed",
+        ),
+    }
+    mock_service = HealthService(checkers=[])
+    mock_service.check_dependencies = AsyncMock(return_value=mock_deps)
 
-    response = client.get("/health/ready")
-    assert response.status_code == 503
-    data = response.json()
-    assert data["status"] == "unready"
-    assert data["dependencies"]["postgres"] == "unhealthy"
-    assert data["dependencies"]["neo4j"] == "healthy"
+    app.dependency_overrides[get_health_service] = lambda: mock_service
+    try:
+        response = client.get("/health/ready")
+        assert response.status_code == 200
+        data = response.json()
+        assert data["status"] == "degraded"
+        assert data["is_ready"] is True
+        assert data["dependencies"]["gemini"]["status"] == "unhealthy"
+    finally:
+        app.dependency_overrides.clear()
 
 
-@patch("app.services.health_service.HealthService.check_postgres", new_callable=AsyncMock)
-@patch("app.services.health_service.HealthService.check_neo4j", new_callable=AsyncMock)
-@patch("app.services.health_service.HealthService.check_gemini", return_value=True)
-def test_health_summary_endpoint(mock_gemini, mock_neo4j, mock_postgres):
+def test_readiness_endpoint_critical_postgres_failure():
     """
-    Test GET /health returns structured operational health document.
+    Test GET /health/ready returns HTTP 503 and status=unhealthy when critical PostgreSQL fails.
     """
-    mock_postgres.return_value = True
-    mock_neo4j.return_value = True
+    mock_deps = {
+        "postgres": DependencyHealth(
+            name="postgres",
+            status=HealthStatus.UNHEALTHY,
+            latency_ms=1.5,
+            critical=True,
+            message="Service check failed",
+        ),
+        "neo4j": DependencyHealth(
+            name="neo4j", status=HealthStatus.HEALTHY, latency_ms=2.0, critical=True
+        ),
+        "gemini": DependencyHealth(
+            name="gemini", status=HealthStatus.HEALTHY, latency_ms=0.1, critical=False
+        ),
+    }
+    mock_service = HealthService(checkers=[])
+    mock_service.check_dependencies = AsyncMock(return_value=mock_deps)
 
-    response = client.get("/health")
-    assert response.status_code == 200
-    data = response.json()
-    assert data["status"] == "healthy"
-    assert "service" in data
-    assert "version" in data
-    assert data["dependencies"]["postgres"] == "healthy"
-    assert data["dependencies"]["neo4j"] == "healthy"
-    assert data["dependencies"]["gemini"] == "configured"
+    app.dependency_overrides[get_health_service] = lambda: mock_service
+    try:
+        response = client.get("/health/ready")
+        assert response.status_code == 503
+        data = response.json()
+        assert data["status"] == "unhealthy"
+        assert data["is_ready"] is False
+        assert data["dependencies"]["postgres"]["status"] == "unhealthy"
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_readiness_endpoint_critical_neo4j_failure():
+    """
+    Test GET /health/ready returns HTTP 503 and status=unhealthy when critical Neo4j fails.
+    """
+    mock_deps = {
+        "postgres": DependencyHealth(
+            name="postgres", status=HealthStatus.HEALTHY, latency_ms=1.5, critical=True
+        ),
+        "neo4j": DependencyHealth(
+            name="neo4j",
+            status=HealthStatus.UNHEALTHY,
+            latency_ms=2.0,
+            critical=True,
+            message="Service check failed",
+        ),
+        "gemini": DependencyHealth(
+            name="gemini", status=HealthStatus.HEALTHY, latency_ms=0.1, critical=False
+        ),
+    }
+    mock_service = HealthService(checkers=[])
+    mock_service.check_dependencies = AsyncMock(return_value=mock_deps)
+
+    app.dependency_overrides[get_health_service] = lambda: mock_service
+    try:
+        response = client.get("/health/ready")
+        assert response.status_code == 503
+        data = response.json()
+        assert data["status"] == "unhealthy"
+        assert data["is_ready"] is False
+        assert data["dependencies"]["neo4j"]["status"] == "unhealthy"
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_health_summary_endpoint_healthy():
+    """
+    Test GET /health returns structured operational health document with HTTP 200.
+    """
+    mock_deps = {
+        "postgres": DependencyHealth(
+            name="postgres", status=HealthStatus.HEALTHY, latency_ms=1.5, critical=True
+        ),
+        "neo4j": DependencyHealth(
+            name="neo4j", status=HealthStatus.HEALTHY, latency_ms=2.0, critical=True
+        ),
+        "gemini": DependencyHealth(
+            name="gemini", status=HealthStatus.HEALTHY, latency_ms=0.1, critical=False
+        ),
+    }
+    mock_service = HealthService(checkers=[])
+    mock_service.check_dependencies = AsyncMock(return_value=mock_deps)
+
+    app.dependency_overrides[get_health_service] = lambda: mock_service
+    try:
+        response = client.get("/health")
+        assert response.status_code == 200
+        data = response.json()
+        assert data["status"] == "healthy"
+        assert data["service"] == settings.PROJECT_NAME
+        assert data["version"] == settings.VERSION
+        assert data["environment"] == ("development" if settings.DEBUG else "production")
+        assert "postgres" in data["dependencies"]
+        assert "neo4j" in data["dependencies"]
+        assert "gemini" in data["dependencies"]
+
+        # Also verify via API v1 prefix
+        v1_response = client.get("/api/v1/health")
+        assert v1_response.status_code == 200
+        assert v1_response.json()["status"] == "healthy"
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_health_summary_endpoint_unhealthy_returns_200():
+    """
+    Test GET /health returns HTTP 200 diagnostic document even when a critical dependency fails.
+    """
+    mock_deps = {
+        "postgres": DependencyHealth(
+            name="postgres",
+            status=HealthStatus.UNHEALTHY,
+            latency_ms=1.5,
+            critical=True,
+            message="Service check failed",
+        ),
+        "neo4j": DependencyHealth(
+            name="neo4j", status=HealthStatus.HEALTHY, latency_ms=2.0, critical=True
+        ),
+        "gemini": DependencyHealth(
+            name="gemini", status=HealthStatus.HEALTHY, latency_ms=0.1, critical=False
+        ),
+    }
+    mock_service = HealthService(checkers=[])
+    mock_service.check_dependencies = AsyncMock(return_value=mock_deps)
+
+    app.dependency_overrides[get_health_service] = lambda: mock_service
+    try:
+        response = client.get("/health")
+        assert response.status_code == 200
+        data = response.json()
+        assert data["status"] == "unhealthy"
+        assert data["dependencies"]["postgres"]["status"] == "unhealthy"
+    finally:
+        app.dependency_overrides.clear()
 
 
 # ============================================================================

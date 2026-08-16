@@ -1,77 +1,88 @@
 # app/api/health.py
 
 from fastapi import APIRouter, Depends, Response, status
-from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.db.database import get_db
-from app.services.health_service import HealthService
+from app.core.config import settings
+from app.core.health.models import (
+    HealthSummaryResponse,
+    LivenessResponse,
+    ReadinessResponse,
+)
+from app.core.health.service import HealthService
 
 router = APIRouter()
+
+
+def get_health_service() -> HealthService:
+    """
+    FastAPI dependency provider for HealthService.
+    """
+    return HealthService()
 
 
 @router.get(
     "/live",
     summary="Process liveness probe",
+    response_model=LivenessResponse,
     status_code=status.HTTP_200_OK,
     tags=["Health"],
 )
-async def liveness_check() -> dict:
+async def liveness_check() -> LivenessResponse:
     """
-    Process liveness check. Always returns 200 OK while app is running.
-    Does not touch databases or external services.
+    Process liveness probe. Always returns HTTP 200 while event loop is responsive.
+    Does not touch databases or external dependencies.
     """
-    return HealthService.check_liveness()
+    return LivenessResponse()
 
 
 @router.get(
     "/ready",
     summary="Application readiness probe",
+    response_model=ReadinessResponse,
     tags=["Health"],
 )
 async def readiness_check(
     response: Response,
-    db: AsyncSession = Depends(get_db),
-) -> dict:
+    service: HealthService = Depends(get_health_service),
+) -> ReadinessResponse:
     """
-    Readiness probe for database & service dependency health.
-    Returns 200 OK when ready, 503 Service Unavailable when unready.
+    Readiness probe for traffic routing.
+    Returns HTTP 200 when ready (including DEGRADED state), HTTP 503 when unready.
     """
-    result = await HealthService.check_readiness(db)
-    if not result["is_ready"]:
-        response.status_code = status.HTTP_503_SERVICE_UNAVAILABLE
-        return {
-            "status": "unready",
-            "dependencies": result["details"],
-        }
+    deps = await service.check_dependencies()
+    overall_status = service.determine_status(deps)
+    is_ready = service.determine_readiness(deps)
 
-    return {
-        "status": "ready",
-        "dependencies": result["details"],
-    }
+    if not is_ready:
+        response.status_code = status.HTTP_503_SERVICE_UNAVAILABLE
+
+    return ReadinessResponse(
+        status=overall_status,
+        is_ready=is_ready,
+        dependencies=deps,
+    )
 
 
 @router.get(
     "",
     summary="Operational health summary",
+    response_model=HealthSummaryResponse,
     tags=["Health"],
-    include_in_schema=True,
-)
-@router.get(
-    "/",
-    summary="Operational health summary",
-    tags=["Health"],
-    include_in_schema=False,
 )
 async def health_summary(
-    response: Response,
-    db: AsyncSession = Depends(get_db),
-) -> dict:
+    service: HealthService = Depends(get_health_service),
+) -> HealthSummaryResponse:
     """
-    Provides structured operational health summary of application and dependencies.
-    Returns 200 OK if healthy, 503 if unhealthy.
+    Detailed operational diagnostic summary.
+    Always returns HTTP 200 with structured diagnostic document even if degraded or unhealthy.
     """
-    summary = await HealthService.get_health_summary(db)
-    if summary["status"] != "healthy":
-        response.status_code = status.HTTP_503_SERVICE_UNAVAILABLE
+    deps = await service.check_dependencies()
+    overall_status = service.determine_status(deps)
 
-    return summary
+    return HealthSummaryResponse(
+        status=overall_status,
+        service=settings.PROJECT_NAME,
+        version=settings.VERSION,
+        environment="development" if settings.DEBUG else "production",
+        dependencies=deps,
+    )
