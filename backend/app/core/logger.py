@@ -15,10 +15,11 @@ LOG_DIR = BASE_DIR / "logs"
 LOG_FILE = LOG_DIR / "app.log"
 
 # Define standard format
-# Format: Time | Level | Module | Function | Line | Message
+# Format: Time | Level | [Request ID] | Module:Function:Line - Message
 LOG_FORMAT = (
     "<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> | "
     "<level>{level:<8}</level> | "
+    "[{extra[request_id]}] | "
     "<cyan>{module}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - "
     "<level>{message}</level>"
 )
@@ -49,6 +50,7 @@ def setup_logger() -> None:
         format=(
             "<green>{time:YYYY-MM-DD HH:mm:ss}</green> | "
             "<level>{level:<8}</level> | "
+            "<yellow>{extra[request_id]}</yellow> | "
             "<cyan>{module}</cyan> | "
             "<cyan>{function}</cyan> | "
             "<cyan>{line}</cyan> | "
