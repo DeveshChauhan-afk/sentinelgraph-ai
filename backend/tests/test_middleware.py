@@ -3,14 +3,18 @@ Unit and integration tests for Request ID / Correlation ID Middleware and Contex
 """
 
 import uuid
+from unittest.mock import AsyncMock, MagicMock
+from fastapi import FastAPI
 from httpx import ASGITransport, AsyncClient
 from loguru import logger
+from prometheus_client import REGISTRY
 import pytest
 from starlette.testclient import TestClient
 
+from app.api.dependencies import get_incident_service
 from app.core.context import get_request_id, reset_request_id, set_request_id
 from app.core.logger import setup_logger
-from app.core.middleware import validate_request_id
+from app.core.middleware import RequestLoggingMiddleware, validate_request_id
 from app.main import app
 
 client = TestClient(app)
@@ -167,3 +171,162 @@ def test_loguru_record_contains_request_id():
         assert captured_records[-1]["extra"]["request_id"] == "-"
     finally:
         logger.remove(handler_id)
+
+
+def test_metrics_successful_request_increments_counter():
+    """
+    12. Verify successful request increments http_requests_total with method, normalized route template, and status code.
+    """
+    path_template = "/live"
+    before = (
+        REGISTRY.get_sample_value(
+            "http_requests_total",
+            {"method": "GET", "path": path_template, "status_code": "200"},
+        )
+        or 0.0
+    )
+
+    response = client.get("/health/live")
+    assert response.status_code == 200
+
+    after = REGISTRY.get_sample_value(
+        "http_requests_total",
+        {"method": "GET", "path": path_template, "status_code": "200"},
+    )
+    assert after == before + 1.0
+
+
+def test_metrics_dynamic_route_contains_parameter_placeholder():
+    """
+    13. Verify request to dynamic route contains {parameter} placeholder and not the raw ID.
+    """
+    dynamic_id = "11111111-1111-1111-1111-111111111111"
+    raw_path = f"/api/v1/complaints/{dynamic_id}"
+    route_template = "/{incident_id}"
+
+    mock_service = MagicMock()
+    mock_service.get_incident = AsyncMock(return_value=None)
+    app.dependency_overrides[get_incident_service] = lambda: mock_service
+
+    try:
+        before = (
+            REGISTRY.get_sample_value(
+                "http_requests_total",
+                {"method": "GET", "path": route_template, "status_code": "404"},
+            )
+            or 0.0
+        )
+
+        response = client.get(raw_path)
+        assert response.status_code == 404
+
+        after = REGISTRY.get_sample_value(
+            "http_requests_total",
+            {"method": "GET", "path": route_template, "status_code": "404"},
+        )
+        assert after == before + 1.0
+
+        # Verify raw dynamic URL path was NEVER registered as a Prometheus label
+        raw_val = REGISTRY.get_sample_value(
+            "http_requests_total",
+            {"method": "GET", "path": raw_path, "status_code": "404"},
+        )
+        assert raw_val is None
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_metrics_unmatched_404_uses_unmatched_label():
+    """
+    14. Verify unmatched 404 request records metric with path='unmatched'.
+    """
+    unmatched_url = "/api/v1/nonexistent/random-path-404"
+    before = (
+        REGISTRY.get_sample_value(
+            "http_requests_total",
+            {"method": "GET", "path": "unmatched", "status_code": "404"},
+        )
+        or 0.0
+    )
+
+    response = client.get(unmatched_url)
+    assert response.status_code == 404
+
+    after = REGISTRY.get_sample_value(
+        "http_requests_total",
+        {"method": "GET", "path": "unmatched", "status_code": "404"},
+    )
+    assert after == before + 1.0
+
+    # Ensure raw unmatched path was NOT emitted
+    raw_val = REGISTRY.get_sample_value(
+        "http_requests_total",
+        {"method": "GET", "path": unmatched_url, "status_code": "404"},
+    )
+    assert raw_val is None
+
+
+def test_metrics_duration_histogram_records_observation():
+    """
+    15. Verify duration histogram receives observation for request.
+    """
+    path_template = "/live"
+    count_before = (
+        REGISTRY.get_sample_value(
+            "http_request_duration_seconds_count",
+            {"method": "GET", "path": path_template},
+        )
+        or 0.0
+    )
+    sum_before = (
+        REGISTRY.get_sample_value(
+            "http_request_duration_seconds_sum",
+            {"method": "GET", "path": path_template},
+        )
+        or 0.0
+    )
+
+    response = client.get("/health/live")
+    assert response.status_code == 200
+
+    count_after = REGISTRY.get_sample_value(
+        "http_request_duration_seconds_count",
+        {"method": "GET", "path": path_template},
+    )
+    sum_after = REGISTRY.get_sample_value(
+        "http_request_duration_seconds_sum",
+        {"method": "GET", "path": path_template},
+    )
+    assert count_after == count_before + 1.0
+    assert sum_after > sum_before
+
+
+def test_metrics_exception_path_records_status_500_and_propagates():
+    """
+    16. Verify metric status is 500 on unhandled exception and exception propagates.
+    """
+    test_app = FastAPI()
+    test_app.add_middleware(RequestLoggingMiddleware)
+
+    @test_app.get("/test-crash-endpoint")
+    def crash_endpoint():
+        raise RuntimeError("Simulated unhandled downstream error")
+
+    test_client = TestClient(test_app, raise_server_exceptions=True)
+
+    before = (
+        REGISTRY.get_sample_value(
+            "http_requests_total",
+            {"method": "GET", "path": "/test-crash-endpoint", "status_code": "500"},
+        )
+        or 0.0
+    )
+
+    with pytest.raises(RuntimeError, match="Simulated unhandled downstream error"):
+        test_client.get("/test-crash-endpoint")
+
+    after = REGISTRY.get_sample_value(
+        "http_requests_total",
+        {"method": "GET", "path": "/test-crash-endpoint", "status_code": "500"},
+    )
+    assert after == before + 1.0

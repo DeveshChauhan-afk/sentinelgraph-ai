@@ -9,6 +9,7 @@ from loguru import logger
 from starlette.middleware.base import BaseHTTPMiddleware
 
 from app.core.context import reset_request_id, set_request_id
+from app.core.metrics import http_request_duration_seconds, http_requests_total
 
 # Whitelist pattern for valid incoming X-Request-ID (1-64 alphanumeric, hyphens, underscores)
 REQUEST_ID_REGEX = re.compile(r"^[a-zA-Z0-9_\-]+$")
@@ -30,6 +31,19 @@ def validate_request_id(incoming_id: Optional[str]) -> Optional[str]:
         return None
 
     return incoming_id
+
+
+def get_route_template(request: Request) -> str:
+    """
+    Extracts the normalized parameterized route path template from route metadata.
+    Returns 'unmatched' for 404s, unmatched endpoints, or unrouted requests.
+    """
+    route = request.scope.get("route")
+    if route and hasattr(route, "path_format"):
+        return route.path_format
+    if route and hasattr(route, "path"):
+        return route.path
+    return "unmatched"
 
 
 class RequestLoggingMiddleware(BaseHTTPMiddleware):
@@ -58,5 +72,15 @@ class RequestLoggingMiddleware(BaseHTTPMiddleware):
                 f"Duration: {process_time * 1000:.2f} ms | "
                 f"Client: {client_ip}"
             )
+            route_template = get_route_template(request)
+            http_requests_total.labels(
+                method=request.method,
+                path=route_template,
+                status_code=str(status_code),
+            ).inc()
+            http_request_duration_seconds.labels(
+                method=request.method,
+                path=route_template,
+            ).observe(process_time)
             if response:
                 response.headers["X-Request-ID"] = request_id
