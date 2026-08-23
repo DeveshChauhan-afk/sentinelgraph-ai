@@ -28,6 +28,7 @@ from app.ai.exceptions import (
 )
 from app.ai.llm_client import LLMClient
 from app.core.config import Settings
+from app.core.metrics import llm_requests_total
 from app.exceptions.investigation import LLMProviderError, LLMTimeoutError
 from app.schemas.investigation import InvestigationReport
 from app.schemas.llm_response import LLMMetadata, LLMResponse, LLMUsage
@@ -141,6 +142,12 @@ class GeminiClient(LLMClient, AIClient):
                 total_tokens,
             )
 
+            llm_requests_total.labels(
+                provider="gemini",
+                model=model_name,
+                status="success",
+            ).inc()
+
             return LLMResponse(
                 metadata=metadata,
                 usage=usage,
@@ -149,9 +156,19 @@ class GeminiClient(LLMClient, AIClient):
             )
 
         except asyncio.TimeoutError as exc:
+            llm_requests_total.labels(
+                provider="gemini",
+                model=model_name,
+                status="error",
+            ).inc()
             logger.error("Gemini API request timed out after 60 seconds.")
             raise LLMTimeoutError("Gemini completion request timed out.") from exc
         except Exception as exc:
+            llm_requests_total.labels(
+                provider="gemini",
+                model=model_name,
+                status="error",
+            ).inc()
             logger.exception("Gemini API execution error: {}", exc)
             if isinstance(exc, (ClientError, ServerError, APIError)):
                 raise LLMProviderError(f"Gemini API Error: {exc}") from exc
