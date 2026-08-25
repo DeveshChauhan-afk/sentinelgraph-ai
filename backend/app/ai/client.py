@@ -28,7 +28,7 @@ from app.ai.exceptions import (
 )
 from app.ai.llm_client import LLMClient
 from app.core.config import Settings
-from app.core.metrics import llm_requests_total
+from app.core.metrics import llm_request_duration_seconds, llm_requests_total
 from app.exceptions.investigation import LLMProviderError, LLMTimeoutError
 from app.schemas.investigation import InvestigationReport
 from app.schemas.llm_response import LLMMetadata, LLMResponse, LLMUsage
@@ -78,8 +78,6 @@ class GeminiClient(LLMClient, AIClient):
             prompt.metadata.prompt_hash[:12],
         )
 
-        start_time = time.perf_counter()
-
         from app.schemas.report import ProfessionalInvestigationReport
 
         config = types.GenerateContentConfig(
@@ -89,18 +87,26 @@ class GeminiClient(LLMClient, AIClient):
             response_schema=ProfessionalInvestigationReport,
         )
 
+        start_time = time.perf_counter()
         try:
-            response = await asyncio.wait_for(
-                asyncio.to_thread(
-                    self._client.models.generate_content,
+            try:
+                response = await asyncio.wait_for(
+                    asyncio.to_thread(
+                        self._client.models.generate_content,
+                        model=model_name,
+                        contents=prompt.full_prompt,
+                        config=config,
+                    ),
+                    timeout=60.0,
+                )
+            finally:
+                duration_seconds = time.perf_counter() - start_time
+                llm_request_duration_seconds.labels(
+                    provider="gemini",
                     model=model_name,
-                    contents=prompt.full_prompt,
-                    config=config,
-                ),
-                timeout=60.0,
-            )
+                ).observe(duration_seconds)
 
-            duration_ms = round((time.perf_counter() - start_time) * 1000, 2)
+            duration_ms = round(duration_seconds * 1000, 2)
 
             text = getattr(response, "text", None)
             if not text:
