@@ -28,7 +28,11 @@ from app.ai.exceptions import (
 )
 from app.ai.llm_client import LLMClient
 from app.core.config import Settings
-from app.core.metrics import llm_request_duration_seconds, llm_requests_total
+from app.core.metrics import (
+    llm_request_duration_seconds,
+    llm_requests_total,
+    llm_tokens_total,
+)
 from app.exceptions.investigation import LLMProviderError, LLMTimeoutError
 from app.schemas.investigation import InvestigationReport
 from app.schemas.llm_response import LLMMetadata, LLMResponse, LLMUsage
@@ -153,6 +157,20 @@ class GeminiClient(LLMClient, AIClient):
                 model=model_name,
                 status="success",
             ).inc()
+
+            if prompt_tokens > 0:
+                llm_tokens_total.labels(
+                    provider="gemini",
+                    model=model_name,
+                    type="prompt",
+                ).inc(prompt_tokens)
+
+            if completion_tokens > 0:
+                llm_tokens_total.labels(
+                    provider="gemini",
+                    model=model_name,
+                    type="completion",
+                ).inc(completion_tokens)
 
             return LLMResponse(
                 metadata=metadata,
