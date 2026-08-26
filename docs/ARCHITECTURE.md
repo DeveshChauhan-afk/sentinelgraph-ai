@@ -96,12 +96,15 @@ SentinelGraph AI employs a **Hybrid Dual-Database Model** where PostgreSQL and N
 | **Primary Role** | Transactional source of truth & audit store | Relational intelligence & multi-hop link analysis |
 | **Data Stored** | Complaints, raw incident text, victim records, timestamps | Fraud entities (Phones, UPI IDs, Accounts) and edges |
 | **Access Pattern** | ACID transactions, index lookups, Alembic migrations | Cypher graph traversals, shortest-path, ring detection |
-| **Schema Management** | Strict schema enforced via SQLAlchemy & Alembic | Labeled Property Graph (`(:Complaint)-[:REPORTED_IN]->(:Entity)`) |
+| **Schema Management** | Strict schema enforced via SQLAlchemy & Alembic | Labeled Property Graph (`(:Complaint)-[:MENTIONS]->(:Entity)`) |
 
-### Synchronization Flow
+### Synchronization Flow & Graph Topology
 1. When a complaint is registered (`POST /api/v1/complaints`), the raw incident record is transactionally persisted in **PostgreSQL**.
-2. Extracted fraud entities (phone numbers, UPI IDs, suspect names) are synchronized into **Neo4j** as graph nodes.
-3. Directed relationships (`REPORTED_IN`, `ASSOCIATED_WITH`, `TRANSFERRED_TO`) are created, instantly updating the fraud knowledge graph for subsequent topological queries.
+2. Extracted fraud entities (phone numbers, UPI IDs, emails, bank accounts, organizations, persons, URLs, locations) are synchronized into **Neo4j** as graph nodes.
+3. Directed **`MENTIONS`** relationships are created, directly linking each complaint to its extracted entities (`(:Complaint)-[:MENTIONS]->(:Entity)`).
+
+> [!NOTE]
+> **Implemented Graph Topology**: `MENTIONS` is the only relationship type persisted in Neo4j. Multi-hop fraud network intelligence (such as shared identifiers, fraud rings, and shortest paths) is evaluated by traversing multiple `MENTIONS` edges (e.g., `(:Complaint)-[:MENTIONS]->(:Entity)<-[:MENTIONS]-(:Complaint)`). Higher-level concepts like entity association, fund flows, or co-occurrence are analytical constructs computed dynamically by query traversals and deterministic reasoning services rather than separate persisted relationship types.
 
 ---
 
