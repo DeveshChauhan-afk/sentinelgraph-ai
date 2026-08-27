@@ -27,6 +27,7 @@ from app.graph.service import GraphService
 from app.services.entity_extraction_service import (
     EntityExtractionService,
 )
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 
@@ -78,6 +79,32 @@ class IncidentService(BaseService[IncidentRepository]):
 
         return incident
 
+    @staticmethod
+    def _is_case_reference_uniqueness_error(exc: IntegrityError) -> bool:
+        """
+        Check if an IntegrityError is caused by a case_reference unique constraint violation.
+        """
+        err_str = str(exc).lower()
+        if "uq_incidents_case_reference" in err_str:
+            return True
+        if "case_reference" in err_str and ("unique" in err_str or "duplicate" in err_str):
+            return True
+
+        orig = getattr(exc, "orig", None)
+        if orig is not None:
+            constraint_name = getattr(orig, "constraint_name", None) or getattr(
+                getattr(orig, "diag", None), "constraint_name", None
+            )
+            if constraint_name == "uq_incidents_case_reference":
+                return True
+            orig_msg = str(orig).lower()
+            if "uq_incidents_case_reference" in orig_msg:
+                return True
+            if "case_reference" in orig_msg and ("unique" in orig_msg or "duplicate" in orig_msg):
+                return True
+
+        return False
+
     async def create_incident(
         self,
         incident_data: IncidentCreate,
@@ -119,6 +146,18 @@ class IncidentService(BaseService[IncidentRepository]):
 
             await self._session.commit()
 
+        except IntegrityError as exc:
+            await self._session.rollback()
+            if self._is_case_reference_uniqueness_error(exc):
+                ref_str = f"'{incident_data.case_reference}' " if incident_data.case_reference else ""
+                logger.warning(
+                    "Database uniqueness violation caught for case reference: {}",
+                    incident_data.case_reference or "N/A",
+                )
+                raise DuplicateCaseReferenceError(
+                    f"Case reference {ref_str}already exists."
+                ) from exc
+            raise
         except Exception:
             await self._session.rollback()
             raise
@@ -214,7 +253,20 @@ class IncidentService(BaseService[IncidentRepository]):
             "Updating incident: {}",
             incident_id,
         )
-        return await self._repository.update(incident, incident_data)
+        try:
+            return await self._repository.update(incident, incident_data)
+        except IntegrityError as exc:
+            await self._session.rollback()
+            if self._is_case_reference_uniqueness_error(exc):
+                ref_str = f"'{incident_data.case_reference}' " if incident_data.case_reference else ""
+                logger.warning(
+                    "Database uniqueness violation caught on update for case reference: {}",
+                    incident_data.case_reference or "N/A",
+                )
+                raise DuplicateCaseReferenceError(
+                    f"Case reference {ref_str}already exists."
+                ) from exc
+            raise
 
     async def delete_incident(self, incident_id: UUID) -> None:
         """

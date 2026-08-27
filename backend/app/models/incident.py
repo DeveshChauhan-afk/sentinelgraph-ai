@@ -7,7 +7,15 @@ Represents a reported fraudulent incident within the SentinelGraph AI platform.
 """
 
 from typing import Optional
-from sqlalchemy import String, Text, Float, Enum, Index, CheckConstraint
+from sqlalchemy import (
+    CheckConstraint,
+    Enum,
+    Float,
+    Index,
+    String,
+    Text,
+    UniqueConstraint,
+)
 from sqlalchemy.orm import Mapped, mapped_column
 from app.models.base_model import BaseModel
 from app.models.enums import (
@@ -30,6 +38,7 @@ class Incident(BaseModel):
         Index("idx_incident_status", "status"),
         Index("idx_incident_priority", "priority"),
         Index("idx_incident_created", "created_at"),
+        UniqueConstraint("case_reference", name="uq_incidents_case_reference"),
         CheckConstraint(
             "risk_score >= 0 AND risk_score <= 1", name="check_risk_score_range"
         ),
