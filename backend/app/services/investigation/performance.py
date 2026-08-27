@@ -16,14 +16,16 @@ class InvestigationTimer:
 
     def __init__(self) -> None:
         self._marks: dict[str, float] = {}
+        self._active_marks: dict[str, float] = {}
         self._start = perf_counter()
 
     def start(self, stage: str) -> None:
-        self._marks[stage] = perf_counter()
+        self._active_marks[stage] = perf_counter()
 
     def stop(self, stage: str) -> None:
-        if stage in self._marks:
-            self._marks[stage] = (perf_counter() - self._marks[stage]) * 1000
+        if stage in self._active_marks:
+            start_time = self._active_marks.pop(stage)
+            self._marks[stage] = (perf_counter() - start_time) * 1000
 
     def summary(self) -> None:
         total = (perf_counter() - self._start) * 1000

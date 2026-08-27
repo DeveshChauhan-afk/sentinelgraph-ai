@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from loguru import logger
-from app.db.neo4j import connect_neo4j
 from app.core.logger import setup_logger
-from app.db.neo4j import disconnect_neo4j
+from app.db.database import close_db
+from app.db.neo4j import connect_neo4j, disconnect_neo4j
 
 
 async def startup(app: FastAPI) -> None:
@@ -22,5 +22,6 @@ Status: ONLINE
 
 async def shutdown(app: FastAPI) -> None:
     await disconnect_neo4j()
+    await close_db()
     logger.info("SentinelGraph AI shutting down...")
     logger.info("Shutdown complete.")

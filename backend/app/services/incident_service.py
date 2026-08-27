@@ -122,7 +122,6 @@ class IncidentService(BaseService[IncidentRepository]):
         except Exception:
             await self._session.rollback()
             raise
-        await self._session.commit()
 
         try:
             entities = await self._entity_extraction_service.extract_entities(

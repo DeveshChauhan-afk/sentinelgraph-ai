@@ -52,3 +52,11 @@ async def get_db() -> AsyncGenerator[AsyncSession, None]:
     """
     async with AsyncSessionLocal() as session:
         yield session
+
+
+async def close_db() -> None:
+    """
+    Dispose of the global SQLAlchemy async engine and release pooled connections.
+    """
+    await async_engine.dispose()
+

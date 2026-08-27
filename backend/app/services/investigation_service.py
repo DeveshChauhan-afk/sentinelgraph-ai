@@ -175,8 +175,6 @@ class InvestigationService:
         )
         timer.stop("Parser")
 
-        timer.stop("Gemini")
-
         logger.info(
             "Investigation complete | Risk={} | Confidence={} | Findings={}",
             report.risk_level,
