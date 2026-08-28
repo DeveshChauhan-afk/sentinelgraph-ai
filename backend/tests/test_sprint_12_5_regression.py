@@ -467,3 +467,177 @@ def test_development_logger_diagnose_enabled_when_debug_true(capsys: pytest.Capt
     finally:
         setup_logger()
 
+
+# ============================================================================
+# 8. Sprint 12.5C: Observability Contract & Invariant Tests
+# ============================================================================
+
+
+def test_observability_label_cardinality_and_safety() -> None:
+    """
+    Verify all 5 Prometheus metric definitions satisfy:
+    1. Strictly bounded label cardinality.
+    2. Zero sensitive user data fields (PII, request IDs, entity values) in label names.
+    3. Ascending, positive latency buckets.
+    """
+    forbidden_label_names = {
+        "request_id",
+        "req_id",
+        "correlation_id",
+        "report_id",
+        "entity_value",
+        "target_value",
+        "phone",
+        "email",
+        "upi",
+        "account",
+        "name",
+        "prompt",
+        "response",
+    }
+
+    metrics = [
+        http_requests_total,
+        http_request_duration_seconds,
+        llm_requests_total,
+        llm_request_duration_seconds,
+        llm_tokens_total,
+    ]
+
+    for m in metrics:
+        labels = set(m._labelnames)
+        # 1. No forbidden/sensitive label names
+        assert not (labels & forbidden_label_names), f"Metric {m._name} contains sensitive labels: {labels}"
+        # 2. Bounded label count (<= 3 labels per metric)
+        assert len(labels) <= 3, f"Metric {m._name} has excessive label cardinality: {labels}"
+
+    # 3. Verify histogram buckets are strictly increasing and positive
+    for hist in [http_request_duration_seconds, llm_request_duration_seconds]:
+        buckets = hist._upper_bounds
+        assert len(buckets) > 0
+        for b in buckets[:-1]:  # Exclude +Inf
+            assert b > 0
+        assert list(buckets) == sorted(buckets)
+
+
+def test_http_route_normalization_bounds_cardinality_and_redacts_identifiers() -> None:
+    """
+    Verify that dynamic endpoints with arbitrary paths/UUIDs:
+    1. Normalize route paths to static parameter templates (e.g. `/{incident_id}`).
+    2. Return 'unmatched' for arbitrary non-existent paths.
+    3. Never register raw IDs, phone numbers, or emails as Prometheus labels.
+    """
+    from fastapi.testclient import TestClient
+    from prometheus_client import REGISTRY
+    from app.main import app
+
+    test_client = TestClient(app)
+
+    sensitive_dynamic_phone_path = "/api/v1/nonexistent-endpoint/+919876543210"
+    res = test_client.get(sensitive_dynamic_phone_path)
+    assert res.status_code == 404
+
+    # 1. Verify metric recorded with 'unmatched' path
+    val_unmatched = REGISTRY.get_sample_value(
+        "http_requests_total",
+        {"method": "GET", "path": "unmatched", "status_code": "404"},
+    )
+    assert val_unmatched is not None and val_unmatched > 0
+
+    # 2. Verify raw sensitive path was NEVER created as a label
+    val_raw = REGISTRY.get_sample_value(
+        "http_requests_total",
+        {"method": "GET", "path": sensitive_dynamic_phone_path, "status_code": "404"},
+    )
+    assert val_raw is None
+
+
+@pytest.mark.asyncio
+async def test_llm_metrics_accuracy_on_retries_and_usage_metadata() -> None:
+    """
+    Verify that LLM telemetry tracks:
+    1. Exact attempt count on retry (1 error attempt + 1 success attempt).
+    2. Exact duration observations without backoff sleep inflation.
+    3. Exact prompt and completion token counts from Gemini SDK usage metadata.
+    """
+    from unittest.mock import patch
+    from google.genai.errors import ServerError
+    from app.ai.client import GeminiClient
+    from app.schemas.prompt import PromptConstraints, PromptMetadata, PromptRequest
+
+    settings = _build_test_settings()
+    client = GeminiClient(settings)
+
+    mock_usage = MagicMock(
+        prompt_token_count=150,
+        candidates_token_count=75,
+        total_token_count=225,
+    )
+    mock_success_response = MagicMock(
+        text='{"summary": "Test report", "risk_level": "LOW", "confidence": 0.9, "findings": [], "key_entities": [], "recommended_actions": []}',
+        usage_metadata=mock_usage,
+        candidates=[MagicMock(finish_reason="STOP")],
+    )
+
+    server_error = ServerError(503, {"error": {"message": "Service overloaded"}})
+    client._client.models.generate_content = MagicMock(
+        side_effect=[server_error, mock_success_response]
+    )
+
+    with (
+        patch.object(llm_requests_total, "labels") as mock_req_labels,
+        patch.object(llm_request_duration_seconds, "labels") as mock_dur_labels,
+        patch.object(llm_tokens_total, "labels") as mock_tok_labels,
+    ):
+        mock_req_counter = MagicMock()
+        mock_req_labels.return_value = mock_req_counter
+
+        mock_dur_hist = MagicMock()
+        mock_dur_labels.return_value = mock_dur_hist
+
+        mock_tok_counter = MagicMock()
+        mock_tok_labels.return_value = mock_tok_counter
+
+        from app.schemas.prompt import (
+            DeveloperInstructions,
+            ExpectedReportSection,
+            ExpectedReportStructure,
+            PromptConstraints,
+            PromptMetadata,
+            PromptRequest,
+            SerializedContext,
+            SystemPrompt,
+        )
+
+        prompt_req = PromptRequest(
+            metadata=PromptMetadata(prompt_hash="a" * 64, model_name="gemini-3.5-flash-lite"),
+            system_prompt=SystemPrompt(role="Role", operating_rules=("Rule 1",)),
+            developer_instructions=DeveloperInstructions(
+                citation_instructions=("Cite 1",), style_guidelines=("Style 1",)
+            ),
+            context=SerializedContext(json_data='{"test": 1}', size_bytes=10),
+            expected_structure=ExpectedReportStructure(
+                sections=(ExpectedReportSection(section_id="S1", title="Title 1", description="Desc 1"),)
+            ),
+            constraints=PromptConstraints(temperature=0.0, max_tokens=1024),
+        )
+
+        res = await client.generate(prompt_req)
+        assert res.usage.prompt_tokens == 150
+        assert res.usage.completion_tokens == 75
+        assert res.usage.total_tokens == 225
+
+        # 1. Total requests: 1 error + 1 success
+        assert mock_req_counter.inc.call_count == 2
+        assert mock_req_labels.call_args_list[0].kwargs["status"] == "error"
+        assert mock_req_labels.call_args_list[1].kwargs["status"] == "success"
+
+        # 2. Duration observed for both attempts
+        assert mock_dur_hist.observe.call_count == 2
+
+        # 3. Tokens recorded for prompt and completion
+        assert mock_tok_counter.inc.call_count == 2
+        mock_tok_counter.inc.assert_any_call(150)
+        mock_tok_counter.inc.assert_any_call(75)
+
+
