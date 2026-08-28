@@ -64,9 +64,8 @@ class EntityExtractionService:
             for name in ExtractedEntities.model_fields
         }
         logger.debug(
-            "Validated extracted entities (counts={}, entities={}).",
+            "Validated extracted entities (counts={}).",
             entity_counts,
-            entities.model_dump(mode="json"),
         )
         logger.info(
             "Entity extraction completed successfully (counts={}).", entity_counts

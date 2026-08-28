@@ -34,34 +34,36 @@ class InvestigationCache:
         """
         Retrieve a cached value if it exists and has not expired.
         """
+        target_type = key.split(":", 1)[0] if ":" in key else "unknown"
         with self._lock:
             item = self._cache.get(key)
 
             if item is None:
                 self._misses += 1
-                logger.info("Cache MISS: {}", key)
+                logger.debug("Investigation cache MISS (target_type={}).", target_type)
                 return None
 
             expires_at, value = item
 
             if datetime.utcnow() > expires_at:
-                logger.info("Cache EXPIRED: {}", key)
+                logger.debug("Investigation cache EXPIRED (target_type={}).", target_type)
                 del self._cache[key]
                 return None
 
             self._hits += 1
-            logger.info("Cache HIT: {}", key)
+            logger.debug("Investigation cache HIT (target_type={}).", target_type)
             return value
 
     def set(self, key: str, value: Any) -> None:
         """
         Store a value in the cache.
         """
+        target_type = key.split(":", 1)[0] if ":" in key else "unknown"
         with self._lock:
             expires_at = datetime.utcnow() + self._ttl
             self._cache[key] = (expires_at, value)
 
-            logger.debug("Cached investigation: {}", key)
+            logger.debug("Cached investigation result (target_type={}).", target_type)
 
     def invalidate(self, key: str) -> None:
         """

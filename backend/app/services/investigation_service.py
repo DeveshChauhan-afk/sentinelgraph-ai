@@ -64,8 +64,8 @@ class InvestigationService:
         """
 
         logger.info(
-            "Building investigation evidence for '{}'.",
-            request.target_value,
+            "Building investigation evidence (target_type={}).",
+            request.target_type,
         )
 
         neighbors = await self._graph_service.get_neighbors(
@@ -89,8 +89,11 @@ class InvestigationService:
         )
 
         logger.info(
-            "Successfully collected investigation evidence for '{}'.",
-            request.target_value,
+            "Successfully collected investigation evidence (target_type={}, neighbors={}, incidents={}, shared={}).",
+            request.target_type,
+            len(neighbors),
+            len(related_incidents),
+            len(shared_entities),
         )
 
         return InvestigationEvidence(
@@ -111,8 +114,8 @@ class InvestigationService:
 
         timer = InvestigationTimer()
         logger.info(
-            "Starting investigation for '{}'.",
-            request.target_value,
+            "Starting investigation (target_type={}).",
+            request.target_type,
         )
 
         # ------------------------------------------------------------------
@@ -128,8 +131,8 @@ class InvestigationService:
 
         if cached_response is not None:
             logger.info(
-                "Returning cached investigation for '{}'.",
-                cache_key,
+                "Returning cached investigation (target_type={}).",
+                request.target_type,
             )
             timer.summary()
             return cached_response
@@ -162,8 +165,9 @@ class InvestigationService:
         timer.stop("Gemini")
 
         logger.debug(
-            "RAW GEMINI RESPONSE:\n{}",
-            raw_response,
+            "Received LLM response for investigation (target_type={}, length={}).",
+            request.target_type,
+            len(raw_response),
         )
 
         # ------------------------------------------------------------------
@@ -183,14 +187,13 @@ class InvestigationService:
         )
 
         logger.info(
-            "Investigation completed for '{}'.",
-            request.target_value,
+            "Investigation completed (target_type={}).",
+            request.target_type,
         )
 
         logger.info(
-            "Creating InvestigationResponse: target_type={} target_value={}",
+            "Creating InvestigationResponse (target_type={}).",
             request.target_type,
-            request.target_value,
         )
 
         response = InvestigationResponse(

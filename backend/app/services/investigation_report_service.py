@@ -70,9 +70,10 @@ class InvestigationReportService:
         correlation_id = f"CORR-{uuid4().hex[:10].upper()}"
 
         logger.info(
-            "Starting end-to-end report generation for target '{}' (correlation_id='{}').",
-            entity_value,
+            "Starting end-to-end report generation (correlation_id='{}', template_id='{}', target_type={}).",
             correlation_id,
+            template_id,
+            target_type or "unspecified",
         )
 
         if self._llm_client is None:
@@ -104,9 +105,9 @@ class InvestigationReportService:
         )
 
         logger.info(
-            "Completed end-to-end report generation for '{}': report_id='{}', latency={:.2f}ms.",
-            entity_value,
+            "Completed end-to-end report generation: report_id='{}', correlation_id='{}', latency={:.2f}ms.",
             report.report_id,
+            correlation_id,
             report.telemetry.latency_ms,
         )
 

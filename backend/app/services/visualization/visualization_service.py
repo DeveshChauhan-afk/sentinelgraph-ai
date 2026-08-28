@@ -45,8 +45,7 @@ class VisualizationService:
             )
 
         logger.info(
-            "Generating visualization graph for '{}' (depth={}).",
-            node_id,
+            "Generating visualization graph (depth={}).",
             depth,
         )
 
@@ -57,8 +56,7 @@ class VisualizationService:
 
         if not paths:
             logger.warning(
-                "No graph found for node '{}'.",
-                node_id,
+                "No graph found for requested node.",
             )
 
         response = self._mapper.map_paths(

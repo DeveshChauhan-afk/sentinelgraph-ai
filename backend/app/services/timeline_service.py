@@ -80,8 +80,7 @@ class TimelineService:
             TimelineResponse containing events, entity_first_seen, statistics, insights, fraud_evolution, and evidence.
         """
         logger.info(
-            "Orchestrating timeline reconstruction for investigation target '{}'.",
-            entity_value,
+            "Orchestrating timeline reconstruction for investigation target.",
         )
 
         # 1. Retrieve connected complaints from GraphRepository
@@ -91,8 +90,7 @@ class TimelineService:
 
         if not complaints_data:
             logger.info(
-                "No connected complaints found for target '{}'. Returning empty timeline response.",
-                entity_value,
+                "No connected complaints found for investigation target. Returning empty timeline response.",
             )
             empty_stats = TimelineStatistics(
                 total_complaints=0,
@@ -200,8 +198,7 @@ class TimelineService:
         )
 
         logger.info(
-            "Completed timeline orchestration for '{}': events={}, entities={}, insights={}, evolution={}, evidence={}.",
-            entity_value,
+            "Completed timeline orchestration: events={}, entities={}, insights={}, evolution={}, evidence={}.",
             total_events,
             len(entity_first_seen),
             len(insights),

@@ -1,0 +1,387 @@
+"""
+Regression tests for Sprint 12.5A: Sensitive Logging Cleanup:
+1. Raw Gemini response text is NOT logged during investigation or entity extraction.
+2. Full prompt contents and complaint text are NOT logged.
+3. Sensitive entity values (phone numbers, UPI IDs, emails, bank accounts, names) are NOT logged in investigation/entity flows.
+4. Safe operational metadata (request/correlation ID, status, counts, latency, risk levels) is retained.
+5. Prometheus metrics and label design remain unchanged and correct.
+"""
+
+from __future__ import annotations
+
+from unittest.mock import AsyncMock, MagicMock
+import pytest
+from loguru import logger
+from pydantic import SecretStr
+
+from app.core.config import Settings
+from app.core.metrics import (
+    http_request_duration_seconds,
+    http_requests_total,
+    llm_request_duration_seconds,
+    llm_requests_total,
+    llm_tokens_total,
+)
+from app.schemas.entity_extraction import ExtractedEntities
+from app.schemas.investigation import (
+    InvestigationReport,
+    InvestigationRequest,
+    InvestigationResponse,
+    InvestigationTargetType,
+)
+from app.schemas.timeline import (
+    TimelineResponse,
+)
+from app.services.entity_extraction_service import EntityExtractionService
+from app.services.investigation.cache import InvestigationCache
+from app.services.investigation_report_service import InvestigationReportService
+from app.services.investigation_service import InvestigationService
+from app.services.timeline_service import TimelineService
+
+
+def _build_test_settings() -> Settings:
+    return Settings(
+        SECRET_KEY=SecretStr("test-secret-key-01234567890123456789012345678901"),
+        DATABASE_HOST="localhost",
+        DATABASE_NAME="test_db",
+        DATABASE_USER="test_user",
+        DATABASE_PASSWORD=SecretStr("test_pass"),
+        NEO4J_URI="bolt://localhost:7687",
+        NEO4J_USERNAME="neo4j",
+        NEO4J_PASSWORD=SecretStr("neo4j_pass"),
+        GEMINI_API_KEY=SecretStr("test-gemini-key"),
+        GEMINI_MODEL="gemini-3.5-flash-lite",
+        GEMINI_TIMEOUT_SECONDS=60.0,
+        GEMINI_MAX_RETRIES=3,
+    )
+
+
+# ============================================================================
+# 1. Sensitive Investigation Logging Tests
+# ============================================================================
+
+
+@pytest.mark.asyncio
+async def test_investigation_service_does_not_log_raw_response_or_target_value() -> None:
+    """
+    Ensure InvestigationService does not log raw Gemini response or sensitive target_value.
+    """
+    sensitive_phone = "+919876543210"
+    sensitive_raw_llm = '{"risk_level": "HIGH", "confidence": 0.95, "findings": ["Suspicious payment pattern"]}'
+
+    from app.graph.models import GraphNode
+    from app.graph.query_models import (
+        EntityRiskResponse,
+        FraudRingResponse,
+        GraphNeighborsResponse,
+        RelatedIncidentsResponse,
+        RiskMetrics,
+        SharedEntityResponse,
+    )
+    from app.schemas.investigation import InvestigationEvidence
+
+    node = GraphNode(id="n1", label="Phone", properties={"value": sensitive_phone})
+    mock_evidence = InvestigationEvidence(
+        neighbors=GraphNeighborsResponse(entity=node, neighbors=[]),
+        related_incidents=RelatedIncidentsResponse(entity=node, incidents=[]),
+        risk=EntityRiskResponse(
+            entity=node,
+            risk_score=90,
+            risk_level="HIGH",
+            metrics=RiskMetrics(
+                incident_count=1,
+                neighbor_count=0,
+                phone_count=1,
+                upi_count=0,
+                email_count=0,
+                organization_count=0,
+            ),
+            reasons=["High risk score"],
+        ),
+        fraud_ring=FraudRingResponse(
+            entity=node,
+            nodes=[],
+            incidents=[],
+            total_nodes=0,
+            total_incidents=0,
+        ),
+        shared_entities=SharedEntityResponse(
+            entity=node,
+            complaints=[],
+            complaint_count=0,
+        ),
+    )
+
+    mock_graph = MagicMock()
+    mock_ai = MagicMock()
+    mock_ai.generate_content = AsyncMock(return_value=sensitive_raw_llm)
+
+    mock_prompt_builder = MagicMock()
+    mock_prompt_builder.build = MagicMock(return_value="structured prompt text")
+
+    mock_parser = MagicMock()
+    mock_parser.parse = MagicMock(
+        return_value=InvestigationReport(
+            summary="High risk fraud network detected.",
+            risk_level="HIGH",
+            confidence=0.95,
+            findings=["Suspicious payment pattern"],
+            key_entities=["phone"],
+            recommended_actions=["Freeze payment identifiers"],
+        )
+    )
+
+    service = InvestigationService(
+        graph_service=mock_graph,
+        ai_client=mock_ai,
+        prompt_builder=mock_prompt_builder,
+        report_parser=mock_parser,
+    )
+    service.build_evidence = AsyncMock(return_value=mock_evidence)
+
+    captured_logs: list[str] = []
+    handler_id = logger.add(lambda msg: captured_logs.append(msg))
+
+    try:
+        req = InvestigationRequest(
+            target_type=InvestigationTargetType.PHONE,
+            target_value=sensitive_phone,
+        )
+        res = await service.investigate(req)
+        assert isinstance(res, InvestigationResponse)
+
+        combined_logs = " ".join(captured_logs)
+
+        # 1. Verify sensitive phone number is NOT logged
+        assert sensitive_phone not in combined_logs
+
+        # 2. Verify raw Gemini response is NOT logged
+        assert "RAW GEMINI RESPONSE" not in combined_logs
+        assert sensitive_raw_llm not in combined_logs
+
+        # 3. Verify safe operational metadata IS logged
+        assert "target_type" in combined_logs
+        assert "Investigation complete" in combined_logs
+
+    finally:
+        logger.remove(handler_id)
+
+
+# ============================================================================
+# 2. Sensitive Entity Extraction Logging Tests
+# ============================================================================
+
+
+@pytest.mark.asyncio
+async def test_entity_extraction_service_does_not_log_sensitive_entities_or_complaint() -> None:
+    """
+    Ensure EntityExtractionService logs only entity counts and not raw extracted entities.
+    """
+    sensitive_complaint = "Victim transferred 50000 to fraudster@okaxis from account 1234567890."
+    sensitive_entities_json = (
+        '{"phone_numbers": [], "upi_ids": [{"value": "fraudster@okaxis", "confidence": 0.9}], '
+        '"emails": [], "urls": [], "bank_accounts": [{"value": "1234567890", "confidence": 0.95}], '
+        '"organizations": [], "persons": [{"value": "John Doe", "confidence": 0.85}], "locations": []}'
+    )
+
+    mock_ai = MagicMock()
+    mock_ai.generate_content = AsyncMock(return_value=sensitive_entities_json)
+
+    service = EntityExtractionService(ai_client=mock_ai)
+
+    captured_logs: list[str] = []
+    handler_id = logger.add(lambda msg: captured_logs.append(msg))
+
+    try:
+        result = await service.extract_entities(sensitive_complaint)
+        assert isinstance(result, ExtractedEntities)
+
+        combined_logs = " ".join(captured_logs)
+
+        # 1. Verify sensitive values are NOT logged
+        assert "fraudster@okaxis" not in combined_logs
+        assert "1234567890" not in combined_logs
+        assert "John Doe" not in combined_logs
+
+        # 2. Verify safe counts metadata IS logged
+        assert "counts=" in combined_logs
+        assert "Entity extraction completed successfully" in combined_logs
+
+    finally:
+        logger.remove(handler_id)
+
+
+# ============================================================================
+# 3. Investigation Cache Logging Tests
+# ============================================================================
+
+
+def test_investigation_cache_does_not_log_target_values() -> None:
+    """
+    Ensure InvestigationCache logs only target_type and not the raw sensitive target value in cache key.
+    """
+    cache = InvestigationCache(ttl_seconds=60)
+    sensitive_key = "phone:+919988776655"
+
+    captured_logs: list[str] = []
+    handler_id = logger.add(lambda msg: captured_logs.append(msg), level="DEBUG")
+
+    try:
+        # Cache Miss
+        assert cache.get(sensitive_key) is None
+        # Cache Set
+        cache.set(sensitive_key, {"dummy": "data"})
+        # Cache Hit
+        assert cache.get(sensitive_key) == {"dummy": "data"}
+
+        combined_logs = " ".join(captured_logs)
+
+        # Verify sensitive phone number in key is NOT logged
+        assert "+919988776655" not in combined_logs
+        assert "phone:+919988776655" not in combined_logs
+
+        # Verify operational cache status is logged with target_type
+        assert "Investigation cache MISS (target_type=phone)" in combined_logs
+        assert "Investigation cache HIT (target_type=phone)" in combined_logs
+
+    finally:
+        logger.remove(handler_id)
+
+
+# ============================================================================
+# 4. Investigation Report Service Logging Tests
+# ============================================================================
+
+
+@pytest.mark.asyncio
+async def test_investigation_report_service_does_not_log_target_value() -> None:
+    """
+    Ensure InvestigationReportService logs correlation IDs and report IDs without exposing target_value.
+    """
+    sensitive_email = "suspect_hacker@darknet.org"
+
+    mock_summary_service = MagicMock()
+    mock_summary_service.build_summary = AsyncMock()
+
+    mock_context_builder = MagicMock()
+    mock_context_builder.build_report_context = MagicMock()
+
+    mock_prompt_builder = MagicMock()
+    mock_prompt_builder.build_prompt_request = MagicMock()
+
+    mock_llm_client = MagicMock()
+    mock_llm_client.generate = AsyncMock()
+
+    mock_report = MagicMock()
+    mock_report.report_id = "RPT-TEST12345"
+    mock_report.telemetry = MagicMock(latency_ms=123.45)
+
+    mock_parser = MagicMock()
+    mock_parser.parse_report = MagicMock(return_value=mock_report)
+
+    service = InvestigationReportService(
+        summary_service=mock_summary_service,
+        context_builder=mock_context_builder,
+        prompt_builder=mock_prompt_builder,
+        llm_client=mock_llm_client,
+        report_parser=mock_parser,
+    )
+
+    captured_logs: list[str] = []
+    handler_id = logger.add(lambda msg: captured_logs.append(msg))
+
+    try:
+        report = await service.generate_report(
+            entity_value=sensitive_email,
+            target_type="EMAIL",
+        )
+        assert report.report_id == "RPT-TEST12345"
+
+        combined_logs = " ".join(captured_logs)
+
+        # 1. Verify sensitive email is NOT logged
+        assert sensitive_email not in combined_logs
+
+        # 2. Verify correlation_id, report_id, and telemetry are logged
+        assert "Starting end-to-end report generation" in combined_logs
+        assert "RPT-TEST12345" in combined_logs
+        assert "123.45ms" in combined_logs
+
+    finally:
+        logger.remove(handler_id)
+
+
+# ============================================================================
+# 5. Timeline Service Logging Tests
+# ============================================================================
+
+
+@pytest.mark.asyncio
+async def test_timeline_service_does_not_log_raw_target() -> None:
+    """
+    Ensure TimelineService logs operational summary without dumping raw target values.
+    """
+    sensitive_account = "ACC-9988112233"
+
+    mock_repo = MagicMock()
+    mock_repo.get_connected_complaints = AsyncMock(return_value=[])
+
+    service = TimelineService(repository=mock_repo)
+
+    captured_logs: list[str] = []
+    handler_id = logger.add(lambda msg: captured_logs.append(msg))
+
+    try:
+        res = await service.build_timeline(sensitive_account)
+        assert isinstance(res, TimelineResponse)
+
+        combined_logs = " ".join(captured_logs)
+
+        # Verify sensitive account is NOT logged
+        assert sensitive_account not in combined_logs
+
+        # Verify operational message logged
+        assert "Orchestrating timeline reconstruction for investigation target" in combined_logs
+
+    finally:
+        logger.remove(handler_id)
+
+
+# ============================================================================
+# 6. Prometheus Metrics Invariant Tests
+# ============================================================================
+
+
+def test_prometheus_metrics_names_and_labels_unchanged() -> None:
+    """
+    Verify all 5 required Prometheus metric names and label definitions remain strictly unchanged.
+    """
+    from prometheus_client import generate_latest, REGISTRY
+
+    # 1. http_requests_total
+    assert http_requests_total._name == "http_requests"
+    assert set(http_requests_total._labelnames) == {"method", "path", "status_code"}
+
+    # 2. http_request_duration_seconds
+    assert http_request_duration_seconds._name == "http_request_duration_seconds"
+    assert set(http_request_duration_seconds._labelnames) == {"method", "path"}
+
+    # 3. llm_requests_total
+    assert llm_requests_total._name == "llm_requests"
+    assert set(llm_requests_total._labelnames) == {"provider", "model", "status"}
+
+    # 4. llm_request_duration_seconds
+    assert llm_request_duration_seconds._name == "llm_request_duration_seconds"
+    assert set(llm_request_duration_seconds._labelnames) == {"provider", "model"}
+
+    # 5. llm_tokens_total
+    assert llm_tokens_total._name == "llm_tokens"
+    assert set(llm_tokens_total._labelnames) == {"provider", "model", "type"}
+
+    # Verify standard Prometheus exposition output format
+    exposition = generate_latest(REGISTRY).decode("utf-8")
+    assert "http_requests_total" in exposition
+    assert "http_request_duration_seconds" in exposition
+    assert "llm_requests_total" in exposition
+    assert "llm_request_duration_seconds" in exposition
+    assert "llm_tokens_total" in exposition

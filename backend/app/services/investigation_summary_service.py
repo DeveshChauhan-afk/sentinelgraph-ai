@@ -96,8 +96,8 @@ class InvestigationSummaryService:
             Canonical InvestigationSummary object.
         """
         logger.info(
-            "Building canonical InvestigationSummary for target '{}'.",
-            entity_value,
+            "Building canonical InvestigationSummary (target_type={}).",
+            target_type or "unspecified",
         )
 
         if self._timeline_service is None:
@@ -252,8 +252,8 @@ class InvestigationSummaryService:
         )
 
         logger.info(
-            "Constructed InvestigationSummary for '{}': risk={}, findings={}, recommendations={}.",
-            target_value,
+            "Constructed canonical InvestigationSummary (target_type={}): risk={}, findings={}, recommendations={}.",
+            target_type or "unspecified",
             overall_risk_level,
             len(findings),
             len(recommendations),

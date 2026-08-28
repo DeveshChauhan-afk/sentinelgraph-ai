@@ -40,8 +40,7 @@ async def get_graph_visualization(
     Retrieve a graph centered around the given node.
     """
     logger.info(
-        "Visualization request received for '{}' (depth={}).",
-        node_id,
+        "Visualization request received (depth={}).",
         depth,
     )
 
@@ -64,8 +63,9 @@ async def get_graph_visualization(
         )
 
     logger.info(
-        "Visualization request completed for '{}'.",
-        node_id,
+        "Visualization request completed (nodes={}, edges={}).",
+        graph.metadata.node_count,
+        graph.metadata.edge_count,
     )
 
     return graph
