@@ -65,6 +65,27 @@ class Settings(BaseSettings):
     GEMINI_MODEL: str = "gemini-3.5-flash-lite"
     LLM_TEMPERATURE: float = Field(default=0.2, ge=0.0, le=2.0)
     LLM_MAX_TOKENS: int = Field(default=2048, ge=1)
+    GEMINI_TIMEOUT_SECONDS: float = Field(
+        default=60.0,
+        gt=0.0,
+        description="Per-attempt request timeout in seconds.",
+    )
+    GEMINI_MAX_RETRIES: int = Field(
+        default=3,
+        ge=1,
+        le=10,
+        description="Maximum total provider attempts (1 initial attempt + up to N-1 retries on transient errors).",
+    )
+    GEMINI_RETRY_INITIAL_DELAY: float = Field(
+        default=1.0,
+        gt=0.0,
+        description="Initial exponential backoff delay in seconds.",
+    )
+    GEMINI_RETRY_MAX_DELAY: float = Field(
+        default=10.0,
+        gt=0.0,
+        description="Maximum ceiling for exponential retry delay in seconds.",
+    )
 
     INVESTIGATION_CACHE_TTL: int = 300
 

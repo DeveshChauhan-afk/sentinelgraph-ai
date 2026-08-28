@@ -1,14 +1,16 @@
 """
-Gemini LLM Provider Implementation (Sprint 9 Phase 4.3).
+Gemini LLM Provider Implementation (Sprint 9 Phase 4.3 / Sprint 12.4 Reliability Hardening).
 
 Provides a provider-independent implementation of LLMClient over the Google GenAI SDK,
-normalizing outputs and metadata into canonical LLMResponse objects.
+normalizing outputs and metadata into canonical LLMResponse objects with bounded retry,
+configurable timeout, and exact per-attempt observability.
 """
 
 from __future__ import annotations
 
 import asyncio
 import time
+from typing import Any
 from uuid import uuid4
 
 from google import genai
@@ -41,7 +43,7 @@ from app.schemas.prompt import PromptRequest
 
 class GeminiClient(LLMClient, AIClient):
     """
-    Gemini implementation of LLMClient provider interface.
+    Gemini implementation of LLMClient and AIClient provider interface.
     """
 
     def __init__(self, settings: Settings) -> None:
@@ -58,6 +60,233 @@ class GeminiClient(LLMClient, AIClient):
             )
         except Exception as exc:
             raise AIConfigurationError("Failed to initialize Gemini SDK client.") from exc
+
+    def _extract_status_code(self, exc: Exception) -> int | None:
+        """
+        Extract numeric HTTP status code from an exception if available.
+        """
+        code = getattr(exc, "code", None)
+        if isinstance(code, int):
+            return code
+        status_code = getattr(exc, "status_code", None)
+        if isinstance(status_code, int):
+            return status_code
+        response = getattr(exc, "response", None)
+        if response is not None:
+            resp_code = getattr(response, "status_code", None)
+            if isinstance(resp_code, int):
+                return resp_code
+        return None
+
+    def _is_transient_error(self, exc: Exception) -> bool:
+        """
+        Determine whether an exception represents a transient provider failure
+        suitable for bounded retry.
+
+        Retryable:
+            - HTTP 429 (Rate Limit / Quota / Resource Exhausted)
+            - HTTP 500, 502, 503, 504 (Provider Server Errors / Gateway / Unavailable)
+            - ServerError instances from Google GenAI SDK
+            - Transient network connection failures
+
+        Non-retryable:
+            - HTTP 400 (Bad Request / invalid prompt syntax)
+            - HTTP 401, 403 (Unauthorized / Forbidden / Auth failure)
+            - HTTP 404 (Not Found / Model not found / Config error)
+            - Application timeouts (asyncio.TimeoutError) to avoid unbounded blocking
+            - Internal schema / application processing errors
+        """
+        if isinstance(exc, (AIAuthenticationError, AIConfigurationError)):
+            return False
+
+        if isinstance(exc, asyncio.TimeoutError):
+            return False
+
+        code = self._extract_status_code(exc)
+        if code is not None:
+            if code == 429:
+                return True
+            if code in (500, 502, 503, 504):
+                return True
+            if 400 <= code < 500:
+                return False
+
+        if isinstance(exc, ServerError):
+            return True
+
+        status = getattr(exc, "status", None)
+        if isinstance(status, str):
+            status_upper = status.upper()
+            if "RESOURCE_EXHAUSTED" in status_upper or "UNAVAILABLE" in status_upper:
+                return True
+            if "DEADLINE_EXCEEDED" in status_upper:
+                return True
+
+        if isinstance(exc, (ConnectionResetError, ConnectionRefusedError)):
+            return True
+
+        return False
+
+    async def _execute_with_retry(
+        self,
+        model_name: str,
+        contents: Any,
+        config: types.GenerateContentConfig,
+    ) -> Any:
+        """
+        Execute a single generate_content call against Gemini with bounded retry,
+        configurable timeout, and exact per-attempt metric instrumentation.
+
+        Retry Semantics:
+            `GEMINI_MAX_RETRIES` represents the total attempt budget: 1 initial attempt
+            plus up to `(GEMINI_MAX_RETRIES - 1)` retry attempts on transient errors (e.g. HTTP 429, 5xx).
+            For example, GEMINI_MAX_RETRIES=3 yields at most 3 total provider calls on complete exhaustion.
+
+        Timeout & Thread Behavior:
+            - Synchronous SDK calls are offloaded to a worker thread via `asyncio.to_thread(...)`.
+            - `asyncio.wait_for(..., timeout=timeout_seconds)` enforces the per-attempt timeout.
+            - When timeout expires, the coroutine stops waiting and raises `asyncio.TimeoutError`.
+            - In Python, `wait_for()` cancels the waiting task but does NOT forcibly terminate
+              the underlying worker thread. The synchronous SDK invocation may continue running
+              in the background thread until the network socket closes or the call completes.
+            - The worker performs read-only LLM generation and performs no application, database
+              (PostgreSQL), or Neo4j state mutations.
+            - `asyncio.TimeoutError` is treated as non-retryable and is immediately re-raised,
+              ensuring timed-out attempts do NOT schedule subsequent retries and cannot create
+              overlapping uncontrolled provider attempts.
+
+        Args:
+            model_name: Gemini model name.
+            contents: Prompt contents (string or structured prompt).
+            config: Generation configuration.
+
+        Returns:
+            The raw response object returned by the Gemini SDK.
+
+        Raises:
+            asyncio.TimeoutError: If a request attempt times out (non-retryable).
+            Exception: If provider fails permanently or retries are exhausted.
+        """
+        max_retries = max(1, self._settings.GEMINI_MAX_RETRIES)
+        initial_delay = self._settings.GEMINI_RETRY_INITIAL_DELAY
+        max_delay = self._settings.GEMINI_RETRY_MAX_DELAY
+        timeout_seconds = self._settings.GEMINI_TIMEOUT_SECONDS
+
+        last_exception: Exception | None = None
+
+        for attempt in range(1, max_retries + 1):
+            start_time = time.perf_counter()
+            try:
+                # Execute synchronous SDK call in threadpool. If wait_for times out,
+                # the task is cancelled while the thread finishes in background without mutations.
+                response = await asyncio.wait_for(
+                    asyncio.to_thread(
+                        self._client.models.generate_content,
+                        model=model_name,
+                        contents=contents,
+                        config=config,
+                    ),
+                    timeout=timeout_seconds,
+                )
+                duration_seconds = time.perf_counter() - start_time
+                llm_request_duration_seconds.labels(
+                    provider="gemini",
+                    model=model_name,
+                ).observe(duration_seconds)
+
+                llm_requests_total.labels(
+                    provider="gemini",
+                    model=model_name,
+                    status="success",
+                ).inc()
+
+                # Extract token usage metadata if available
+                usage_meta = getattr(response, "usage_metadata", None)
+                if usage_meta:
+                    raw_prompt_tokens = getattr(usage_meta, "prompt_token_count", 0)
+                    prompt_tokens = raw_prompt_tokens if isinstance(raw_prompt_tokens, int) else 0
+                    raw_completion_tokens = getattr(usage_meta, "candidates_token_count", 0)
+                    completion_tokens = raw_completion_tokens if isinstance(raw_completion_tokens, int) else 0
+                    if prompt_tokens > 0:
+                        llm_tokens_total.labels(
+                            provider="gemini",
+                            model=model_name,
+                            type="prompt",
+                        ).inc(prompt_tokens)
+                    if completion_tokens > 0:
+                        llm_tokens_total.labels(
+                            provider="gemini",
+                            model=model_name,
+                            type="completion",
+                        ).inc(completion_tokens)
+
+                return response
+
+            except asyncio.TimeoutError as exc:
+                duration_seconds = time.perf_counter() - start_time
+                llm_request_duration_seconds.labels(
+                    provider="gemini",
+                    model=model_name,
+                ).observe(duration_seconds)
+
+                llm_requests_total.labels(
+                    provider="gemini",
+                    model=model_name,
+                    status="error",
+                ).inc()
+
+                logger.error(
+                    "Gemini API request timed out after {:.1f}s (attempt {}/{}).",
+                    timeout_seconds,
+                    attempt,
+                    max_retries,
+                )
+                raise exc
+
+            except Exception as exc:
+                duration_seconds = time.perf_counter() - start_time
+                llm_request_duration_seconds.labels(
+                    provider="gemini",
+                    model=model_name,
+                ).observe(duration_seconds)
+
+                llm_requests_total.labels(
+                    provider="gemini",
+                    model=model_name,
+                    status="error",
+                ).inc()
+
+                last_exception = exc
+                is_transient = self._is_transient_error(exc)
+
+                if is_transient and attempt < max_retries:
+                    delay = min(initial_delay * (2 ** (attempt - 1)), max_delay)
+                    logger.warning(
+                        "Transient Gemini error on attempt {}/{}: {}. Retrying in {:.2f}s...",
+                        attempt,
+                        max_retries,
+                        exc,
+                        delay,
+                    )
+                    await asyncio.sleep(delay)
+                else:
+                    if is_transient and attempt >= max_retries:
+                        logger.error(
+                            "Gemini retry exhausted after {} attempts. Last error: {}",
+                            max_retries,
+                            exc,
+                        )
+                    else:
+                        logger.warning(
+                            "Non-retryable Gemini error on attempt {}/{}: {}",
+                            attempt,
+                            max_retries,
+                            exc,
+                        )
+                    raise exc
+
+        if last_exception is not None:
+            raise last_exception
 
     async def generate(
         self,
@@ -91,112 +320,76 @@ class GeminiClient(LLMClient, AIClient):
             response_schema=ProfessionalInvestigationReport,
         )
 
-        start_time = time.perf_counter()
+        overall_start = time.perf_counter()
         try:
-            try:
-                response = await asyncio.wait_for(
-                    asyncio.to_thread(
-                        self._client.models.generate_content,
-                        model=model_name,
-                        contents=prompt.full_prompt,
-                        config=config,
-                    ),
-                    timeout=60.0,
-                )
-            finally:
-                duration_seconds = time.perf_counter() - start_time
-                llm_request_duration_seconds.labels(
-                    provider="gemini",
-                    model=model_name,
-                ).observe(duration_seconds)
-
-            duration_ms = round(duration_seconds * 1000, 2)
-
-            text = getattr(response, "text", None)
-            if not text:
-                raise LLMProviderError("Gemini provider returned empty response text.")
-
-            # Extract token usage if available from SDK response
-            prompt_tokens = 0
-            completion_tokens = 0
-            total_tokens = 0
-
-            usage_meta = getattr(response, "usage_metadata", None)
-            if usage_meta:
-                prompt_tokens = getattr(usage_meta, "prompt_token_count", 0) or 0
-                completion_tokens = getattr(usage_meta, "candidates_token_count", 0) or 0
-                total_tokens = getattr(usage_meta, "total_token_count", 0) or (prompt_tokens + completion_tokens)
-
-            finish_reason = "STOP"
-            if hasattr(response, "candidates") and response.candidates:
-                finish_reason = str(getattr(response.candidates[0], "finish_reason", "STOP"))
-
-            metadata = LLMMetadata(
-                provider="Gemini",
-                model=model_name,
-                request_id=req_id,
-                latency_ms=duration_ms,
-                prompt_hash=prompt.metadata.prompt_hash,
+            response = await self._execute_with_retry(
+                model_name=model_name,
+                contents=prompt.full_prompt,
+                config=config,
             )
-
-            usage = LLMUsage(
-                prompt_tokens=prompt_tokens,
-                completion_tokens=completion_tokens,
-                total_tokens=total_tokens,
-            )
-
-            logger.info(
-                "Gemini completion success: request_id={}, latency={:.2f}ms, total_tokens={}.",
-                req_id,
-                duration_ms,
-                total_tokens,
-            )
-
-            llm_requests_total.labels(
-                provider="gemini",
-                model=model_name,
-                status="success",
-            ).inc()
-
-            if prompt_tokens > 0:
-                llm_tokens_total.labels(
-                    provider="gemini",
-                    model=model_name,
-                    type="prompt",
-                ).inc(prompt_tokens)
-
-            if completion_tokens > 0:
-                llm_tokens_total.labels(
-                    provider="gemini",
-                    model=model_name,
-                    type="completion",
-                ).inc(completion_tokens)
-
-            return LLMResponse(
-                metadata=metadata,
-                usage=usage,
-                finish_reason=finish_reason,
-                response_text=text,
-            )
-
         except asyncio.TimeoutError as exc:
-            llm_requests_total.labels(
-                provider="gemini",
-                model=model_name,
-                status="error",
-            ).inc()
-            logger.error("Gemini API request timed out after 60 seconds.")
             raise LLMTimeoutError("Gemini completion request timed out.") from exc
         except Exception as exc:
-            llm_requests_total.labels(
-                provider="gemini",
-                model=model_name,
-                status="error",
-            ).inc()
             logger.exception("Gemini API execution error: {}", exc)
             if isinstance(exc, (ClientError, ServerError, APIError)):
                 raise LLMProviderError(f"Gemini API Error: {exc}") from exc
             raise LLMProviderError(f"Unexpected LLM generation error: {exc}") from exc
+
+        duration_ms = round((time.perf_counter() - overall_start) * 1000, 2)
+
+        text = getattr(response, "text", None)
+        if not text:
+            raise LLMProviderError("Gemini provider returned empty response text.")
+
+        # Extract token usage if available from SDK response
+        prompt_tokens = 0
+        completion_tokens = 0
+        total_tokens = 0
+
+        usage_meta = getattr(response, "usage_metadata", None)
+        if usage_meta:
+            raw_prompt_tokens = getattr(usage_meta, "prompt_token_count", 0)
+            prompt_tokens = raw_prompt_tokens if isinstance(raw_prompt_tokens, int) else 0
+            raw_completion_tokens = getattr(usage_meta, "candidates_token_count", 0)
+            completion_tokens = raw_completion_tokens if isinstance(raw_completion_tokens, int) else 0
+            raw_total_tokens = getattr(usage_meta, "total_token_count", 0)
+            total_tokens = (
+                raw_total_tokens
+                if isinstance(raw_total_tokens, int) and raw_total_tokens > 0
+                else (prompt_tokens + completion_tokens)
+            )
+
+        finish_reason = "STOP"
+        if hasattr(response, "candidates") and response.candidates:
+            finish_reason = str(getattr(response.candidates[0], "finish_reason", "STOP"))
+
+        metadata = LLMMetadata(
+            provider="Gemini",
+            model=model_name,
+            request_id=req_id,
+            latency_ms=duration_ms,
+            prompt_hash=prompt.metadata.prompt_hash,
+        )
+
+        usage = LLMUsage(
+            prompt_tokens=prompt_tokens,
+            completion_tokens=completion_tokens,
+            total_tokens=total_tokens,
+        )
+
+        logger.info(
+            "Gemini completion success: request_id={}, latency={:.2f}ms, total_tokens={}.",
+            req_id,
+            duration_ms,
+            total_tokens,
+        )
+
+        return LLMResponse(
+            metadata=metadata,
+            usage=usage,
+            finish_reason=finish_reason,
+            response_text=text,
+        )
 
     def _build_generation_config(
         self,
@@ -222,9 +415,8 @@ class GeminiClient(LLMClient, AIClient):
             len(prompt),
         )
         try:
-            response = await asyncio.to_thread(
-                self._client.models.generate_content,
-                model=self._settings.GEMINI_MODEL,
+            response = await self._execute_with_retry(
+                model_name=self._settings.GEMINI_MODEL,
                 contents=prompt,
                 config=self._build_generation_config(response_schema),
             )
@@ -237,18 +429,27 @@ class GeminiClient(LLMClient, AIClient):
 
     def _translate_exception(self, exc: Exception) -> None:
         """Translate legacy exceptions."""
-        logger.exception("Gemini request failed.")
+        logger.exception("Gemini request failed: {}", exc)
+        if isinstance(exc, (AIResponseError, AIAuthenticationError, AIConfigurationError, AIRateLimitError, AIRequestError, AIUnavailableError)):
+            raise exc
+        if isinstance(exc, asyncio.TimeoutError):
+            raise AIRequestError("Gemini request timed out.") from exc
         if isinstance(exc, ClientError):
-            status = getattr(exc, "status_code", None)
-            if status in (401, 403):
+            code = self._extract_status_code(exc)
+            if code in (401, 403):
                 raise AIAuthenticationError(str(exc)) from exc
-            if status == 404:
+            if code == 404:
                 raise AIConfigurationError(str(exc)) from exc
-            if status == 429:
+            if code == 429:
                 raise AIRateLimitError(str(exc)) from exc
             raise AIRequestError(str(exc)) from exc
         if isinstance(exc, ServerError):
             raise AIUnavailableError(str(exc)) from exc
         if isinstance(exc, APIError):
+            code = self._extract_status_code(exc)
+            if code == 429:
+                raise AIRateLimitError(str(exc)) from exc
+            if code in (500, 502, 503, 504):
+                raise AIUnavailableError(str(exc)) from exc
             raise AIRequestError(str(exc)) from exc
         raise AIRequestError(str(exc)) from exc
