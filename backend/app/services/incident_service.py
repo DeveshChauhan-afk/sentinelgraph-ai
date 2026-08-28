@@ -267,6 +267,9 @@ class IncidentService(BaseService[IncidentRepository]):
                     f"Case reference {ref_str}already exists."
                 ) from exc
             raise
+        except Exception:
+            await self._session.rollback()
+            raise
 
     async def delete_incident(self, incident_id: UUID) -> None:
         """
@@ -287,7 +290,11 @@ class IncidentService(BaseService[IncidentRepository]):
         incident = await self._repository.get_by_id(incident_id)
         if incident is None:
             raise IncidentNotFoundError(f"Incident '{incident_id}' was not found.")
-        await self._repository.delete(incident)
+        try:
+            await self._repository.delete(incident)
+        except Exception:
+            await self._session.rollback()
+            raise
 
     async def search_incidents(
         self,
