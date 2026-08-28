@@ -15,6 +15,7 @@ from loguru import logger
 from pydantic import SecretStr
 
 from app.core.config import Settings
+from app.core.logger import setup_logger
 from app.core.metrics import (
     http_request_duration_seconds,
     http_requests_total,
@@ -385,3 +386,84 @@ def test_prometheus_metrics_names_and_labels_unchanged() -> None:
     assert "llm_requests_total" in exposition
     assert "llm_request_duration_seconds" in exposition
     assert "llm_tokens_total" in exposition
+
+
+# ============================================================================
+# 7. Sprint 12.5B: Production Loguru Diagnostics Tests
+# ============================================================================
+
+
+def test_settings_default_debug_is_false() -> None:
+    """
+    Ensure Settings.DEBUG defaults to False in production.
+    """
+    settings_instance = _build_test_settings()
+    assert settings_instance.DEBUG is False
+
+
+def test_production_logger_diagnose_disabled_no_local_variable_leak(capsys: pytest.CaptureFixture[str]) -> None:
+    """
+    Verify that in production mode (DEBUG=False):
+    1. Loguru `diagnose` is disabled: local variable names and values are NOT logged in exception tracebacks.
+    2. Loguru `backtrace` remains enabled: complete traceback structure and error messages are preserved.
+    """
+    prod_settings = _build_test_settings()
+    prod_settings.DEBUG = False
+    setup_logger(prod_settings)
+
+    def _vulnerable_operation() -> None:
+        local_db_password = "PROD_SECRET_PASSWORD_998877"
+        bad_divisor = 0
+        _ = len(local_db_password) / bad_divisor
+
+    try:
+        try:
+            _vulnerable_operation()
+        except ZeroDivisionError:
+            logger.exception("Production error occurred during processing.")
+
+        captured = capsys.readouterr()
+        err_output = captured.err
+
+        # 1. Verify traceback and error messages are preserved (backtrace=True)
+        assert "_vulnerable_operation" in err_output
+        assert "division by zero" in err_output
+        assert "Production error occurred during processing." in err_output
+
+        # 2. Verify local variable inspection is NOT emitted (diagnose=False)
+        assert "PROD_SECRET_PASSWORD_998877" not in err_output
+
+    finally:
+        setup_logger()
+
+
+def test_development_logger_diagnose_enabled_when_debug_true(capsys: pytest.CaptureFixture[str]) -> None:
+    """
+    Verify that in development mode (DEBUG=True), Loguru diagnose is enabled for debugging convenience.
+    """
+    dev_settings = _build_test_settings()
+    dev_settings.DEBUG = True
+    setup_logger(dev_settings)
+
+    def _dev_failing_operation() -> None:
+        debug_dev_var = "DEV_LOCAL_VALUE_DEBUG_123"
+        zero_div = 0
+        _ = len(debug_dev_var) / zero_div
+
+    try:
+        try:
+            _dev_failing_operation()
+        except ZeroDivisionError:
+            logger.exception("Dev error captured.")
+
+        captured = capsys.readouterr()
+        err_output = captured.err
+
+        # In DEBUG=True mode, diagnose=True inspects local variable expressions
+        assert "_dev_failing_operation" in err_output
+        assert "division by zero" in err_output
+        assert "DEV_LOCAL_VALUE_DEBUG_123" in err_output
+
+    finally:
+        setup_logger()
+

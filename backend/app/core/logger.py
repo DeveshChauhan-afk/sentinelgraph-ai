@@ -1,4 +1,4 @@
-# app/core/logger.py
+from __future__ import annotations
 
 import sys
 from pathlib import Path
@@ -6,7 +6,7 @@ from typing import Any
 
 from loguru import logger as loguru_logger
 
-from app.core.config import settings
+from app.core.config import Settings, settings
 from app.core.context import get_request_id
 
 # Define log directory and file path (no filesystem side-effects during import)
@@ -33,16 +33,26 @@ def _correlation_patcher(record: dict) -> None:
     record["extra"]["request_id"] = req_id if req_id else "-"
 
 
-def setup_logger() -> None:
+def setup_logger(cfg: Settings | None = None) -> None:
     """
     Configures the global logger with console and optional rotating file handlers.
     Should be called once during application startup.
+
+    In production (DEBUG=False), `diagnose` is disabled to prevent leaking local
+    variable values in exception tracebacks, while `backtrace=True` is preserved
+    to ensure complete and actionable stack traces.
     """
+    active_settings = cfg or settings
+
     # Remove default handler
     loguru_logger.remove()
 
     # Configure global patcher for correlation ID propagation
     loguru_logger.configure(patcher=_correlation_patcher)
+
+    # In production (DEBUG=False), diagnose must be False to prevent local variable exposure
+    diagnose_mode = bool(active_settings.DEBUG)
+    backtrace_mode = True
 
     # Add Console Handler (Colorful)
     loguru_logger.add(
@@ -56,27 +66,27 @@ def setup_logger() -> None:
             "<cyan>{line}</cyan> | "
             "{message}"
         ),
-        level=settings.LOG_LEVEL,
+        level=active_settings.LOG_LEVEL,
         colorize=True,
         catch=True,
-        diagnose=True,
-        backtrace=True,
+        diagnose=diagnose_mode,
+        backtrace=backtrace_mode,
     )
 
     # Add Rotating File Handler conditionally based on configuration
-    if settings.LOG_TO_FILE:
+    if active_settings.LOG_TO_FILE:
         LOG_DIR.mkdir(parents=True, exist_ok=True)
         loguru_logger.add(
             LOG_FILE,
             format=LOG_FORMAT,
-            level=settings.LOG_LEVEL,
+            level=active_settings.LOG_LEVEL,
             rotation="1 day",
             retention="7 days",
             compression="zip",
             enqueue=True,  # Ensure thread safety for async apps
             catch=True,
-            diagnose=True,
-            backtrace=True,
+            diagnose=diagnose_mode,
+            backtrace=backtrace_mode,
         )
 
     loguru_logger.info("Logger initialized.")
