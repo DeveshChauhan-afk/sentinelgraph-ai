@@ -25,7 +25,7 @@ async def connect_neo4j() -> None:
 
     logger.info("Connecting to Neo4j...")
 
-    _driver = AsyncGraphDatabase.driver(
+    driver = AsyncGraphDatabase.driver(
         settings.NEO4J_URI,
         auth=(
             settings.NEO4J_USERNAME,
@@ -33,7 +33,13 @@ async def connect_neo4j() -> None:
         ),
     )
 
-    await _driver.verify_connectivity()
+    try:
+        await driver.verify_connectivity()
+        _driver = driver
+    except Exception:
+        await driver.close()
+        _driver = None
+        raise
 
     logger.success("Connected to Neo4j.")
 

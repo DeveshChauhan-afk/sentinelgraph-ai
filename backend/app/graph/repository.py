@@ -1567,13 +1567,27 @@ class GraphRepository:
         RETURN DISTINCT path
         """
 
-        async with self._driver.session() as session:
-            result = await session.run(
-                query,
-                node_id=node_id,
-            )
+        try:
+            async with self._driver.session() as session:
+                result = await session.run(
+                    query,
+                    node_id=node_id,
+                )
 
-            paths: list[Path] = [record["path"] async for record in result]
+                paths: list[Path] = [record["path"] async for record in result]
+
+        except Neo4jError as exc:
+            logger.exception(
+                "Failed to retrieve subgraph for node '{}'.",
+                node_id,
+            )
+            raise GraphQueryError(
+                "Failed to retrieve graph visualization subgraph.",
+            ) from exc
+
+        except Exception as exc:
+            logger.exception("Unable to connect to Neo4j.")
+            raise GraphConnectionError("Neo4j connection failed.") from exc
 
         logger.debug(
             "Retrieved {} graph paths for node '{}'.",
@@ -1668,9 +1682,18 @@ class GraphRepository:
             coalesce(average_degree, 0.0) AS average_degree
         """
 
-        async with self._driver.session() as session:
-            result = await session.run(query)
-            record = await result.single()
+        try:
+            async with self._driver.session() as session:
+                result = await session.run(query)
+                record = await result.single()
+
+        except Neo4jError as exc:
+            logger.exception("Failed to retrieve graph summary statistics.")
+            raise GraphQueryError("Failed to retrieve graph summary statistics.") from exc
+
+        except Exception as exc:
+            logger.exception("Unable to connect to Neo4j.")
+            raise GraphConnectionError("Neo4j connection failed.") from exc
 
         if record is None:
             logger.warning(
@@ -1758,13 +1781,22 @@ class GraphRepository:
         LIMIT $limit
         """
 
-        async with self._driver.session() as session:
-            result = await session.run(
-                query,
-                limit=limit,
-            )
+        try:
+            async with self._driver.session() as session:
+                result = await session.run(
+                    query,
+                    limit=limit,
+                )
 
-            records = [record async for record in result]
+                records = [record async for record in result]
+
+        except Neo4jError as exc:
+            logger.exception("Failed to retrieve top connected entities.")
+            raise GraphQueryError("Failed to retrieve top connected entities.") from exc
+
+        except Exception as exc:
+            logger.exception("Unable to connect to Neo4j.")
+            raise GraphConnectionError("Neo4j connection failed.") from exc
 
         entities: list[TopConnectedEntity] = []
 
@@ -1838,13 +1870,22 @@ class GraphRepository:
             entity.id
         """
 
-        async with self._driver.session() as session:
-            result = await session.run(
-                query,
-                minimum_complaints=minimum_complaints,
-            )
+        try:
+            async with self._driver.session() as session:
+                result = await session.run(
+                    query,
+                    minimum_complaints=minimum_complaints,
+                )
 
-            records = [record async for record in result]
+                records = [record async for record in result]
+
+        except Neo4jError as exc:
+            logger.exception("Failed to retrieve shared entities.")
+            raise GraphQueryError("Failed to retrieve shared entities.") from exc
+
+        except Exception as exc:
+            logger.exception("Unable to connect to Neo4j.")
+            raise GraphConnectionError("Neo4j connection failed.") from exc
 
         shared_entities: list[SharedEntityAnalysis] = []
 
