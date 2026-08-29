@@ -89,7 +89,7 @@ class Settings(BaseSettings):
 
     INVESTIGATION_CACHE_TTL: int = 300
 
-    @computed_field
+    @computed_field(repr=False)
     @property
     def DATABASE_URL(self) -> str:
         """
@@ -107,7 +107,7 @@ class Settings(BaseSettings):
         case_sensitive=False,
     )
 
-    @computed_field
+    @computed_field(repr=False)
     @property
     def SYNC_DATABASE_URL(self) -> str:
         """
