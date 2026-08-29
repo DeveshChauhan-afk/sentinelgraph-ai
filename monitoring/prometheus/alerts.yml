@@ -1,0 +1,77 @@
+# Prometheus Alert Rules for SentinelGraph AI
+# Specification for Prometheus Alertmanager
+
+groups:
+  - name: sentinelgraph_alerts
+    rules:
+      # ========================================================================
+      # HTTP & API Infrastructure Alerts
+      # ========================================================================
+
+      - alert: HighHttp5xxErrorRate
+        expr: >-
+          (sum(rate(http_requests_total{status_code=~"5.."}[5m])) or vector(0))
+          /
+          (sum(rate(http_requests_total[5m])) > 0)
+          > 0.05
+        for: 5m
+        labels:
+          severity: critical
+          service: sentinelgraph-backend
+        annotations:
+          summary: "High HTTP 5xx error rate detected on SentinelGraph AI backend"
+          description: "HTTP 5xx error rate is above 5% over the last 5 minutes (current value: {{ $value | humanizePercentage }})."
+
+      - alert: ElevatedHttpRequestLatency
+        expr: >-
+          histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le, path))
+          > 2.0
+        for: 5m
+        labels:
+          severity: warning
+          service: sentinelgraph-backend
+        annotations:
+          summary: "Elevated HTTP request latency detected"
+          description: "95th percentile HTTP request latency for path '{{ $labels.path }}' is above 2.0s over the last 5 minutes (current value: {{ $value | humanizeDuration }})."
+
+      - alert: ReadinessProbeFailing
+        expr: >-
+          sum(rate(http_requests_total{path=~".*/health/ready", status_code="503"}[5m]))
+          > 0
+        for: 2m
+        labels:
+          severity: critical
+          service: sentinelgraph-backend
+        annotations:
+          summary: "SentinelGraph AI readiness probe is failing"
+          description: "The application readiness probe is returning HTTP 503, indicating unhealthy critical dependencies (PostgreSQL or Neo4j)."
+
+      # ========================================================================
+      # LLM / Gemini Inference Telemetry Alerts
+      # ========================================================================
+
+      - alert: HighLlmErrorRate
+        expr: >-
+          (sum(rate(llm_requests_total{status="error"}[5m])) or vector(0))
+          /
+          (sum(rate(llm_requests_total[5m])) > 0)
+          > 0.10
+        for: 5m
+        labels:
+          severity: critical
+          service: sentinelgraph-backend
+        annotations:
+          summary: "High LLM error rate detected during AI inference"
+          description: "LLM completion error rate is above 10% over the last 5 minutes (current value: {{ $value | humanizePercentage }})."
+
+      - alert: ElevatedLlmRequestLatency
+        expr: >-
+          histogram_quantile(0.95, sum(rate(llm_request_duration_seconds_bucket[5m])) by (le, model))
+          > 15.0
+        for: 5m
+        labels:
+          severity: warning
+          service: sentinelgraph-backend
+        annotations:
+          summary: "Elevated LLM inference latency detected"
+          description: "95th percentile LLM inference latency for model '{{ $labels.model }}' is above 15.0s over the last 5 minutes (current value: {{ $value | humanizeDuration }})."
