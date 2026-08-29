@@ -11,6 +11,7 @@ Regression tests for Sprint 12.7A: Deployment Hardening Audit:
 
 from __future__ import annotations
 
+import os
 from pathlib import Path
 from unittest.mock import AsyncMock, patch
 
@@ -88,11 +89,38 @@ def test_settings_validates_required_secrets_and_types() -> None:
     """
     Verify Settings enforces mandatory fields and protects secrets as SecretStr.
     """
-    # Missing mandatory variables should raise ValidationError
-    with pytest.raises(ValidationError):
-        Settings(
-            _env_file=None,  # Do not load from .env
-        )
+    # Missing all mandatory variables should raise ValidationError
+    with patch.dict(os.environ, {}, clear=True):
+        with pytest.raises(ValidationError) as exc_info:
+            Settings(_env_file=None)
+        errors = exc_info.value.errors()
+        missing_fields = {e["loc"][0] for e in errors}
+        assert "SECRET_KEY" in missing_fields
+        assert "DATABASE_PASSWORD" in missing_fields
+        assert "NEO4J_PASSWORD" in missing_fields
+        assert "GEMINI_API_KEY" in missing_fields
+
+    # Valid base dictionary with all required fields
+    valid_base = {
+        "SECRET_KEY": "test-key",
+        "DATABASE_HOST": "localhost",
+        "DATABASE_NAME": "test_db",
+        "DATABASE_USER": "test_user",
+        "DATABASE_PASSWORD": "test_password",
+        "NEO4J_URI": "bolt://localhost:7687",
+        "NEO4J_USERNAME": "neo4j",
+        "NEO4J_PASSWORD": "test_password",
+        "GEMINI_API_KEY": "test_api_key",
+    }
+
+    # Verify each required secret individually raises ValidationError when omitted
+    for required_secret in ("SECRET_KEY", "DATABASE_PASSWORD", "NEO4J_PASSWORD", "GEMINI_API_KEY"):
+        env_without_secret = {k: v for k, v in valid_base.items() if k != required_secret}
+        with patch.dict(os.environ, env_without_secret, clear=True):
+            with pytest.raises(ValidationError) as exc_info:
+                Settings(_env_file=None)
+            missing_fields = {e["loc"][0] for e in exc_info.value.errors()}
+            assert required_secret in missing_fields, f"Expected ValidationError for missing {required_secret}"
 
 
 def test_settings_secret_values_are_masked() -> None:
