@@ -35,7 +35,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.14"
+          python-version: "3.13"
 
       - name: Install dependencies
         run: |
@@ -50,3 +50,9 @@ jobs:
 
       - name: Run Tests
         run: python -m pytest
+
+      - name: Validate Docker Compose Configuration
+        run: docker compose -f docker-compose.yml config
+
+      - name: Build Production Docker Image
+        run: docker build -t sentinelgraph-api:test -f Dockerfile .
