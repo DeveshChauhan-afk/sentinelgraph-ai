@@ -51,6 +51,9 @@ jobs:
       - name: Run Tests
         run: python -m pytest
 
+      - name: Create CI Environment File
+        run: cp .env.example .env
+
       - name: Validate Docker Compose Configuration
         run: docker compose -f docker-compose.yml config
 
