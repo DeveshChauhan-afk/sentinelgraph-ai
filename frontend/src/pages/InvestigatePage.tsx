@@ -16,6 +16,9 @@ import {
 import { Badge } from '../components/common/Badge';
 import { GraphVisualization } from '../components/investigation/GraphVisualization';
 import { RiskIntelligencePanel } from '../components/investigation/RiskIntelligencePanel';
+import { AiInvestigationDossier } from '../components/investigation/AiInvestigationDossier';
+import { investigationApi } from '../api';
+import { ProfessionalInvestigationReport, InvestigationTargetType } from '../types';
 
 interface InvestigatePageProps {
   targetEntity?: string | null;
@@ -57,6 +60,11 @@ export const InvestigatePage: React.FC<InvestigatePageProps> = ({
     targetEntity || null
   );
 
+  // AI Investigation Dossier State
+  const [aiReport, setAiReport] = useState<ProfessionalInvestigationReport | null>(null);
+  const [loadingAi, setLoadingAi] = useState<boolean>(false);
+  const [errorAi, setErrorAi] = useState<string | null>(null);
+
   // Sync if targetEntity changes from parent navigation
   useEffect(() => {
     if (targetEntity) {
@@ -64,6 +72,13 @@ export const InvestigatePage: React.FC<InvestigatePageProps> = ({
       setSelectedTarget(targetEntity);
     }
   }, [targetEntity]);
+
+  // Clear old AI report whenever the investigation target changes
+  useEffect(() => {
+    setAiReport(null);
+    setLoadingAi(false);
+    setErrorAi(null);
+  }, [selectedTarget]);
 
   const handleSelectPreset = (presetValue: string) => {
     setInputValue(presetValue);
@@ -85,7 +100,55 @@ export const InvestigatePage: React.FC<InvestigatePageProps> = ({
     setSelectedTarget(null);
   };
 
-  // Helper to infer entity format
+  // Helper to map identifier to backend InvestigationTargetType
+  const mapToApiTargetType = (val: string): InvestigationTargetType => {
+    const trimmed = val.trim();
+    if (trimmed.startsWith('+') || /^\d{10}$/.test(trimmed.replace(/\s+/g, ''))) {
+      return 'phone';
+    }
+    if (trimmed.includes('@') && !trimmed.includes('.')) {
+      return 'upi';
+    }
+    if (trimmed.includes('@') && trimmed.includes('.')) {
+      return 'email';
+    }
+    if (
+      trimmed.toLowerCase().startsWith('case-') ||
+      trimmed.toLowerCase().startsWith('complaint:') ||
+      /^[0-9a-f]{8}-[0-9a-f]{4}/i.test(trimmed)
+    ) {
+      return 'complaint';
+    }
+    return 'phone';
+  };
+
+  const handleGenerateAi = async () => {
+    if (!selectedTarget || loadingAi) return;
+
+    setLoadingAi(true);
+    setErrorAi(null);
+
+    try {
+      const apiType = mapToApiTargetType(selectedTarget);
+      // Strip any node prefix if present
+      const cleanValue = selectedTarget.replace(/^(phone|upi|email|complaint):/i, '').trim();
+
+      const report = await investigationApi.generateReport({
+        target_type: apiType,
+        target_value: cleanValue,
+      });
+      setAiReport(report);
+    } catch (err: any) {
+      setErrorAi(
+        err.message ||
+          'Failed to generate AI investigation dossier. Please check Gemini connection and retry.'
+      );
+    } finally {
+      setLoadingAi(false);
+    }
+  };
+
+  // Helper to infer entity format for UI display
   const inferTargetType = (val: string): string => {
     const trimmed = val.trim();
     if (trimmed.startsWith('+') || /^\d{10}$/.test(trimmed.replace(/\s+/g, ''))) {
@@ -262,7 +325,7 @@ export const InvestigatePage: React.FC<InvestigatePageProps> = ({
         </div>
       ) : null}
 
-      {/* 5. Graph & Risk Intelligence Workspace (Rendered when target is selected) */}
+      {/* 5. Graph, Risk & AI Investigation Workspace (Rendered when target is selected) */}
       {selectedTarget ? (
         <div className="space-y-6">
           <GraphVisualization
@@ -270,6 +333,16 @@ export const InvestigatePage: React.FC<InvestigatePageProps> = ({
             onSelectNewTarget={handleSelectPreset}
           />
           <RiskIntelligencePanel targetValue={selectedTarget} />
+          <AiInvestigationDossier
+            report={aiReport}
+            loading={loadingAi}
+            error={errorAi}
+            onGenerate={handleGenerateAi}
+            onRetry={handleGenerateAi}
+            onSelectEntity={handleSelectPreset}
+            targetValue={selectedTarget}
+            hasTarget={Boolean(selectedTarget)}
+          />
         </div>
       ) : (
         /* Empty Guidance State when no target selected */
