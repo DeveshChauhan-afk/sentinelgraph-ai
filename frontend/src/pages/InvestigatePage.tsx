@@ -16,6 +16,7 @@ import {
 import { Badge } from '../components/common/Badge';
 import { GraphVisualization } from '../components/investigation/GraphVisualization';
 import { RiskIntelligencePanel } from '../components/investigation/RiskIntelligencePanel';
+import { NetworkTimeline } from '../components/investigation/NetworkTimeline';
 import { AiInvestigationDossier } from '../components/investigation/AiInvestigationDossier';
 import { investigationApi } from '../api';
 import { ProfessionalInvestigationReport, InvestigationTargetType } from '../types';
@@ -325,7 +326,7 @@ export const InvestigatePage: React.FC<InvestigatePageProps> = ({
         </div>
       ) : null}
 
-      {/* 5. Graph, Risk & AI Investigation Workspace (Rendered when target is selected) */}
+      {/* 5. Graph, Risk, Timeline & AI Investigation Workspace (Rendered when target is selected) */}
       {selectedTarget ? (
         <div className="space-y-6">
           <GraphVisualization
@@ -333,6 +334,10 @@ export const InvestigatePage: React.FC<InvestigatePageProps> = ({
             onSelectNewTarget={handleSelectPreset}
           />
           <RiskIntelligencePanel targetValue={selectedTarget} />
+          <NetworkTimeline
+            targetValue={selectedTarget}
+            onSelectEntity={handleSelectPreset}
+          />
           <AiInvestigationDossier
             report={aiReport}
             loading={loadingAi}
