@@ -12,6 +12,9 @@ import {
   CheckCircle2,
   X,
   Crosshair,
+  Compass,
+  Network,
+  GitFork,
 } from 'lucide-react';
 import { Badge } from '../components/common/Badge';
 import { GraphVisualization } from '../components/investigation/GraphVisualization';
@@ -27,6 +30,7 @@ interface InvestigatePageProps {
 
 interface DemoPreset {
   value: string;
+  displayValue?: string;
   label: string;
   type: string;
   icon: React.ComponentType<{ className?: string }>;
@@ -34,19 +38,22 @@ interface DemoPreset {
 
 const DEMO_PRESETS: DemoPreset[] = [
   {
-    value: '+91 9876543210',
+    value: '+919876543210',
+    displayValue: '+91 9876543210',
     label: 'Ring Alpha • KYC Scam',
     type: 'Phone',
     icon: Phone,
   },
   {
     value: 'securekyc@ibl',
+    displayValue: 'securekyc@ibl',
     label: 'Ring Alpha • UPI Mule',
     type: 'UPI',
     icon: CreditCard,
   },
   {
-    value: '+91 9988776655',
+    value: '+919988776655',
+    displayValue: '+91 9988776655',
     label: 'Ring Beta • Marketplace Scam',
     type: 'Phone',
     icon: Phone,
@@ -93,6 +100,13 @@ export const InvestigatePage: React.FC<InvestigatePageProps> = ({
     const trimmed = inputValue.trim();
     if (trimmed) {
       setSelectedTarget(trimmed);
+    }
+  };
+
+  const scrollToSection = (sectionId: string) => {
+    const el = document.getElementById(sectionId);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
 
@@ -264,7 +278,7 @@ export const InvestigatePage: React.FC<InvestigatePageProps> = ({
                 >
                   <div className="min-w-0 pr-2">
                     <div className="font-mono text-xs font-semibold text-sentinel-text group-hover:text-blue-400 transition-colors truncate">
-                      {preset.value}
+                      {preset.displayValue || preset.value}
                     </div>
                     <div className="text-[11px] text-sentinel-muted mt-0.5 truncate">
                       {preset.label}
@@ -329,25 +343,88 @@ export const InvestigatePage: React.FC<InvestigatePageProps> = ({
       {/* 5. Graph, Risk, Timeline & AI Investigation Workspace (Rendered when target is selected) */}
       {selectedTarget ? (
         <div className="space-y-6">
-          <GraphVisualization
-            targetValue={selectedTarget}
-            onSelectNewTarget={handleSelectPreset}
-          />
-          <RiskIntelligencePanel targetValue={selectedTarget} />
-          <NetworkTimeline
-            targetValue={selectedTarget}
-            onSelectEntity={handleSelectPreset}
-          />
-          <AiInvestigationDossier
-            report={aiReport}
-            loading={loadingAi}
-            error={errorAi}
-            onGenerate={handleGenerateAi}
-            onRetry={handleGenerateAi}
-            onSelectEntity={handleSelectPreset}
-            targetValue={selectedTarget}
-            hasTarget={Boolean(selectedTarget)}
-          />
+          {/* Sticky Workspace Jump Bar */}
+          <div className="sticky top-0 z-20 bg-sentinel-surface/95 backdrop-blur-md py-2 px-3.5 rounded-lg border border-sentinel-border shadow-lg flex flex-wrap items-center justify-between gap-2 select-none">
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-mono uppercase tracking-wider text-sentinel-dim flex items-center gap-1">
+                <Compass className="w-3.5 h-3.5 text-blue-400" />
+                <span>Workspace:</span>
+              </span>
+              <span className="font-mono text-xs font-bold text-sentinel-text truncate max-w-[200px]">
+                {selectedTarget}
+              </span>
+            </div>
+
+            <div className="flex items-center gap-1.5">
+              <button
+                type="button"
+                onClick={() => scrollToSection('section-graph')}
+                className="px-2.5 py-1 rounded bg-sentinel-bg hover:bg-sentinel-surfaceHover border border-sentinel-border text-xs font-mono text-sentinel-dim hover:text-blue-400 transition-colors flex items-center gap-1.5 cursor-pointer"
+                title="Jump to Graph Visualization"
+              >
+                <Network className="w-3 h-3 text-blue-400" />
+                <span>Graph</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => scrollToSection('section-risk')}
+                className="px-2.5 py-1 rounded bg-sentinel-bg hover:bg-sentinel-surfaceHover border border-sentinel-border text-xs font-mono text-sentinel-dim hover:text-amber-400 transition-colors flex items-center gap-1.5 cursor-pointer"
+                title="Jump to Risk Intelligence"
+              >
+                <ShieldAlert className="w-3 h-3 text-amber-400" />
+                <span>Risk</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => scrollToSection('section-timeline')}
+                className="px-2.5 py-1 rounded bg-sentinel-bg hover:bg-sentinel-surfaceHover border border-sentinel-border text-xs font-mono text-sentinel-dim hover:text-purple-400 transition-colors flex items-center gap-1.5 cursor-pointer"
+                title="Jump to Network Evolution Timeline"
+              >
+                <GitFork className="w-3 h-3 text-purple-400" />
+                <span>Timeline</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => scrollToSection('section-ai-dossier')}
+                className="px-2.5 py-1 rounded bg-sentinel-bg hover:bg-sentinel-surfaceHover border border-sentinel-border text-xs font-mono text-sentinel-dim hover:text-emerald-400 transition-colors flex items-center gap-1.5 cursor-pointer"
+                title="Jump to AI Investigation Dossier"
+              >
+                <Sparkles className="w-3 h-3 text-emerald-400" />
+                <span>AI Dossier</span>
+              </button>
+            </div>
+          </div>
+
+          <div id="section-graph" className="scroll-mt-14">
+            <GraphVisualization
+              targetValue={selectedTarget}
+              onSelectNewTarget={handleSelectPreset}
+            />
+          </div>
+
+          <div id="section-risk" className="scroll-mt-14">
+            <RiskIntelligencePanel targetValue={selectedTarget} />
+          </div>
+
+          <div id="section-timeline" className="scroll-mt-14">
+            <NetworkTimeline
+              targetValue={selectedTarget}
+              onSelectEntity={handleSelectPreset}
+            />
+          </div>
+
+          <div id="section-ai-dossier" className="scroll-mt-14">
+            <AiInvestigationDossier
+              report={aiReport}
+              loading={loadingAi}
+              error={errorAi}
+              onGenerate={handleGenerateAi}
+              onRetry={handleGenerateAi}
+              onSelectEntity={handleSelectPreset}
+              targetValue={selectedTarget}
+              hasTarget={Boolean(selectedTarget)}
+            />
+          </div>
         </div>
       ) : (
         /* Empty Guidance State when no target selected */
