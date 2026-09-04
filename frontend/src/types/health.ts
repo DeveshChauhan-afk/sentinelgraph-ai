@@ -1,14 +1,25 @@
+export type HealthStatusType =
+  | 'HEALTHY'
+  | 'DEGRADED'
+  | 'UNHEALTHY'
+  | 'healthy'
+  | 'degraded'
+  | 'unhealthy';
+
 export interface DependencyCheck {
-  status: 'HEALTHY' | 'DEGRADED' | 'UNHEALTHY';
+  name?: string;
+  status: HealthStatusType;
   latency_ms: number;
+  critical?: boolean;
   message?: string | null;
 }
 
 export interface HealthSummaryResponse {
-  status: 'HEALTHY' | 'DEGRADED' | 'UNHEALTHY';
+  status: HealthStatusType;
   service: string;
   version: string;
   environment: string;
+  timestamp?: string;
   dependencies: {
     postgres?: DependencyCheck;
     neo4j?: DependencyCheck;
@@ -18,7 +29,9 @@ export interface HealthSummaryResponse {
 }
 
 export interface ReadinessResponse {
-  status: 'HEALTHY' | 'DEGRADED' | 'UNHEALTHY';
+  status: HealthStatusType;
   is_ready: boolean;
+  timestamp?: string;
   dependencies: Record<string, DependencyCheck>;
 }
+

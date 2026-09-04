@@ -6,10 +6,23 @@ import { InvestigatePage } from './pages/InvestigatePage';
 import { EvaluationPage } from './pages/EvaluationPage';
 
 export function App() {
-  const [currentPage, setCurrentPage] = useState<NavigationPage>('risk-overview');
+  const getInitialPage = (): NavigationPage => {
+    const hash = window.location.hash.replace('#', '');
+    if (hash === 'evaluation' || hash === 'investigate' || hash === 'risk-overview') {
+      return hash as NavigationPage;
+    }
+    return 'risk-overview';
+  };
+
+  const [currentPage, setCurrentPage] = useState<NavigationPage>(getInitialPage);
   const [selectedEntity, setSelectedEntity] = useState<string | null>(null);
   const [refreshTrigger, setRefreshTrigger] = useState<number>(0);
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
+
+  const handleNavigate = (page: NavigationPage) => {
+    window.location.hash = page;
+    setCurrentPage(page);
+  };
 
   const handleRefresh = () => {
     setIsRefreshing(true);
@@ -21,13 +34,13 @@ export function App() {
     if (entityValue) {
       setSelectedEntity(entityValue);
     }
-    setCurrentPage('investigate');
+    handleNavigate('investigate');
   };
 
   return (
     <AppLayout
       currentPage={currentPage}
-      onNavigate={setCurrentPage}
+      onNavigate={handleNavigate}
       onRefresh={handleRefresh}
       isRefreshing={isRefreshing}
     >
