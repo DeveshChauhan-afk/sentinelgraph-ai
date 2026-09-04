@@ -12,6 +12,7 @@ import hashlib
 import json
 from loguru import logger
 
+from app.core.config import Settings, settings
 from app.prompts.templates import (
     PromptTemplate,
     PromptTemplateRegistry,
@@ -40,6 +41,7 @@ class PromptBuilder:
         self,
         registry: PromptTemplateRegistry | None = None,
         template: PromptTemplate | None = None,
+        settings: Settings | None = None,
     ) -> None:
         """
         Initialize PromptBuilder with dependency injection.
@@ -47,18 +49,20 @@ class PromptBuilder:
         Args:
             registry: Optional PromptTemplateRegistry instance.
             template: Optional explicit PromptTemplate instance.
+            settings: Optional application Settings instance.
         """
         self._registry = registry or prompt_template_registry
         self._explicit_template = template
+        self._settings = settings
 
     def build_prompt_request(
         self,
         report_context: InvestigationReportContext,
         template_id: str = "EXECUTIVE_INVESTIGATION_REPORT",
         template_version: str = "1.0",
-        model_name: str = "gemini-3.5-flash-lite",
+        model_name: str | None = None,
         temperature: float = 0.2,
-        max_tokens: int = 4096,
+        max_tokens: int = 8192,
     ) -> PromptRequest:
         """
         Construct a deterministic, fingerprint-hashed PromptRequest package.
@@ -67,7 +71,7 @@ class PromptBuilder:
             report_context: Source canonical InvestigationReportContext DTO.
             template_id: Template identifier in registry (e.g. EXECUTIVE_INVESTIGATION_REPORT).
             template_version: Version of the prompt template.
-            model_name: Target LLM model name.
+            model_name: Target LLM model name (defaults to configured GEMINI_MODEL).
             temperature: LLM generation temperature constraint.
             max_tokens: LLM max tokens constraint.
 
@@ -127,13 +131,20 @@ class PromptBuilder:
         )
 
         # 8. Metadata
+        if model_name is not None and model_name.strip():
+            target_model = model_name.strip()
+        elif self._settings is not None and self._settings.GEMINI_MODEL:
+            target_model = self._settings.GEMINI_MODEL
+        else:
+            target_model = settings.GEMINI_MODEL
+
         metadata = PromptMetadata(
             prompt_version="1.0",
             template_version=template.template_version,
             report_context_version=report_context.metadata.report_context_version,
             summary_version=report_context.metadata.generated_from_summary_version,
             template_id=template.template_id,
-            model_name=model_name,
+            model_name=target_model,
             prompt_hash=prompt_hash,
             metrics=metrics,
         )
@@ -165,9 +176,9 @@ class PromptBuilder:
         report_context: InvestigationReportContext,
         template_id: str = "EXECUTIVE_INVESTIGATION_REPORT",
         template_version: str = "1.0",
-        model_name: str = "gemini-3.5-flash-lite",
+        model_name: str | None = None,
         temperature: float = 0.2,
-        max_tokens: int = 4096,
+        max_tokens: int = 8192,
     ) -> PromptRequest:
         """Async wrapper for build_prompt_request."""
         return self.build_prompt_request(

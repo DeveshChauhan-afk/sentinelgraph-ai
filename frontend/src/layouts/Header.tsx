@@ -48,7 +48,7 @@ export const Header: React.FC<HeaderProps> = ({
       <div className="flex items-center gap-3">
         <div className="hidden sm:flex items-center gap-2 px-2.5 py-1 rounded bg-sentinel-bg border border-sentinel-border text-[11px] font-mono text-sentinel-muted">
           <Database className="w-3.5 h-3.5 text-blue-400" />
-          <span>Neo4j + Postgres + Gemini 3.5</span>
+          <span>Neo4j + Postgres + Gemini</span>
         </div>
 
         <div className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-emerald-950/40 border border-emerald-800/40 text-emerald-400 text-[11px] font-mono">

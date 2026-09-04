@@ -13,6 +13,7 @@ from uuid import uuid4
 from loguru import logger
 
 from app.ai.llm_client import LLMClient
+from app.core.config import Settings
 from app.schemas.report import ProfessionalInvestigationReport
 from app.services.investigation.report_parser import ReportParser
 from app.services.investigation_summary_service import InvestigationSummaryService
@@ -26,13 +27,13 @@ class InvestigationReportService:
     """
 
     def __init__(
-
         self,
         summary_service: InvestigationSummaryService,
         context_builder: ReportContextBuilder | None = None,
         prompt_builder: PromptBuilder | None = None,
         llm_client: LLMClient | None = None,
         report_parser: ReportParser | None = None,
+        settings: Settings | None = None,
     ) -> None:
         """
         Initialize InvestigationReportService with dependency injection.
@@ -43,10 +44,12 @@ class InvestigationReportService:
             prompt_builder: Service building PromptRequest objects.
             llm_client: LLMClient provider implementation.
             report_parser: Parser parsing LLM JSON completions into ProfessionalInvestigationReport.
+            settings: Optional application Settings instance.
         """
         self._summary_service = summary_service
         self._context_builder = context_builder or ReportContextBuilder()
-        self._prompt_builder = prompt_builder or PromptBuilder()
+        self._settings = settings
+        self._prompt_builder = prompt_builder or PromptBuilder(settings=settings)
         self._llm_client = llm_client
         self._report_parser = report_parser or ReportParser()
 
@@ -55,6 +58,7 @@ class InvestigationReportService:
         entity_value: str,
         target_type: str | None = None,
         template_id: str = "EXECUTIVE_INVESTIGATION_REPORT",
+        model_name: str | None = None,
     ) -> ProfessionalInvestigationReport:
         """
         Generate a validated, immutable ProfessionalInvestigationReport for a target entity.
@@ -92,6 +96,7 @@ class InvestigationReportService:
         prompt_request = self._prompt_builder.build_prompt_request(
             report_context=report_context,
             template_id=template_id,
+            model_name=model_name,
         )
 
         # Step 4: Execute LLM Completion

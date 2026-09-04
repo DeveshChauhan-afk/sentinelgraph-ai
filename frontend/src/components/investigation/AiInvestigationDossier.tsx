@@ -109,7 +109,7 @@ export const AiInvestigationDossier: React.FC<AiInvestigationDossierProps> = ({
                 AI Graph-RAG Investigation
               </h3>
               <span className="hidden sm:inline-block text-[10px] font-mono px-1.5 py-0.2 rounded bg-sentinel-bg border border-sentinel-border text-sentinel-dim">
-                Gemini 3.5 Flash Lite
+                Google Gemini
               </span>
             </div>
             <p className="text-xs text-sentinel-muted mt-0.5">
@@ -168,7 +168,7 @@ export const AiInvestigationDossier: React.FC<AiInvestigationDossierProps> = ({
             </div>
             <div className="p-2 rounded bg-sentinel-bg border border-blue-800/60 text-blue-400 flex items-center gap-2 animate-pulse">
               <Cpu className="w-3.5 h-3.5 text-blue-400 shrink-0" />
-              <span className="truncate">2. Gemini 3.5 Reasoning...</span>
+              <span className="truncate">2. Gemini reasoning & synthesis...</span>
             </div>
             <div className="p-2 rounded bg-sentinel-bg border border-sentinel-border text-sentinel-dim flex items-center gap-2">
               <Layers className="w-3.5 h-3.5 text-sentinel-dim shrink-0" />
@@ -441,7 +441,7 @@ export const AiInvestigationDossier: React.FC<AiInvestigationDossierProps> = ({
             <div className="pt-3 border-t border-sentinel-border/50 flex flex-wrap items-center justify-between gap-2 text-[10px] font-mono text-sentinel-dim">
               <div className="flex items-center gap-2">
                 <Cpu className="w-3 h-3 text-blue-400" />
-                <span>Model: {report.telemetry.model || 'Gemini 3.5'}</span>
+                <span>Model: {report.telemetry.model || 'Google Gemini'}</span>
                 <span>•</span>
                 <Clock className="w-3 h-3 text-amber-400" />
                 <span>Latency: {report.telemetry.latency_ms?.toFixed(1)}ms</span>

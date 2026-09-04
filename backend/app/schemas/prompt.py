@@ -200,7 +200,7 @@ class PromptMetadata(BaseModel):
         description="Template identifier.",
     )
     model_name: str = Field(
-        default="gemini-3.5-flash-lite", description="Target LLM model name."
+        default="", description="Target LLM model name."
     )
     generated_at: datetime = Field(
         default_factory=lambda: datetime.now(timezone.utc),
@@ -226,7 +226,7 @@ class PromptConstraints(BaseModel):
         default=0.2, ge=0.0, le=2.0, description="Generation temperature."
     )
     max_tokens: int = Field(
-        default=4096, ge=1, description="Max token limit."
+        default=8192, ge=1, description="Max token limit."
     )
     prohibit_speculation: bool = Field(
         default=True, description="Strict speculation prohibition."

@@ -12,6 +12,7 @@ from __future__ import annotations
 import pytest
 from pydantic import ValidationError
 
+from app.core.config import Settings, settings
 from app.prompts.templates import (
     PromptTemplateRegistry,
     get_executive_report_template,
@@ -191,5 +192,39 @@ async def test_async_prompt_builder_support(sample_report_context):
     """
     builder = PromptBuilder()
     request = await builder.build_prompt_request_async(sample_report_context)
-    assert request.metadata.model_name == "gemini-3.5-flash-lite"
+    assert request.metadata.model_name == settings.GEMINI_MODEL
     assert len(request.metadata.prompt_hash) == 64
+
+
+def test_prompt_builder_model_selection_from_settings(sample_report_context):
+    """
+    Test PromptBuilder automatically adopts GEMINI_MODEL from settings when model_name is omitted.
+    """
+    builder = PromptBuilder()
+    req = builder.build_prompt_request(sample_report_context)
+    assert req.metadata.model_name == settings.GEMINI_MODEL
+
+
+def test_prompt_builder_custom_settings_injection(sample_report_context):
+    """
+    Test PromptBuilder respects custom Settings instance injected via constructor.
+    """
+    custom_settings = Settings(
+        NEO4J_URI="bolt://localhost:7687",
+        NEO4J_USERNAME="neo4j",
+        NEO4J_PASSWORD="password",
+        GEMINI_API_KEY="test_key",
+        GEMINI_MODEL="custom-gemini-model-v2",
+    )
+    builder = PromptBuilder(settings=custom_settings)
+    req = builder.build_prompt_request(sample_report_context)
+    assert req.metadata.model_name == "custom-gemini-model-v2"
+
+
+def test_prompt_builder_explicit_model_name_override(sample_report_context):
+    """
+    Test explicit model_name parameter overrides settings in PromptBuilder.
+    """
+    builder = PromptBuilder()
+    req = builder.build_prompt_request(sample_report_context, model_name="explicit-test-model")
+    assert req.metadata.model_name == "explicit-test-model"

@@ -95,7 +95,7 @@ def get_prompt_builder() -> PromptBuilder:
     """
     Return the Graph-RAG prompt builder.
     """
-    return PromptBuilder()
+    return PromptBuilder(settings=settings)
 
 
 def get_report_parser() -> ReportParser:
@@ -307,6 +307,7 @@ def get_investigation_report_service(
         prompt_builder=prompt_builder,
         llm_client=llm_client,
         report_parser=report_parser,
+        settings=settings,
     )
 
 

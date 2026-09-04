@@ -285,3 +285,135 @@ async def test_api_report_endpoint_success(sample_valid_report_dict):
         assert data["executive_summary"]["overall_risk_level"] == "HIGH"
     finally:
         app.dependency_overrides.clear()
+
+
+def _build_mock_prompt_with_model(model_name: str) -> PromptRequest:
+    return PromptRequest(
+        metadata=PromptMetadata(prompt_hash="a" * 64, model_name=model_name),
+        system_prompt=SystemPrompt(role="Role", operating_rules=("Rule 1",)),
+        developer_instructions=DeveloperInstructions(citation_instructions=("Cite 1",), style_guidelines=("Style 1",)),
+        context=SerializedContext(json_data='{"test": 1}', size_bytes=10),
+        expected_structure=ExpectedReportStructure(
+            sections=(ExpectedReportSection(section_id="S1", title="Title 1", description="Desc 1"),)
+        ),
+        constraints=PromptConstraints(),
+    )
+
+
+@pytest.mark.asyncio
+async def test_investigation_report_service_model_selection(
+    sample_valid_report_dict, mock_prompt_request
+):
+    """
+    Test that InvestigationReportService forwards model_name to PromptBuilder.
+    """
+    summary_service = MagicMock()
+    summary_service.build_summary = AsyncMock(return_value=MagicMock())
+
+    context_builder = MagicMock()
+    context_builder.build_report_context = MagicMock(return_value=MagicMock())
+
+    prompt_builder = MagicMock()
+    prompt_builder.build_prompt_request = MagicMock(return_value=mock_prompt_request)
+
+    llm_client = MagicMock()
+    llm_client.generate = AsyncMock(
+        return_value=LLMResponse(
+            metadata=LLMMetadata(
+                provider="Gemini",
+                model="gemini-3.6-flash",
+                request_id="R-1",
+                latency_ms=10.0,
+                prompt_hash="a" * 64,
+            ),
+            usage=LLMUsage(prompt_tokens=10, completion_tokens=10, total_tokens=20),
+            finish_reason="STOP",
+            response_text=f"```json\n{json.dumps(sample_valid_report_dict)}\n```",
+        )
+    )
+
+    report_parser = ReportParser()
+
+    service = InvestigationReportService(
+        summary_service=summary_service,
+        context_builder=context_builder,
+        prompt_builder=prompt_builder,
+        llm_client=llm_client,
+        report_parser=report_parser,
+    )
+
+    report = await service.generate_report("+919876543210")
+    assert report is not None
+    prompt_builder.build_prompt_request.assert_called_once()
+    call_kwargs = prompt_builder.build_prompt_request.call_args.kwargs
+    assert "model_name" in call_kwargs
+
+
+@pytest.mark.asyncio
+async def test_gemini_client_fallback_when_prompt_metadata_model_empty():
+    """
+    Test GeminiClient falls back to settings.GEMINI_MODEL when prompt metadata model_name is empty.
+    """
+    from app.ai.client import GeminiClient
+    from app.core.config import Settings
+
+    custom_settings = Settings(
+        NEO4J_URI="bolt://localhost:7687",
+        NEO4J_USERNAME="neo4j",
+        NEO4J_PASSWORD="password",
+        GEMINI_API_KEY="test_key",
+        GEMINI_MODEL="gemini-3.6-flash",
+    )
+    client = GeminiClient(custom_settings)
+
+    prompt = _build_mock_prompt_with_model("")
+
+    captured_model = None
+
+    async def mock_execute_with_retry(model_name, contents, config):
+        nonlocal captured_model
+        captured_model = model_name
+        mock_resp = MagicMock()
+        mock_resp.text = '{"report_id": "R1"}'
+        mock_resp.usage_metadata = MagicMock(prompt_token_count=5, candidates_token_count=5, total_token_count=10)
+        return mock_resp
+
+    client._execute_with_retry = mock_execute_with_retry
+    await client.generate(prompt)
+
+    assert captured_model == "gemini-3.6-flash"
+
+
+@pytest.mark.asyncio
+async def test_gemini_client_honors_explicit_prompt_metadata_model():
+    """
+    Test GeminiClient honors explicit model_name in prompt metadata when provided.
+    """
+    from app.ai.client import GeminiClient
+    from app.core.config import Settings
+
+    custom_settings = Settings(
+        NEO4J_URI="bolt://localhost:7687",
+        NEO4J_USERNAME="neo4j",
+        NEO4J_PASSWORD="password",
+        GEMINI_API_KEY="test_key",
+        GEMINI_MODEL="gemini-3.6-flash",
+    )
+    client = GeminiClient(custom_settings)
+
+    prompt = _build_mock_prompt_with_model("custom-explicit-model")
+
+    captured_model = None
+
+    async def mock_execute_with_retry(model_name, contents, config):
+        nonlocal captured_model
+        captured_model = model_name
+        mock_resp = MagicMock()
+        mock_resp.text = '{"report_id": "R1"}'
+        mock_resp.usage_metadata = MagicMock(prompt_token_count=5, candidates_token_count=5, total_token_count=10)
+        return mock_resp
+
+    client._execute_with_retry = mock_execute_with_retry
+    await client.generate(prompt)
+
+    assert captured_model == "custom-explicit-model"
