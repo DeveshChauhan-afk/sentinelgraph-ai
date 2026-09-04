@@ -58,16 +58,18 @@ The following capabilities represent completed, tested, and documented functiona
 
 ## 3. Near-Term Hardening & Operational Readiness
 
-The following items represent logical, high-priority engineering enhancements to harden the existing v1 architecture. These are proposed improvements, not completed features:
+The following items represent operational and production readiness engineering enhancements:
 
-| Priority Area | Proposed Engineering Work | Status |
+| Priority Area | Engineering Work | Status |
 | :--- | :--- | :---: |
-| **Documentation Completion** | Author comprehensive endpoint specifications in `docs/API.md` and formal product requirements in `docs/PRD.md`. | Proposed |
-| **Neo4j Schema Hardening** | Implement database-level uniqueness constraints (e.g. `CREATE CONSTRAINT FOR (n:Entity) REQUIRE n.id IS UNIQUE`) and explicit indexes on `lookup_value`. *(Current idempotency relies on application-level Cypher `MERGE`)*. | Proposed |
-| **Observability Dashboards** | Build pre-configured Grafana dashboard JSON models for HTTP throughput, endpoint latencies (p50/p95/p99), and Gemini token budgets. | Proposed |
-| **Alerting Rules** | Define Prometheus Alertmanager rules for sustained `5xx` error rates, LLM quota exhaustion, and dependency health degradation. | Proposed |
-| **Cloud Deployment Manifests** | Author cloud deployment configurations (e.g., Cloud Run, AWS ECS) with automated startup migration execution (`alembic upgrade head`). *(Note: `deployment/Dockerfile`, `deployment/railway.json`, and `deployment/vercel.json` are currently placeholder files)*. | Proposed |
-| **Extended Resilience Testing** | Expand automated testing to include database reconnection recovery, transient LLM error handling policies, and concurrent ingestion load stress tests. | Proposed |
+| **Documentation Completion** | Comprehensive endpoint specifications in `docs/API.md` and formal product requirements in `docs/PRD.md`. | Completed (Sprint 12) |
+| **Neo4j Schema Hardening** | Database-level uniqueness constraints (`CREATE CONSTRAINT IF NOT EXISTS`) across all 9 graph labels during application startup. | Completed (Sprint 12) |
+| **Observability Dashboards** | Pre-configured Grafana dashboard JSON models for HTTP throughput, endpoint latencies (p50/p95/p99), and Gemini token budgets. | Completed (Sprint 12) |
+| **Alerting Rules** | Prometheus Alertmanager rules for sustained `5xx` error rates, LLM quota exhaustion, and dependency health degradation. | Completed (Sprint 12) |
+| **Observability & Compose Stack** | Unified Docker Compose orchestration running API, PostgreSQL 16, Prometheus, and Grafana with auto-provisioning. | Completed (Sprint 3.2) |
+| **CI Containerization Gates** | Automated Docker image build validation and Compose syntax validation in GitHub Actions CI. | Completed (Sprint 3.3) |
+| **Extended Resilience Testing** | Automated testing for database reconnection recovery, transient LLM error handling policies, and concurrent ingestion load resilience. | Completed (Sprint 12) |
+| **Cloud Deployment Manifests** | Production cloud deployment configurations (e.g., Cloud Run, AWS ECS, Kubernetes) with automated release-step migration execution (`alembic upgrade head`). | Proposed |
 
 ---
 
@@ -109,7 +111,7 @@ The following capabilities represent strategic product horizons outlined in proj
 To maintain engineering focus and clarity, the following principles govern SentinelGraph AI's scope:
 
 1. **No Speculative Commitments**: Roadmap items are directional capabilities and do not represent contractual delivery dates.
-2. **No Claim of Active Railway/Vercel Deployments**: The current deployment baseline is defined by `backend/Dockerfile` and `backend/docker-compose.yml`. Root deployment placeholders are not active targets.
+2. **No Claim of Active Cloud Deployments**: The deployment baseline is defined by `backend/Dockerfile` and `backend/docker-compose.yml`.
 3. **No Distributed 2PC or Outbox/CDC**: The v1 architecture uses an application-orchestrated dual-write pattern with failure isolation. Distributed two-phase commit or Kafka-based event streaming are out of scope for v1.
 4. **Single Persisted Graph Relationship**: The property graph schema strictly uses `MENTIONS`. Conceptual relationships (such as association or money transfer) are evaluated dynamically via graph traversal, not stored as separate relationship types.
 5. **Clear Separation of Backend v1 from Future Horizons**: Multimodal analysis, multi-language processing, frontend web applications, and direct banking integrations are non-goals for Backend v1 and belong strictly to Future V2+.
