@@ -39,13 +39,16 @@ RUN groupadd -g 10001 appgroup && \
 # Copy application source code with proper permissions
 COPY --chown=appuser:appgroup . .
 
-# Create runtime directories and assign ownership
+# Create runtime directories, ensure entrypoint permissions, and assign ownership
 RUN mkdir -p /app/logs && \
+    chmod +x /app/entrypoint.sh && \
     chown -R appuser:appgroup /app
 
 # Switch to non-root user
 USER appuser
 
 EXPOSE 8000
+
+ENTRYPOINT ["/app/entrypoint.sh"]
 
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

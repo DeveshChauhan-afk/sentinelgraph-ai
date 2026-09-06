@@ -37,6 +37,8 @@ services:
     env_file:
       - path: ./backend/.env
         required: false
+      - path: .env
+        required: false
     environment:
       - DATABASE_HOST=postgres
       - DATABASE_NAME=${DATABASE_NAME:-sentinel_db}
@@ -46,6 +48,7 @@ services:
       - NEO4J_USERNAME=${NEO4J_USERNAME:-neo4j}
       - NEO4J_PASSWORD=${NEO4J_PASSWORD:-sentinel_neo4j_password}
       - NEO4J_DATABASE=${NEO4J_DATABASE:-neo4j}
+      - RUN_MIGRATIONS=${RUN_MIGRATIONS:-true}
     depends_on:
       postgres:
         condition: service_healthy
