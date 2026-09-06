@@ -1,5 +1,21 @@
-export type ReporterType = 'citizen' | 'law_enforcement' | 'financial_institution' | 'other';
-export type IncidentSource = 'web_portal' | 'helpline_1930' | 'bank_integration' | 'law_enforcement_api' | 'other';
+export type ReporterType =
+  | 'citizen'
+  | 'police'
+  | 'bank'
+  | 'cyber_cell'
+  | 'other'
+  | 'law_enforcement'
+  | 'financial_institution';
+
+export type IncidentSource =
+  | 'web_portal'
+  | 'mobile_app'
+  | 'api'
+  | 'bulk_import'
+  | 'helpline_1930'
+  | 'bank_integration'
+  | 'law_enforcement_api'
+  | 'other';
 export type IncidentStatus = 'new' | 'under_investigation' | 'escalated' | 'resolved' | 'closed';
 export type Priority = 'low' | 'medium' | 'high' | 'critical';
 export type ScamCategory =

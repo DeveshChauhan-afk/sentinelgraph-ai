@@ -113,12 +113,15 @@ export function parseLlmTelemetryFromPrometheus(text: string): LlmTelemetryMetri
   };
 }
 
+import { resolveApiUrl } from './client';
+
 export const metricsApi = {
   /**
    * Scrapes GET /metrics and extracts available LLM telemetry safely.
    */
   getLlmTelemetry: async (): Promise<LlmTelemetryMetrics> => {
-    const response = await fetch('/metrics', {
+    const url = resolveApiUrl('/metrics');
+    const response = await fetch(url, {
       headers: {
         Accept: 'text/plain, */*',
       },

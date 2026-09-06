@@ -31,8 +31,18 @@ def create_application() -> FastAPI:
         debug=settings.DEBUG,
     )
 
+    from fastapi.middleware.cors import CORSMiddleware
     from app.api.health import router as health_router
     from app.api.metrics import router as metrics_router
+
+    if settings.CORS_ORIGINS:
+        application.add_middleware(
+            CORSMiddleware,
+            allow_origins=settings.CORS_ORIGINS,
+            allow_credentials=True,
+            allow_methods=["*"],
+            allow_headers=["*"],
+        )
 
     application.add_middleware(RequestLoggingMiddleware)
     application.add_exception_handler(Exception, global_exception_handler)

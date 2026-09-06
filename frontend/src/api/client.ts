@@ -15,11 +15,35 @@ export class ApiError extends Error {
   }
 }
 
-interface RequestOptions extends RequestInit {
+/**
+ * Base API URL derived from environment.
+ * If VITE_API_URL is configured (e.g. https://api.sentinelgraph.example.com),
+ * all requests are routed to that host.
+ * Otherwise, defaults to relative URLs for same-origin or development proxy environments.
+ */
+const RAW_API_BASE_URL = import.meta.env.VITE_API_URL;
+export const API_BASE_URL =
+  typeof RAW_API_BASE_URL === 'string' && RAW_API_BASE_URL.trim()
+    ? RAW_API_BASE_URL.trim().replace(/\/+$/, '')
+    : '';
+
+/**
+ * Resolves an API path to either an absolute URL or normalized relative path.
+ */
+export function resolveApiUrl(path: string): string {
+  if (/^https?:\/\//i.test(path)) {
+    return path;
+  }
+  const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+  return API_BASE_URL ? `${API_BASE_URL}${normalizedPath}` : normalizedPath;
+}
+
+export interface RequestOptions extends RequestInit {
   timeoutMs?: number;
 }
 
-export async function apiFetch<T>(url: string, options: RequestOptions = {}): Promise<T> {
+export async function apiFetch<T>(endpoint: string, options: RequestOptions = {}): Promise<T> {
+  const url = resolveApiUrl(endpoint);
   const { timeoutMs = 30000, ...fetchOptions } = options;
 
   const controller = new AbortController();

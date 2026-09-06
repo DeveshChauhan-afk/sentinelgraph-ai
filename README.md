@@ -111,6 +111,7 @@ AI Investigation Report
 ```text
 sentinelgraph-ai/
 │
+├── docker-compose.yml
 ├── backend/
 │   ├── alembic/
 │   ├── app/
@@ -144,7 +145,12 @@ sentinelgraph-ai/
 │   │   ├── pages/
 │   │   ├── types/
 │   │   ├── App.tsx
-│   │   └── main.tsx
+│   │   ├── main.tsx
+│   │   └── vite-env.d.ts
+│   ├── .dockerignore
+│   ├── .env.example
+│   ├── Dockerfile
+│   ├── nginx.conf
 │   ├── index.html
 │   ├── package.json
 │   ├── tailwind.config.js
@@ -166,22 +172,26 @@ sentinelgraph-ai/
 
 # ⚙️ Installation & Quickstart
 
-## Option A: Docker Compose (Recommended)
+## Option A: Full-Stack Docker Compose (Recommended)
 
-Run the full unified platform stack (FastAPI Backend, PostgreSQL 16, Prometheus, and Grafana):
+Run the full unified platform stack (Frontend UI on Nginx, FastAPI Backend, PostgreSQL 16, Prometheus, and Grafana) directly from the repository root:
 
 ```bash
-cd backend
-cp .env.example .env
+# 1. Configure backend environment
+cp backend/.env.example backend/.env
 # Fill in credentials (SECRET_KEY, NEO4J_URI/PASSWORD, GEMINI_API_KEY)
 
-docker compose up -d
+# 2. Build and start all services
+docker compose up -d --build
 ```
 
+* **Frontend Web Console**: `http://localhost` (Port 80)
 * **FastAPI Backend**: `http://localhost:8000` (Docs: `http://localhost:8000/docs`)
 * **PostgreSQL Database**: `localhost:5432`
 * **Prometheus Metrics**: `http://localhost:9090`
 * **Grafana Dashboards**: `http://localhost:3000` (Default login: `admin` / `admin`)
+
+> **Note**: To run backend infrastructure services only (without the frontend container), you can still execute `docker compose up -d` from inside the `backend/` directory using `backend/docker-compose.yml`.
 
 ---
 
@@ -251,29 +261,46 @@ uvicorn app.main:app --reload
 
 ## 🖥️ Frontend Web Console Setup
 
-The SentinelGraph AI web application provides an interactive analyst console (Risk Overview, Graph Exploration, Network Timeline, AI Investigation Dossier, and AI Governance Console). It communicates with the backend via Vite's built-in development reverse-proxy (`/api`, `/health`, and `/metrics` are automatically forwarded to `http://localhost:8000`).
+The SentinelGraph AI web application provides an interactive analyst console (Risk Overview, Graph Exploration, Network Timeline, AI Investigation Dossier, and AI Governance Console).
 
-### 1. Navigate to Frontend Directory
+### Option 1: Local Development Server
+
+1. **Navigate to Frontend Directory**:
+   ```bash
+   cd frontend
+   ```
+
+2. **Environment Configuration**:
+   ```bash
+   cp .env.example .env
+   ```
+   By default, `VITE_API_URL` is unset, causing the frontend to use relative paths (`/api/v1/...`) proxied by Vite to `http://localhost:8000`. If connecting to a standalone or remote backend, specify the base URL:
+   ```env
+   VITE_API_URL=http://localhost:8000
+   ```
+   *(When using a distinct origin, ensure `CORS_ORIGINS` in `backend/.env` includes `http://localhost:5173`)*.
+
+3. **Install Dependencies & Start**:
+   ```bash
+   npm install
+   npm run dev
+   ```
+
+   * **Application Dashboard**: `http://localhost:5173`
+   * **Investigation Workspace**: `http://localhost:5173/#investigate`
+   * **AI Governance & Guardrails Console**: `http://localhost:5173/#evaluation`
+
+### Option 2: Standalone Production Docker Container
+
+You can build and run the production-optimized Nginx container independently:
 
 ```bash
 cd frontend
+docker build -t sentinelgraph-frontend:latest .
+docker run -d -p 80:80 --name sentinelgraph-ui sentinelgraph-frontend:latest
 ```
 
-### 2. Install Dependencies
-
-```bash
-npm install
-```
-
-### 3. Start Development Server
-
-```bash
-npm run dev
-```
-
-* **Application Dashboard**: `http://localhost:5173`
-* **Investigation Workspace**: `http://localhost:5173/#investigate`
-* **AI Governance & Guardrails Console**: `http://localhost:5173/#evaluation`
+The Nginx container serves the optimized SPA build and reverse-proxies `/api/`, `/health`, and `/metrics` requests to `http://api:8000`.
 
 ---
 
@@ -281,7 +308,7 @@ npm run dev
 
 | Method | Endpoint | Description |
 |---------|----------|-------------|
-| POST | `/api/v1/incidents` | Register Complaint |
+| POST | `/api/v1/complaints/` | Register Complaint |
 | POST | `/api/v1/investigation` | AI Investigation |
 | GET | `/api/v1/graph/...` | Graph Queries |
 | GET | `/health` | Health Check |

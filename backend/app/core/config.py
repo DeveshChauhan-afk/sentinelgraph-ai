@@ -10,8 +10,9 @@ A cached singleton instance is exposed through
 get_settings() to avoid repeated parsing.
 """
 
+from typing import Any
 from functools import lru_cache
-from pydantic import Field, SecretStr, computed_field
+from pydantic import Field, SecretStr, computed_field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -24,6 +25,32 @@ class Settings(BaseSettings):
     VERSION: str = "0.1.0"
     API_V1_PREFIX: str = "/api/v1"
     DEBUG: bool = False
+
+    # =========================
+    # CORS Configuration
+    # =========================
+    CORS_ORIGINS: list[str] = Field(
+        default=["http://localhost:5173", "http://127.0.0.1:5173"],
+        description="Allowed origins for Cross-Origin Resource Sharing (CORS).",
+    )
+
+    @field_validator("CORS_ORIGINS", mode="before")
+    @classmethod
+    def assemble_cors_origins(cls, v: Any) -> list[str]:
+        if isinstance(v, str):
+            clean = v.strip()
+            if not clean:
+                return []
+            if clean.startswith("[") and clean.endswith("]"):
+                import json
+                try:
+                    return json.loads(clean)
+                except Exception:
+                    pass
+            return [i.strip() for i in clean.split(",") if i.strip()]
+        elif isinstance(v, (list, tuple, set)):
+            return list(v)
+        return ["http://localhost:5173", "http://127.0.0.1:5173"]
 
     # =========================
     # Logging Configuration

@@ -12,7 +12,8 @@ import { HighestRiskTable } from '../components/overview/HighestRiskTable';
 import { FraudHubsList } from '../components/overview/FraudHubsList';
 import { SharedInfrastructureCard } from '../components/overview/SharedInfrastructureCard';
 import { RecentComplaintsTable } from '../components/overview/RecentComplaintsTable';
-import { RefreshCw, ShieldAlert, Cpu } from 'lucide-react';
+import { RegisterComplaintModal } from '../components/overview/RegisterComplaintModal';
+import { RefreshCw, ShieldAlert, Cpu, FilePlus2 } from 'lucide-react';
 
 interface RiskOverviewPageProps {
   onNavigateToInvestigate?: (entityValue?: string) => void;
@@ -21,6 +22,9 @@ interface RiskOverviewPageProps {
 export const RiskOverviewPage: React.FC<RiskOverviewPageProps> = ({
   onNavigateToInvestigate,
 }) => {
+  // Complaint Registration Modal State
+  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState<boolean>(false);
+
   // Section 1: Summary KPIs
   const [summary, setSummary] = useState<GraphSummary | null>(null);
   const [loadingSummary, setLoadingSummary] = useState<boolean>(true);
@@ -177,6 +181,14 @@ export const RiskOverviewPage: React.FC<RiskOverviewPageProps> = ({
             />
             <span>Refresh Intelligence</span>
           </button>
+
+          <button
+            onClick={() => setIsRegisterModalOpen(true)}
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-500 rounded transition-colors shadow-sm"
+          >
+            <FilePlus2 className="w-3.5 h-3.5" />
+            <span>Register Complaint</span>
+          </button>
         </div>
       </div>
 
@@ -232,6 +244,16 @@ export const RiskOverviewPage: React.FC<RiskOverviewPageProps> = ({
           onSelectComplaint={(complaintId) => handleEntitySelect(complaintId)}
         />
       </div>
+
+      {/* Complaint Intake Modal */}
+      <RegisterComplaintModal
+        isOpen={isRegisterModalOpen}
+        onClose={() => setIsRegisterModalOpen(false)}
+        onSuccess={() => {
+          handleRefreshAll();
+        }}
+        onNavigateToInvestigate={onNavigateToInvestigate}
+      />
     </div>
   );
 };
