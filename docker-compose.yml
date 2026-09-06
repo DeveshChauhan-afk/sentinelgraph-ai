@@ -32,8 +32,6 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     restart: unless-stopped
-    ports:
-      - "8000:8000"
     env_file:
       - path: ./backend/.env
         required: false
@@ -58,8 +56,6 @@ services:
   postgres:
     image: postgres:16
     restart: unless-stopped
-    ports:
-      - "5432:5432"
     environment:
       POSTGRES_DB: ${DATABASE_NAME:-sentinel_db}
       POSTGRES_USER: ${DATABASE_USER:-sentinel_user}
@@ -76,8 +72,6 @@ services:
   neo4j:
     image: neo4j:5.26.0-community
     restart: unless-stopped
-    ports:
-      - "7687:7687"
     environment:
       - NEO4J_AUTH=${NEO4J_USERNAME:-neo4j}/${NEO4J_PASSWORD:-sentinel_neo4j_password}
       - NEO4J_PLUGINS=["apoc"]
@@ -96,8 +90,6 @@ services:
   prometheus:
     image: prom/prometheus:v2.53.0
     restart: unless-stopped
-    ports:
-      - "9090:9090"
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
       - "--storage.tsdb.path=/prometheus"
@@ -120,8 +112,6 @@ services:
   grafana:
     image: grafana/grafana:11.1.0
     restart: unless-stopped
-    ports:
-      - "3000:3000"
     environment:
       - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER:-admin}
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:-admin}
