@@ -38,13 +38,19 @@ export function resolveApiUrl(path: string): string {
   return API_BASE_URL ? `${API_BASE_URL}${normalizedPath}` : normalizedPath;
 }
 
+/**
+ * Default request timeout in milliseconds (60 seconds).
+ * Accommodates free-tier managed cloud cold starts (e.g. Render Free wake-from-sleep).
+ */
+export const DEFAULT_REQUEST_TIMEOUT_MS = 60000;
+
 export interface RequestOptions extends RequestInit {
   timeoutMs?: number;
 }
 
 export async function apiFetch<T>(endpoint: string, options: RequestOptions = {}): Promise<T> {
   const url = resolveApiUrl(endpoint);
-  const { timeoutMs = 30000, ...fetchOptions } = options;
+  const { timeoutMs = DEFAULT_REQUEST_TIMEOUT_MS, ...fetchOptions } = options;
 
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeoutMs);

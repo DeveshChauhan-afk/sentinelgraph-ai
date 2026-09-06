@@ -71,6 +71,7 @@ class Settings(BaseSettings):
     DATABASE_NAME: str
     DATABASE_USER: str
     DATABASE_PASSWORD: SecretStr
+    DATABASE_SSL: bool = False
 
     DB_POOL_SIZE: int = Field(default=10, ge=1)
     DB_MAX_OVERFLOW: int = Field(default=20, ge=0)
@@ -122,9 +123,10 @@ class Settings(BaseSettings):
         """
         Constructs the async PostgreSQL URL for SQLAlchemy.
         """
+        ssl_param = "?ssl=require" if self.DATABASE_SSL else ""
         return (
             f"postgresql+asyncpg://{self.DATABASE_USER}:{self.DATABASE_PASSWORD.get_secret_value()}"
-            f"@{self.DATABASE_HOST}:{self.DATABASE_PORT}/{self.DATABASE_NAME}"
+            f"@{self.DATABASE_HOST}:{self.DATABASE_PORT}/{self.DATABASE_NAME}{ssl_param}"
         )
 
     model_config = SettingsConfigDict(
@@ -141,9 +143,10 @@ class Settings(BaseSettings):
         Constructs the synchronous PostgreSQL URL for Alembic.
         Uses psycopg2 driver for migration compatibility.
         """
+        ssl_param = "?sslmode=require" if self.DATABASE_SSL else ""
         return (
             f"postgresql+psycopg2://{self.DATABASE_USER}:{self.DATABASE_PASSWORD.get_secret_value()}"
-            f"@{self.DATABASE_HOST}:{self.DATABASE_PORT}/{self.DATABASE_NAME}"
+            f"@{self.DATABASE_HOST}:{self.DATABASE_PORT}/{self.DATABASE_NAME}{ssl_param}"
         )
 
 

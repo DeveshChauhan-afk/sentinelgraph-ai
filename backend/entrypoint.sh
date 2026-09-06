@@ -11,4 +11,10 @@ if [ "${RUN_MIGRATIONS:-true}" = "true" ]; then
     echo "Database migrations applied successfully."
 fi
 
+# Honor dynamic PORT environment variable (e.g. Render Web Services)
+if [ "$1" = "uvicorn" ] && [ "$2" = "app.main:app" ]; then
+    PORT="${PORT:-8000}"
+    exec uvicorn app.main:app --host 0.0.0.0 --port "$PORT"
+fi
+
 exec "$@"
