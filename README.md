@@ -1,422 +1,300 @@
 # 🛡️ SentinelGraph AI
 
 <p align="center">
-  <h3 align="center">
-    AI-Powered Fraud Intelligence Platform using Graph-RAG
-  </h3>
-
+  <h2 align="center">
+    Enterprise AI-Powered Cyber Fraud Intelligence Platform
+  </h2>
   <p align="center">
-    Transforming isolated fraud complaints into an intelligent knowledge graph for faster, explainable investigations.
+    <strong>Defeating Digital Arrest Coercion, UPI Payment Phishing & Mule Syndicates using Graph-RAG</strong>
+  </p>
+  <p align="center">
+    <em>Track 02: AI Risk Manager — AI for Digital Public Safety</em>
   </p>
 </p>
 
 <p align="center">
-
-![Python](https://img.shields.io/badge/Python-3.13+-blue?style=for-the-badge&logo=python)
-![FastAPI](https://img.shields.io/badge/FastAPI-Async-green?style=for-the-badge&logo=fastapi)
-![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.7+-3178C6?style=for-the-badge&logo=typescript)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-blue?style=for-the-badge&logo=postgresql)
-![Neo4j](https://img.shields.io/badge/Neo4j-Graph_DB-008CC1?style=for-the-badge&logo=neo4j)
-![Gemini](https://img.shields.io/badge/Google-Gemini-orange?style=for-the-badge&logo=google)
-
+  <img src="https://img.shields.io/badge/Python-3.13+-blue?style=for-the-badge&logo=python" alt="Python" />
+  <img src="https://img.shields.io/badge/FastAPI-Async-green?style=for-the-badge&logo=fastapi" alt="FastAPI" />
+  <img src="https://img.shields.io/badge/React-18.3-61DAFB?style=for-the-badge&logo=react" alt="React" />
+  <img src="https://img.shields.io/badge/TypeScript-5.7-3178C6?style=for-the-badge&logo=typescript" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/PostgreSQL-16-blue?style=for-the-badge&logo=postgresql" alt="PostgreSQL" />
+  <img src="https://img.shields.io/badge/Neo4j-5.26_Community-008CC1?style=for-the-badge&logo=neo4j" alt="Neo4j" />
+  <img src="https://img.shields.io/badge/Google-Gemini_2.5_Flash-orange?style=for-the-badge&logo=google" alt="Google Gemini" />
+  <img src="https://img.shields.io/badge/Prometheus-v2.53-E6522C?style=for-the-badge&logo=prometheus" alt="Prometheus" />
+  <img src="https://img.shields.io/badge/Grafana-v11.1-F46800?style=for-the-badge&logo=grafana" alt="Grafana" />
+  <img src="https://img.shields.io/badge/Docker-Unified_Compose-2496ED?style=for-the-badge&logo=docker" alt="Docker" />
 </p>
 
 ---
 
-## 📌 Overview
+## 📌 1. Project Overview & Problem Space
 
-SentinelGraph AI is a full-stack AI-powered Fraud & Risk Intelligence Platform developed for the hackathon theme:
+Organized cybercrime syndicates are waging systematic fraud campaigns against citizens, businesses, and public institutions. Schemes like **Digital Arrest coercion**, **UPI payment redirection**, **phishing portals**, and **mule banking rings** exploit fragmented law enforcement data:
+* **The Fragmented Data Problem**: Citizen and institutional fraud complaints are typically stored in isolated ticketing queues. A single criminal mobile number or UPI VPA operating across multiple police jurisdictions often goes unnoticed for months.
+* **The "Black-Box" AI Problem**: Applying unconstrained generative AI directly to crime data creates catastrophic risks: hallucinated links, invented legal references, non-reproducible risk scores, and speculation that cannot hold up in court.
 
-> **AI for Digital Public Safety: Defeating Counterfeiting, Fraud & Digital Arrest Scams** (Track 02: AI Risk Manager)
+### The SentinelGraph AI Solution
+**SentinelGraph AI** bridges this critical gap. It ingests unstructured fraud complaints, durably records them in **PostgreSQL 16**, extracts verified fraud identifiers using **Google Gemini**, builds an interconnected **Neo4j** knowledge graph, and evaluates crime networks using **100% deterministic Python reasoning engines**. 
 
-Instead of treating every complaint as an isolated record, SentinelGraph AI extracts fraud-related entities, builds an interconnected Neo4j knowledge graph, discovers hidden mule syndicates, and generates evidence-grounded AI investigation reports via a deterministic Graph Retrieval-Augmented Generation (Graph-RAG) pipeline.
-
-The platform provides a unified operations console featuring:
-- 📊 **Risk Overview**: Global co-occurrence monitoring, highest-risk entities, and shared infrastructure hubs.
-- 🎯 **Interactive Investigation Workspace**: Single-pane triage across phone numbers, UPI VPAs, emails, and complaints.
-- 🕸️ **Graph Visualization**: Interactive Cytoscape.js topological network exploration with multi-hop neighbor expansion.
-- 📄 **AI Investigation Dossier**: Evidence-grounded, citation-backed investigative findings powered by Google Gemini.
-- 🛡️ **AI Governance & Guardrails Console**: Deterministic 3-layer verification pipeline (Schema Validation, Evidence Grounding, Hallucination Detection), live Prometheus telemetry, and golden benchmark specifications.
+Generative AI is strictly constrained to structured extraction and formal report drafting—ensuring that every link, timeline event, and recommendation in the final dossier is grounded in verifiable mathematical facts.
 
 ---
 
-# ✨ Features
-
-- 📊 Full-Stack Fraud Risk Intelligence Dashboard
-- 🎯 Interactive Investigation Workspace with Preset Scenarios
-- 🕸️ Cytoscape.js Graph Visualization & Neighborhood Traversal
-- 🧠 Graph-RAG Investigation Engine with Deterministic Grounding
-- 🛡️ 3-Layer AI Governance & Guardrail Verification Pipeline
-- 📝 Complaint Registration API & PostgreSQL Transactional Storage
-- 🤖 AI Entity Extraction using Google Gemini
-- 🌐 Neo4j Knowledge Graph with Automated Schema Constraints
-- 📈 Prometheus & Grafana Observability Stack
-- 📚 Interactive Swagger Documentation & Health Probes
-
----
-
-# 🏗️ System Architecture
-
-![hld](hld.png)
+## 🏗️ 2. High-Level Architecture & Flow
 
 ```
-Complaint
-     │
-     ▼
-FastAPI Backend
-     │
-     ▼
-PostgreSQL
-     │
-     ▼
-Gemini Entity Extraction
-     │
-     ▼
-Graph Builder
-     │
-     ▼
-Neo4j AuraDB
-     │
-     ▼
-Graph-RAG Investigation
-     │
-     ▼
-AI Investigation Report
-```
-
----
-
-# 🚀 Technology Stack
-
-| Layer | Technology |
-|--------|------------|
-| Frontend | React 18, TypeScript, Vite, Tailwind CSS, Cytoscape.js |
-| Backend | FastAPI |
-| Language | Python 3.13+ / TypeScript |
-| Database | PostgreSQL 16 |
-| Graph Database | Neo4j AuraDB |
-| AI Model | Google Gemini |
-| ORM | SQLAlchemy Async |
-| Validation | Pydantic V2 |
-| Logging | Loguru |
-| Migrations | Alembic |
-| Observability | Prometheus & Grafana |
-| Containerization | Docker & Docker Compose |
-
----
-
-# 📂 Project Structure
-
-```text
-sentinelgraph-ai/
-│
-├── docker-compose.yml
-├── backend/
-│   ├── alembic/
-│   ├── app/
-│   │   ├── ai/
-│   │   ├── api/
-│   │   ├── core/
-│   │   ├── db/
-│   │   ├── evaluation/
-│   │   ├── graph/
-│   │   ├── models/
-│   │   ├── repositories/
-│   │   ├── schemas/
-│   │   ├── services/
-│   │   └── main.py
-│   ├── tests/
-│   ├── .dockerignore
-│   ├── .env.example
-│   ├── Dockerfile
-│   ├── docker-compose.yml
-│   ├── requirements.txt
-│   └── requirements-dev.txt
-│
-├── frontend/
-│   ├── src/
-│   │   ├── api/
-│   │   ├── components/
-│   │   │   ├── common/
-│   │   │   ├── investigation/
-│   │   │   └── overview/
-│   │   ├── layouts/
-│   │   ├── pages/
-│   │   ├── types/
-│   │   ├── App.tsx
-│   │   ├── main.tsx
-│   │   └── vite-env.d.ts
-│   ├── .dockerignore
-│   ├── .env.example
-│   ├── Dockerfile
-│   ├── nginx.conf
-│   ├── index.html
-│   ├── package.json
-│   ├── tailwind.config.js
-│   └── vite.config.ts
-│
-├── monitoring/
-│   ├── grafana/
-│   │   ├── dashboards/
-│   │   └── provisioning/
-│   └── prometheus/
-│       ├── alerts.yml
-│       └── prometheus.yml
-│
-├── docs/
-└── README.md
+   Citizen / Bank / Cyber Cell Complaint
+                    │
+                    ▼
+   ┌────────────────────────────────────────────────────────┐
+   │             Nginx Reverse Proxy (:80)                  │
+   │  Routes SPA, /api/, /health, and /metrics to backend   │
+   └────────────────────────┬───────────────────────────────┘
+                            │
+                            ▼
+   ┌────────────────────────────────────────────────────────┐
+   │             FastAPI Asynchronous Backend (:8000)       │
+   │  • RequestLoggingMiddleware (X-Request-ID Tracking)    │
+   │  • Pydantic V2 Input Sanitization & Validation         │
+   │  • Prometheus Metrics Exposition (/metrics)            │
+   └──────────────┬──────────────────────────┬──────────────┘
+                  │                          │
+                  ▼ (1) ACID Commit          ▼ (2) Async Extraction
+   ┌───────────────────────────┐  ┌─────────────────────────┐
+   │ PostgreSQL 16             │  │ Google Gemini API       │
+   │ Transactional Record Store│  │ Structured Entity Extr. │
+   │ • incidents Table         │  └──────────┬──────────────┘
+   │ • Case Reference Unique UQ│             │ Extracted Entities
+   │ • Check Constraints       │             ▼
+   └───────────────────────────┘  ┌─────────────────────────┐
+                                  │ Neo4j 5.26 Graph Engine │
+                                  │ • 9 Persisted Labels    │
+                                  │ • MENTIONS Topology     │
+                                  │ • Startup DDL Unique UQ │
+                                  └──────────┬──────────────┘
+                                             │ Topological Subgraph
+                                             ▼
+                                  ┌─────────────────────────┐
+                                  │ Deterministic Python    │
+                                  │ XAI Intelligence Engines│
+                                  │ • TimelineReconstruct   │
+                                  │ • EntityEvolution       │
+                                  │ • EvidenceEngine (0-1)  │
+                                  │ • FraudRing Expansion   │
+                                  └──────────┬──────────────┘
+                                             │ Canonical Case File
+                                             ▼
+                                  ┌─────────────────────────┐
+                                  │ Google Gemini Formatter │
+                                  │ • SHA-256 Prompt Hash   │
+                                  │ • Citation Preservation │
+                                  └──────────┬──────────────┘
+                                             │
+                                             ▼
+                                  ┌─────────────────────────┐
+                                  │ React 18 Web Console    │
+                                  │ • Cytoscape.js Network  │
+                                  │ • Timeline & Dossier    │
+                                  │ • AI Governance Console │
+                                  └─────────────────────────┘
 ```
 
 ---
 
-# ⚙️ Installation & Quickstart
+## ⚡ 3. Architectural Truths & Invariants
 
-## Option A: Full-Stack Docker Compose (Recommended)
+SentinelGraph AI adheres to explicit engineering invariants:
+1. **PostgreSQL 16 is the Transactional System of Record**:
+   Raw complaints, case reference numbers, reporter details, and triage states are durably committed to PostgreSQL before any AI extraction or graph persistence occurs.
+2. **Neo4j Persists a Strict Bipartite Star Topology**:
+   The graph persists **only** one relationship type: `(:Complaint)-[:MENTIONS]->(:Entity)`. Conceptual relationships (`REPORTED_IN`, `TRANSFERRED_TO`, `ASSOCIATED_WITH`) are **never** persisted in the database; they are dynamically derived via deterministic graph traversals.
+3. **100% Deterministic Investigation Reasoning**:
+   Risk scoring, timeline ordering, velocity calculation, network clustering, and evidence scoring are executed by pure Python logic. Gemini never calculates risk scores or determines guilt.
+4. **Gemini NEVER Directly Queries Databases**:
+   Google Gemini has zero direct connection privileges to PostgreSQL or Neo4j. It receives pre-computed, verified Pydantic view models and emits structured JSON.
+5. **Decoupled Failure Isolation**:
+   External AI rate-limiting or Neo4j connectivity blips never compromise the primary PostgreSQL complaint record.
+6. **Authentication Reality**:
+   Authentication is **NOT implemented** in this release. `/api/v1/auth/` is an explicit `"Coming soon"` placeholder. Triage and report generation endpoints are open for local research and hackathon evaluation.
+7. **CI Pipeline Scope**:
+   Continuous integration currently verifies the backend (Ruff linting, dry-run Alembic migrations, and 287 pytest tests); frontend CI is slated for Horizon 2 hardening.
 
-Run the full unified platform stack (Frontend UI on Nginx, FastAPI Backend, PostgreSQL 16, Prometheus, and Grafana) directly from the repository root:
+---
+
+## 💻 4. The React 18 Analyst Console
+
+The web application ([`frontend/`](file:///c:/Devesh/DeveshChauhan/Devesh%20Chauhan/sentinelgraph-ai/frontend)) provides a modern, single-pane triage console:
+
+* 📊 **Risk Overview (`#risk-overview`)**: Global fraud KPIs, highest degree-centrality entity hubs, multi-complaint shared infrastructure tables, and real-time complaint streams.
+* 🎯 **Investigation Workspace (`#investigate`)**:
+  * **Cytoscape.js Topological Graph**: 1–5 hop traversal depth controls, switchable physics layouts (`cose`, `concentric`, `breadthfirst`, `grid`), pan/zoom controls, and slide-over entity inspection.
+  * **Reconstructed Timeline**: Chronological event sequence tracking first-seen dates, identifier reuse, and activity bursts.
+  * **AI Investigation Dossier**: Structured findings with verified evidence citations, risk justifications, and actionable containment recommendations.
+* 🛡️ **AI Governance & Guardrails Console (`#evaluation`)**: Interactive transparency dashboard detailing the 3-Layer Guardrail Architecture, 5 Golden Scenario benchmark specifications, quality dimension formulas, and live Prometheus telemetry.
+
+---
+
+## 🛠️ 5. Technology Stack
+
+| Layer | Technology | Purpose |
+| :--- | :--- | :--- |
+| **Frontend UI** | React 18.3, TypeScript 5.7, Vite 6.1 | High-performance Single Page Application (SPA). |
+| **Styling & Icons** | Tailwind CSS 3.4, Lucide React | Modern dark-mode analyst UI design system. |
+| **Graph Canvas** | Cytoscape.js 3.30 | Interactive Canvas/WebGL topological network visualization. |
+| **Ingress & Proxy**| Nginx 1.27 Alpine | Unified static host, Gzip compression, edge security headers. |
+| **Backend API** | FastAPI, Python 3.13, Uvicorn | Asynchronous high-throughput REST API. |
+| **Relational Store**| PostgreSQL 16 (SQLAlchemy + asyncpg)| ACID transactional system of record with 2 Alembic migrations. |
+| **Graph Store** | Neo4j 5.26 Community / AuraDB | Labeled property graph with 9 startup DDL unique constraints. |
+| **Generative AI** | Google Gemini (google-genai SDK) | Structured entity extraction and citation-preserving report writer. |
+| **Observability** | Prometheus 2.53 & Grafana 11.1 | 15s metric scraping, 5 alert rules, pre-provisioned dashboard. |
+| **Containerization**| Docker & Docker Compose | Multi-stage production containers with non-root execution. |
+
+---
+
+## 🚀 6. Quickstart & Deployment
+
+### Option A: Unified Full-Stack Docker Compose (Recommended)
+Run the entire platform (Frontend on Nginx, FastAPI Backend, PostgreSQL 16, Neo4j 5.26, Prometheus, and Grafana) with a single command:
 
 ```bash
-# 1. Configure backend environment
-cp backend/.env.example backend/.env
-# Fill in credentials (SECRET_KEY, NEO4J_URI/PASSWORD, GEMINI_API_KEY)
+# 1. Clone repository
+git clone https://github.com/DeveshChauhan-afk/SentinelGraph-AI.git
+cd SentinelGraph-AI
 
-# 2. Build and start all services
+# 2. Configure environment credentials
+cp backend/.env.example backend/.env
+# Edit backend/.env to provide your Google Gemini API key:
+# GEMINI_API_KEY=AIzaSy...
+
+# 3. Build and start all 6 services
 docker compose up -d --build
 ```
 
-* **Frontend Web Console**: `http://localhost` (Port 80)
-* **FastAPI Backend**: `http://localhost:8000` (Docs: `http://localhost:8000/docs`)
-* **PostgreSQL Database**: `localhost:5432`
-* **Prometheus Metrics**: `http://localhost:9090`
+#### Operational Endpoints:
+* **Analyst Web Console**: `http://localhost` (Port 80)
+* **Investigation Workspace**: `http://localhost/#investigate`
+* **AI Governance Console**: `http://localhost/#evaluation`
+* **FastAPI Backend Swagger**: `http://localhost:8000/docs`
+* **Prometheus Metrics**: `http://localhost:8000/metrics` (or `http://localhost:9090`)
 * **Grafana Dashboards**: `http://localhost:3000` (Default login: `admin` / `admin`)
 
-> **Note**: To run backend infrastructure services only (without the frontend container), you can still execute `docker compose up -d` from inside the `backend/` directory using `backend/docker-compose.yml`.
-
 ---
 
-## Option B: Local Python Development
+### Option B: Local Python Development
 
-### 1. Clone & Navigate to Backend
-
+#### 1. Backend Setup
 ```bash
-git clone https://github.com/DeveshChauhan-afk/SentinelGraph-AI.git
-cd SentinelGraph-AI/backend
-```
-
-### 2. Create Virtual Environment
-
-```bash
+cd backend
 python -m venv venv
-```
-
-Windows:
-```bash
-venv\Scripts\activate
-```
-
-Linux / macOS:
-```bash
-source venv/bin/activate
-```
-
-### 3. Install Dependencies
-
-```bash
+# Windows: venv\Scripts\activate | Linux/macOS: source venv/bin/activate
 pip install -r requirements-dev.txt
-```
 
-### 4. Configure Environment
-
-Copy the template to `.env` and fill in the required values:
-
-```bash
 cp .env.example .env
-```
+# Edit .env with your PostgreSQL, Neo4j, and Gemini credentials
 
-Required variables in `.env`:
-* `SECRET_KEY`: Random string for cryptographic security
-* `DATABASE_HOST`, `DATABASE_PORT`, `DATABASE_NAME`, `DATABASE_USER`, `DATABASE_PASSWORD`: PostgreSQL connection settings
-* `NEO4J_URI`, `NEO4J_USERNAME`, `NEO4J_PASSWORD`: Neo4j AuraDB credentials
-* `GEMINI_API_KEY`: Google Gemini API key
-
-### 5. Run Database Migrations
-
-```bash
+# Run database migrations
 alembic upgrade head
+
+# Start API server
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-### 6. Start Server
-
-```bash
-uvicorn app.main:app --reload
-```
-
-* API Server: `http://localhost:8000`
-* Interactive API Documentation (Swagger): `http://localhost:8000/docs`
-* Metrics Endpoint: `http://localhost:8000/metrics`
-* Health Probes: `http://localhost:8000/health/live`, `http://localhost:8000/health/ready`
-
----
-
-## 🖥️ Frontend Web Console Setup
-
-The SentinelGraph AI web application provides an interactive analyst console (Risk Overview, Graph Exploration, Network Timeline, AI Investigation Dossier, and AI Governance Console).
-
-### Option 1: Local Development Server
-
-1. **Navigate to Frontend Directory**:
-   ```bash
-   cd frontend
-   ```
-
-2. **Environment Configuration**:
-   ```bash
-   cp .env.example .env
-   ```
-   By default, `VITE_API_URL` is unset, causing the frontend to use relative paths (`/api/v1/...`) proxied by Vite to `http://localhost:8000`. If connecting to a standalone or remote backend, specify the base URL:
-   ```env
-   VITE_API_URL=http://localhost:8000
-   ```
-   *(When using a distinct origin, ensure `CORS_ORIGINS` in `backend/.env` includes `http://localhost:5173`)*.
-
-3. **Install Dependencies & Start**:
-   ```bash
-   npm install
-   npm run dev
-   ```
-
-   * **Application Dashboard**: `http://localhost:5173`
-   * **Investigation Workspace**: `http://localhost:5173/#investigate`
-   * **AI Governance & Guardrails Console**: `http://localhost:5173/#evaluation`
-
-### Option 2: Standalone Production Docker Container
-
-You can build and run the production-optimized Nginx container independently:
-
+#### 2. Frontend Setup
 ```bash
 cd frontend
-docker build -t sentinelgraph-frontend:latest .
-docker run -d -p 80:80 --name sentinelgraph-ui sentinelgraph-frontend:latest
+npm install
+npm run dev
 ```
-
-The Nginx container serves the optimized SPA build and reverse-proxies `/api/`, `/health`, and `/metrics` requests to `http://api:8000`.
-
----
-
-# 📡 API Endpoints
-
-| Method | Endpoint | Description |
-|---------|----------|-------------|
-| POST | `/api/v1/complaints/` | Register Complaint |
-| POST | `/api/v1/investigation` | AI Investigation |
-| GET | `/api/v1/graph/...` | Graph Queries |
-| GET | `/health` | Health Check |
+Access the local frontend development server at `http://localhost:5173`.
 
 ---
 
-# 📸 Screenshots
+## 📡 7. API Reference Overview
 
-## Swagger Documentation
+All backend endpoints are documented interactively at `http://localhost:8000/docs`:
 
+| Method | Endpoint Path | Description | Response Model |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/health/live` | Process liveness probe (HTTP 200) | `LivenessResponse` |
+| `GET` | `/health/ready`| Dependency readiness probe (Postgres, Neo4j) | `ReadinessResponse` |
+| `GET` | `/health` | Detailed operational health diagnostics | `HealthSummaryResponse` |
+| `GET` | `/metrics` | Prometheus metrics exposition | Text/Plain |
+| `GET` | `/api/v1/version/`| Application version (`1.0.0`) | `{"version": "1.0.0"}` |
+| `GET` | `/api/v1/auth/` | Authentication placeholder | `{"message": "Coming soon"}` |
+| `POST`| `/api/v1/complaints/` | Register new complaint & trigger extraction | `IncidentResponse` |
+| `GET` | `/api/v1/complaints/` | List complaints (paginated) | `list[IncidentListResponse]` |
+| `GET` | `/api/v1/complaints/{id}` | Retrieve complaint by UUID | `IncidentResponse` |
+| `GET` | `/api/v1/graph/entity/{val}` | Get single graph node | `GraphNode` |
+| `GET` | `/api/v1/graph/entity/{val}/neighbors` | 1-hop connected neighbors | `GraphNeighborsResponse` |
+| `GET` | `/api/v1/graph/entity/{val}/ring` | Multi-hop connected fraud ring component | `FraudRingResponse` |
+| `GET` | `/api/v1/graph/visualization/{id}` | Subgraph for Cytoscape.js (depth 1-5) | `GraphResponse` |
+| `GET` | `/api/v1/timeline/{val}` | Reconstruct chronological complaint timeline | `TimelineResponse` |
+| `POST`| `/api/v1/investigation/report` | Generate certified AI investigation dossier | `ProfessionalInvestigationReport` |
+
+*For complete parameters, schemas, and error codes, refer to [`docs/04_API_REFERENCE.md`](docs/04_API_REFERENCE.md).*
+
+---
+
+## 📸 8. Screenshots & Visual Verification
+
+### Swagger API Documentation
 ![swagger](swagger.png)
 
----
-
-## Complaint Registration
-
+### Complaint Registration & Triage
 ![complaint_registration](complaint_registration.png)
 
----
-
-## PostgreSQL Database
-
+### PostgreSQL Transactional System of Record
 ![postgre](postgre.png)
 
----
-
-## Neo4j Knowledge Graph
-
+### Neo4j Fraud Intelligence Knowledge Graph
 ![neo4j](neo4j.png)
 
----
-
-## AI Investigation Report
-
+### Evidence-Grounded AI Investigation Dossier
 ![investigation](investigation.png)
 
 ---
 
-# 🧠 Graph-RAG Investigation Flow
+## 📚 9. Comprehensive Documentation Map
 
-1. Complaint Registration
+Deep-dive architectural, database, and operational manuals are available in the [`docs/`](docs/) directory:
 
-2. AI Entity Extraction
-
-3. Graph Construction
-
-4. Graph Persistence
-
-5. Context Retrieval
-
-6. Gemini AI Reasoning
-
-7. Structured Investigation Report
-
----
-
-# 🎯 Future Enhancements
-
-- 📊 Real-time Monitoring Dashboard
-- 🎙️ Voice Scam Analysis
-- 🖼️ Counterfeit Image Detection
-- 🌍 Multi-language Support
-- ☁️ Docker & Cloud Deployment
-- 🤝 Law Enforcement Integration
+| Document | Focus & Highlights |
+| :--- | :--- |
+| **[`docs/01_OVERVIEW.md`](docs/01_OVERVIEW.md)** | System overview, digital arrest & UPI problem space, and foundational design principles. |
+| **[`docs/02_ARCHITECTURE.md`](docs/02_ARCHITECTURE.md)** | Full-stack request lifecycle, sequence diagrams, service interactions, and data boundaries. |
+| **[`docs/03_DATABASE.md`](docs/03_DATABASE.md)** | Dual-database design, 2 Alembic revisions, 9 Neo4j labels, startup unique DDL, and MENTIONS topology. |
+| **[`docs/04_API_REFERENCE.md`](docs/04_API_REFERENCE.md)** | Complete mounted route catalog, parameters, response models, health probes, and auth placeholder. |
+| **[`docs/05_AI_PIPELINE.md`](docs/05_AI_PIPELINE.md)** | Deterministic investigation architecture, Graph-RAG flow, Gemini boundaries, prompt hashing, timeouts/retries. |
+| **[`docs/06_EVALUATION_GOVERNANCE.md`](docs/06_EVALUATION_GOVERNANCE.md)**| 3-layer guardrail pipeline, 5 golden scenarios, quality evaluator, and distinguishing offline harness from UI. |
+| **[`docs/07_FRONTEND.md`](docs/07_FRONTEND.md)** | React 18, TypeScript, Vite, Tailwind, Cytoscape.js integration, hash routing, and Nginx proxy. |
+| **[`docs/08_OBSERVABILITY.md`](docs/08_OBSERVABILITY.md)** | Prometheus metrics catalog, 15s scrape interval, 5 alert rules, Grafana dashboard, and health probes. |
+| **[`docs/09_DEPLOYMENT_OPERATIONS.md`](docs/09_DEPLOYMENT_OPERATIONS.md)**| Root Docker Compose, backend-only compose, migration lifecycle, ports, and operational runbooks. |
+| **[`docs/10_SECURITY.md`](docs/10_SECURITY.md)** | Unauthenticated reality disclosure, Pydantic validation, SecretStr protection, and hardening roadmap. |
+| **[`docs/11_CHANGELOG.md`](docs/11_CHANGELOG.md)** | Verified historical engineering record through Sprint 12 and full-stack frontend completion. |
+| **[`docs/12_ROADMAP.md`](docs/12_ROADMAP.md)** | Strategic product roadmap separating Implemented v1, Near-Term Hardening, and Future V2+ capabilities. |
 
 ---
 
-# 📖 Documentation
+## 🔒 10. Security Reality & Current Limitations
 
-Complete project documentation is available in the repository.
-
-- System Design
-- Architecture
-- API Design
-- Database Design
-- Graph-RAG Pipeline
-- Implementation Results
+1. **Unauthenticated Triage APIs**: User authentication is not implemented in v1; endpoints are accessible without tokens.
+2. **Offline Evaluation Harness**: The evaluation package (`app/evaluation/`) is an offline test and benchmark suite executed via pytest, not a public REST API.
+3. **Continuous Integration**: GitHub Actions CI currently validates backend code (Ruff, dry-run Alembic migrations, pytest); frontend lint/test automation is planned for Horizon 2.
+4. **SinglePersisted Topology**: Neo4j persists only `MENTIONS` edges; high-level associations are computed dynamically in Python.
 
 ---
 
-# 🤝 Contributing
+## 🗺️ 11. Future Roadmap Horizons (V2+)
 
-Contributions, ideas, and suggestions are welcome.
-
-Fork the repository and submit a pull request.
-
----
-
-# 📄 License
-
-This project is licensed under the MIT License.
+* 🎙️ **Multimodal Voice Scam Audio Analysis**: Audio transcription and synthetic voice clone matching for digital arrest calls.
+* 🖼️ **Counterfeit Document OCR**: Multimodal detection of forged arrest warrants, fake CBI notices, and cloned police identity cards.
+* 🌐 **Multilingual Indian Language Support**: Extraction fine-tuned for Hindi, Tamil, Telugu, Bengali, Marathi, and Gujarati complaint narratives.
+* ⚡ **Direct Banking Switch Freeze Connectors**: Real-time webhooks connecting recommendations directly to NPCI and commercial banking switches.
+* 🏛️ **National Portal Adapters**: Real-time ingestion connectors for the Indian National Cyber Crime Reporting Portal (NCRP).
 
 ---
 
-# ⭐ Acknowledgements
+## 📄 License & Acknowledgements
 
-- FastAPI
-- Neo4j AuraDB
-- PostgreSQL
-- Google Gemini
-- SQLAlchemy
-- Pydantic
-- Loguru
-
----
-
-<p align="center">
-
-⭐ If you found this project interesting, consider giving it a star!
-
-</p>
+* **License**: Open-source under the [MIT License](LICENSE).
+* **Acknowledgements**: Built with FastAPI, PostgreSQL, Neo4j Community, Google Gemini, React, Cytoscape.js, Prometheus, and Grafana.
