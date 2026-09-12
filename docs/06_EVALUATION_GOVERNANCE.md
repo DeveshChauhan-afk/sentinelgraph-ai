@@ -30,6 +30,9 @@ A critical architectural distinction in SentinelGraph AI is the separation betwe
 * **The Evaluation Subsystem** (`app/evaluation`) is an automated testing, benchmarking, and quality-assurance harness. It does not expose a public `/api/v1/evaluation` endpoint; it is designed for regression testing and CI verification.
 * **The Governance Page** (`#evaluation` in the web application) is an interactive auditor console that communicates the system's safety posture, provides transparent inspection of benchmark specifications, and displays real-time Prometheus telemetry.
 
+![Frontend AI Governance & Guardrails Console](../visuals/ai_governance_guardrail.jpg)
+*Frontend AI Governance & Guardrails Console (`#evaluation`) visually mapping the 3-layer guardrail architecture, 5 golden benchmark scenarios, and live operational metrics.*
+
 ---
 
 ## 2. The 3-Layer AI Guardrail Architecture

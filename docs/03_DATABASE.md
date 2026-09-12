@@ -63,6 +63,9 @@ Loaded from [`app/core/config.py`](file:///c:/Devesh/DeveshChauhan/Devesh%20Chau
 ### 2.2 PostgreSQL Schema: The `incidents` Table
 The `incidents` table (mapped to the [`Incident`](file:///c:/Devesh/DeveshChauhan/Devesh%20Chauhan/sentinelgraph-ai/backend/app/models/incident.py) ORM model) is the single concrete relational table in the database:
 
+![PostgreSQL Incidents Table Records](../visuals/postgre.png)
+*PostgreSQL relational database table viewing complaint records, lifecycle statuses, priority levels, risk scores, case references, and audit timestamps.*
+
 | Column Name | SQL Type | Python / Model Type | Nullable | Constraints & Defaults | Description |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | `id` | `UUID` | `uuid.UUID` | No | Primary Key (`pk_incidents`) | Unique incident UUID identifier |
@@ -178,6 +181,9 @@ alembic upgrade head --sql
 ### 3.1 Graph Domain Model & 9 Node Labels
 
 The Fraud Intelligence Graph persists nodes across 9 distinct labels defined in [`GraphLabel`](file:///c:/Devesh/DeveshChauhan/Devesh%20Chauhan/sentinelgraph-ai/backend/app/graph/models.py) and constructed by [`GraphBuilder`](file:///c:/Devesh/DeveshChauhan/Devesh%20Chauhan/sentinelgraph-ai/backend/app/graph/builder.py):
+
+![Neo4j Fraud Graph Browser](../visuals/neo4j.png)
+*Neo4j graph visualization showing star-topology connections between Complaint nodes and extracted entity nodes (Phone, UPI, BankAccount, Person).*
 
 | Node Label | ID Prefix Format | Example ID | Primary Properties |
 | :--- | :--- | :--- | :--- |

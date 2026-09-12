@@ -235,22 +235,29 @@ All backend endpoints are documented interactively at `http://localhost:8000/doc
 
 ---
 
-## 📸 8. Screenshots & Visual Verification
+## 📸 8. Platform Preview & Screenshots
 
-### Swagger API Documentation
-![swagger](swagger.png)
+Explore SentinelGraph AI's production analyst console, demonstrating real-time fraud topology exploration, deterministic explainability, and enterprise AI governance.
 
-### Complaint Registration & Triage
-![complaint_registration](complaint_registration.png)
+### 1. Network-Wide Risk Intelligence & Executive Overview
+![Network-Wide Risk Intelligence](visuals/risk_overview.jpg)
+*Real-time executive dashboard featuring network-level KPIs, high-risk entity rankings, fraud typology breakdowns, and top cross-incident nexus hubs.*
 
-### PostgreSQL Transactional System of Record
-![postgre](postgre.png)
+### 2. Deep Investigation Workspace & Target Triage
+![Investigation Workspace](visuals/investigation_workspace.jpg)
+*Forensic investigation workspace allowing analysts to search seed identifiers (Phone, UPI, Bank Account), review linked complaints, and launch automated dossier synthesis.*
 
-### Neo4j Fraud Intelligence Knowledge Graph
-![neo4j](neo4j.png)
+### 3. Interactive Fraud Topology & Multi-Hop Graph Traversal
+![Interactive Fraud Graph](visuals/graph.jpg)
+*Cytoscape.js topological graph canvas supporting dynamic 1-to-5 hop depth exploration, semantic node styling (Phone, Bank, UPI, Complaint), and physics-driven cluster layouts.*
 
-### Evidence-Grounded AI Investigation Dossier
-![investigation](investigation.png)
+### 4. Certified AI Investigation Dossier & Explainability
+![AI Investigation Dossier](visuals/ai_investigation_dossier.jpg)
+*Evidence-grounded case file synthesized by Google Gemini 2.5 Flash from deterministic graph analytics, complete with severity badges, confidence metrics, and verifiable citations.*
+
+### 5. AI Governance, Guardrails & Model Telemetry
+![AI Governance Guardrail](visuals/ai_governance_guardrail.jpg)
+*Three-layer governance auditor console validating schema compliance, citation fidelity, hallucination mitigation, and real-time Prometheus telemetry.*
 
 ---
 

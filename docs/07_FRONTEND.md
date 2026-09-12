@@ -47,6 +47,9 @@ The frontend employs lightweight, robust **hash-based routing** (`window.locatio
    * Top connected entities table with degree centrality and direct "Investigate" action triggers.
    * Shared entity co-occurrence table and recent complaint ingestion stream.
 
+![Risk Overview Dashboard](../visuals/risk_overview.jpg)
+*Global Risk Overview dashboard visualizing system KPIs, active syndicate hubs, entity risk rankings, and recent complaint activity.*
+
 2. **Investigation Workspace (`#investigate`)**:
    * Single-pane triage workspace for deep forensic analysis.
    * Target search bar with support for phone numbers, UPI VPAs, emails, bank accounts, or complaint IDs.
@@ -55,17 +58,32 @@ The frontend employs lightweight, robust **hash-based routing** (`window.locatio
    * Reconstructed chronological **Complaint Timeline**.
    * Structured **Evidence Dossier** and **AI Executive Report** view.
 
+![Investigation Workspace Interface](../visuals/investigation_workspace.jpg)
+*Investigation Workspace providing target entity selection, one-click demo scenario loading, and integrated timeline and graph tabs.*
+
 3. **AI Governance & Guardrails Console (`#evaluation`)**:
    * Visual audit dashboard explaining the 3-Layer Guardrail Architecture.
    * Golden Scenario specification cards with ground-truth citation requirements.
    * Mathematical formulas for the five quality dimensions.
    * Real-time polling of Prometheus telemetry counters and latency histograms.
 
+![AI Governance and Guardrails Console](../visuals/ai_governance_guardrail.jpg)
+*AI Governance & Guardrails Console displaying the 3-layer guardrail pipeline, golden evaluation scenario specifications, and live operational metrics.*
+
+### 2.1 Complaint Ingestion & Registration Modal
+Analysts can register new incidents directly from the console via [`RegisterComplaintModal.tsx`](file:///c:/Devesh/DeveshChauhan/Devesh%20Chauhan/sentinelgraph-ai/frontend/src/components/overview/RegisterComplaintModal.tsx), complete with pre-configured scam presets (Digital Arrest, UPI Phishing, QR Scam) and immediate background entity extraction:
+
+![Complaint Registration & Triage](../visuals/complaint_registration.png)
+*Complaint registration interface providing structured incident metadata input, narrative submission, scam category presets, and immediate ingestion triggers.*
+
 ---
 
 ## 3. The Investigation Workspace & Cytoscape.js Visualization
 
 The graph visualization component ([`CytoscapeGraph.tsx`](file:///c:/Devesh/DeveshChauhan/Devesh%20Chauhan/sentinelgraph-ai/frontend/src/components/investigation/CytoscapeGraph.tsx)) renders complex fraud topologies with high-performance Canvas rendering:
+
+![Interactive Cytoscape Fraud Graph](../visuals/graph.jpg)
+*Interactive Cytoscape.js canvas showing 1-to-5 hop network expansion, entity clusters, and directional MENTIONS relationships between complaints and indicators.*
 
 ### 3.1 Graph Controls & Capabilities
 * **Dynamic Traversal Depth**: Analysts can adjust graph exploration depth from $1$ to $5$ hops using a slider control.
@@ -108,6 +126,9 @@ The investigation workspace pairs graph topology with temporal and evidentiary v
   * **Structured Findings**: Cards with severity badges (`CRITICAL`, `HIGH`), confidence bars, and clickable citation links.
   * **Actionable Recommendations**: Clear containment actions (e.g., "Freeze UPI VPA `scammer@upi`", "Submit NCRP Advisory").
   * **Execution Telemetry**: Model name, inference latency, prompt hash, and token usage.
+
+![Evidence-Grounded AI Investigation Dossier](../visuals/ai_investigation_dossier.jpg)
+*AI Investigation Dossier showing synthesized executive summary, evidence-grounded findings with verifiable citations, confidence scores, and containment recommendations.*
 
 ---
 
