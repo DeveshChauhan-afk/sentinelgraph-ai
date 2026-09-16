@@ -95,7 +95,7 @@ export const KpiGrid: React.FC<KpiGridProps> = ({
             </div>
 
             <div className="flex items-baseline gap-1.5">
-              {loading ? (
+              {(card.id === 'high_risk' ? topRisk === null : loading) ? (
                 <div className="h-7 w-16 bg-sentinel-surfaceHover rounded animate-pulse my-0.5" />
               ) : (
                 <div className="text-xl font-bold font-mono text-sentinel-text tracking-tight">

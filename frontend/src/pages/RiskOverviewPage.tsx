@@ -196,7 +196,7 @@ export const RiskOverviewPage: React.FC<RiskOverviewPageProps> = ({
       <KpiGrid
         summary={summary}
         topRisk={topRisk}
-        loading={loadingSummary || loadingTopRisk}
+        loading={loadingSummary}
         error={errorSummary}
         onRetry={fetchSummary}
       />
