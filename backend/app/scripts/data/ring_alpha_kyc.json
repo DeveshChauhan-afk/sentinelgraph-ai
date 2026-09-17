@@ -68,5 +68,54 @@
     "reporter_type": "citizen",
     "source": "web_portal",
     "case_reference": null
+  },
+  {
+    "title": "Automated Banking Alert: Suspicious KYC Impersonation Transfers",
+    "description": "An automated alert from State Bank of India fraud monitoring desk flagged a transaction where an account holder transferred ₹62,000 to UPI ID securekyc@ibl following fraudulent instructions from phone number +91 9876543210 claiming urgent KYC verification was mandatory to unfreeze net banking.",
+    "reporter_type": "bank",
+    "source": "api",
+    "case_reference": null
+  },
+  {
+    "title": "Cyber Crime Cell Report: Coordinated SBI KYC Phishing",
+    "description": "State Cyber Crime Cell received a formal complaint regarding a coordinated phishing campaign impersonating State Bank of India. The victim reported transferring ₹88,000 to sbihelpdesk@okaxis after receiving calls from +91 9876543211 threatening permanent pan card de-linking.",
+    "reporter_type": "cyber_cell",
+    "source": "bulk_import",
+    "case_reference": null
+  },
+  {
+    "title": "Zero-FIR Forward: Pension Account KYC Fraud",
+    "description": "A local police station registered and forwarded a Zero-FIR regarding a retired citizen defrauded of ₹35,000. The caller on +91 9876543210 claimed to represent State Bank of India and demanded immediate CKYC renewal payment through UPI ID securekyc@ibl.",
+    "reporter_type": "police",
+    "source": "web_portal",
+    "case_reference": null
+  },
+  {
+    "title": "Dormant Salary Account Re-activation Scam",
+    "description": "I was contacted on my mobile phone by an individual claiming to be an officer from SBI. He stated my salary account had been marked dormant and directed me to transfer ₹19,500 to sbihelpdesk@okaxis using contact +91 9876543211 to restore access.",
+    "reporter_type": "citizen",
+    "source": "mobile_app",
+    "case_reference": null
+  },
+  {
+    "title": "SBI Reward Points Expiry Trap",
+    "description": "I received an urgent notification claiming that 15,000 SBI reward points were about to expire. The caller from +91 9876543210 directed me to pay ₹14,200 to securekyc@ibl as a refundable conversion fee under State Bank of India rules. The refund never arrived.",
+    "reporter_type": "citizen",
+    "source": "web_portal",
+    "case_reference": null
+  },
+  {
+    "title": "Disputed UPI KYC Transfer Chargeback",
+    "description": "The bank received a dispute and chargeback request from a customer who was deceived into sending ₹52,000 to securekyc@ibl. The customer had received fraudulent phone calls from +91 9876543210 claiming to be State Bank of India compliance personnel.",
+    "reporter_type": "bank",
+    "source": "api",
+    "case_reference": null
+  },
+  {
+    "title": "NetBanking Credential Block Threat",
+    "description": "A caller claiming to represent State Bank of India warned me that my net banking credentials would be blocked permanently within 24 hours. They instructed me from +91 9876543211 to remit ₹22,000 to sbihelpdesk@okaxis. After the transfer, the line was disconnected.",
+    "reporter_type": "citizen",
+    "source": "mobile_app",
+    "case_reference": null
   }
 ]

@@ -40,5 +40,89 @@
     "reporter_type": "citizen",
     "source": "web_portal",
     "case_reference": null
+  },
+  {
+    "title": "ATM Skimming Incident at Commercial Street",
+    "description": "The bank received an alert regarding a customer's debit card cloned using a physical skimmer at an off-site ATM kiosk on Commercial Street. An unauthorized cash withdrawal of ₹10,000 was executed without the cardholder's authorization.",
+    "reporter_type": "bank",
+    "source": "api",
+    "case_reference": null
+  },
+  {
+    "title": "Manipulated Airport Taxi Fare Application",
+    "description": "After hailing a private cab from the international airport, the driver utilized a tampered third-party navigation meter app that charged ₹4,500 instead of standard regulated rates and refused to let me exit until payment was made.",
+    "reporter_type": "citizen",
+    "source": "mobile_app",
+    "case_reference": null
+  },
+  {
+    "title": "Fake Rooftop Solar Subsidy Scam",
+    "description": "A salesperson claiming to represent GreenSolar Solutions visited my residence promising a 60 percent state solar subsidy. I paid ₹18,000 as a site feasibility survey deposit. The individual disappeared and the company was non-existent.",
+    "reporter_type": "citizen",
+    "source": "web_portal",
+    "case_reference": null
+  },
+  {
+    "title": "Bogus Overseas Medical Conference Registration",
+    "description": "I received an invitation to present at a purported international cardiology summit organized by GlobalHealth Summits. I remitted ₹38,000 for delegate registration before discovering the conference venue had no booking under that name.",
+    "reporter_type": "citizen",
+    "source": "web_portal",
+    "case_reference": null
+  },
+  {
+    "title": "Unauthorized NFC Transit Reader Tap",
+    "description": "A passenger registered a police station complaint after noticing an unauthorized deduction of ₹1,900 from their contactless debit card while commuting on a packed metro train, suspected to be executed via a concealed portable POS terminal.",
+    "reporter_type": "police",
+    "source": "web_portal",
+    "case_reference": null
+  },
+  {
+    "title": "Phony Pet Adoption Logistics Advance",
+    "description": "I attempted to adopt a rescue golden retriever puppy advertised on social media. The supposed foster home instructed me to pay ₹6,500 for a climate-controlled pet carrier and transit clearance. After sending the payment, the foster profile was deleted.",
+    "reporter_type": "citizen",
+    "source": "mobile_app",
+    "case_reference": null
+  },
+  {
+    "title": "Fraudulent Domestic Helper Agency Registration Fee",
+    "description": "I contacted an agency calling itself City Domestic Care to hire a full-time elder care assistant. They demanded a registration and police verification fee of ₹7,000. Once paid, the agency disconnected all contact numbers.",
+    "reporter_type": "citizen",
+    "source": "web_portal",
+    "case_reference": null
+  },
+  {
+    "title": "Rental Apartment Token Deposit Fraud",
+    "description": "Cyber crime division received a complaint from a prospective tenant who paid ₹25,000 as an advance security token to a fake property owner on a rental listing site. The key handover was scheduled, but the apartment was actually occupied by genuine owners.",
+    "reporter_type": "cyber_cell",
+    "source": "web_portal",
+    "case_reference": null
+  },
+  {
+    "title": "Spurious Two-Wheeler Insurance Policy Fraud",
+    "description": "I purchased third-party motorcycle insurance through an unverified discount link for ₹3,200. When I requested verification from the national insurance repository, the policy certificate was identified as completely counterfeit.",
+    "reporter_type": "citizen",
+    "source": "mobile_app",
+    "case_reference": null
+  },
+  {
+    "title": "Online Astrological Remedial Gemstone Scam",
+    "description": "A spiritual consultation website charged ₹14,000 for custom energized gemstones promised to resolve personal disputes. The package never arrived and the customer support helpline was terminated.",
+    "reporter_type": "other",
+    "source": "web_portal",
+    "case_reference": null
+  },
+  {
+    "title": "Fake Agricultural Equipment Subsidy Fee",
+    "description": "A rural police outpost forwarded a complaint by a farmer who was persuaded to pay ₹5,500 as an application fee for a subsidized tractor scheme by an imposter claiming to be a district agriculture extension officer.",
+    "reporter_type": "police",
+    "source": "web_portal",
+    "case_reference": null
+  },
+  {
+    "title": "Bank Account Compromise via Public Charging Kiosk",
+    "description": "A customer reported unauthorized funds transfer of ₹12,000 occurring shortly after connecting a mobile phone to a public USB charging station at a transit terminal, indicating potential juice-jacking malware payload.",
+    "reporter_type": "bank",
+    "source": "api",
+    "case_reference": null
   }
 ]

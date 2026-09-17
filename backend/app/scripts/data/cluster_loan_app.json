@@ -1,0 +1,44 @@
+[
+  {
+    "title": "Predatory Instant Loan APK Extortion",
+    "description": "I downloaded a short-term micro-lending app from https://cashnow-instantloan.apk operated by CashNow Finance. Although I repaid ₹14,000 to UPI ID microloanrepay@hdfc, recovery agents from +91 9234567890 accessed my contact list and threatened to circulate private photos unless I paid ₹25,000 more.",
+    "reporter_type": "citizen",
+    "source": "mobile_app",
+    "case_reference": null
+  },
+  {
+    "title": "Cyber Crime Cell Advisory: Unlicensed Lending App Syndicate",
+    "description": "State Cyber Cell issued a public advisory regarding an unlicensed digital lending syndicate operating CashNow Finance. Complainants reported extortion calls from +91 9234567890 demanding repetitive payments to UPI ID microloanrepay@hdfc after downloading https://cashnow-instantloan.apk.",
+    "reporter_type": "cyber_cell",
+    "source": "web_portal",
+    "case_reference": null
+  },
+  {
+    "title": "Fake Collateral-Free Loan Sanction Fee Fraud",
+    "description": "A representative from CashNow Finance called me from +91 9234567890 offering a pre-approved personal loan of ₹2,00,000. I was told to pay an upfront processing fee of ₹12,500 to microloanrepay@hdfc. Once the amount was transferred, no loan was disbursed.",
+    "reporter_type": "citizen",
+    "source": "web_portal",
+    "case_reference": null
+  },
+  {
+    "title": "Police Complaint: Morphed Image Blackmail by Digital Loan App",
+    "description": "A victim filed a police report against CashNow Finance after installing an application from https://cashnow-instantloan.apk. An extortionist contacting from +91 9234567891 sent morphed images to the victim's colleagues and coerced a transfer of ₹18,000 to instantclear@icici.",
+    "reporter_type": "police",
+    "source": "web_portal",
+    "case_reference": null
+  },
+  {
+    "title": "Bank Anti-Fraud Alert: Coerced Transfers to Lending Entity",
+    "description": "Bank fraud surveillance detected rapid successive payments totaling ₹30,000 sent by an account holder to UPI ID microloanrepay@hdfc under duress, linked to aggressive recovery tactics by CashNow Finance.",
+    "reporter_type": "bank",
+    "source": "api",
+    "case_reference": null
+  },
+  {
+    "title": "Contact List Harassment by Illegal Lending Network",
+    "description": "After installing an app from https://cashnow-instantloan.apk, debt collectors calling from +91 9234567890 and +91 9234567891 began spamming my family members. I was pressured into remitting ₹16,000 to UPI ID instantclear@icici to stop the harassment.",
+    "reporter_type": "citizen",
+    "source": "mobile_app",
+    "case_reference": null
+  }
+]

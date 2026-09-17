@@ -40,18 +40,18 @@ def test_alembic_revisions_chain_has_single_head_and_single_base() -> None:
 
     heads = script.get_heads()
     assert len(heads) == 1, f"Expected exactly 1 migration head, found {len(heads)}: {heads}"
-    assert heads[0] == "e7c2a19d4b8f"
+    assert heads[0] == "5a9b1f1083a7"
 
     base = script.get_base()
     assert base == "3d3cf359c2a1"
 
     revisions = list(script.walk_revisions())
-    assert len(revisions) == 2
+    assert len(revisions) == 3
 
-    # Linear link verification: head down_revision points to base
+    # Linear link verification: head down_revision points to previous head
     head_rev = script.get_revision(heads[0])
     assert head_rev is not None
-    assert head_rev.down_revision == "3d3cf359c2a1"
+    assert head_rev.down_revision == "e7c2a19d4b8f"
 
 
 def test_all_migration_versions_define_upgrade_and_downgrade() -> None:

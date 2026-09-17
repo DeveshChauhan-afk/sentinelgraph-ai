@@ -1,0 +1,44 @@
+[
+  {
+    "title": "Work-From-Home Video Rating Task Fraud",
+    "description": "I was recruited through WhatsApp to complete video rating tasks on https://workportal-ratinghub.com. A coordinator on Telegram @GlobalMediaTasksAdmin representing Global Media Marketing instructed me to deposit ₹15,000 into UPI ID vipmerchant@yesbank to unlock high-commission VIP tasks.",
+    "reporter_type": "citizen",
+    "source": "web_portal",
+    "case_reference": null
+  },
+  {
+    "title": "Hotel Review Prepaid Task Scam",
+    "description": "A supervisor named @TaskSupervisorNeha from Global Media Marketing offered daily payments for submitting positive hotel reviews on https://workportal-ratinghub.com. I was instructed to transfer ₹45,000 to UPI ID vipmerchant@yesbank to clear a negative balance, after which my account was blocked.",
+    "reporter_type": "citizen",
+    "source": "mobile_app",
+    "case_reference": null
+  },
+  {
+    "title": "Cyber Cell Multi-Victim Complaint: E-Commerce Rating Syndicate",
+    "description": "State Cyber Cell registered a multi-complainant FIR against Global Media Marketing and the platform https://workportal-ratinghub.com. Victims were directed by Telegram handler @GlobalMediaTasksAdmin to send ₹85,000 to merchant UPI vipmerchant@yesbank for task commissions.",
+    "reporter_type": "cyber_cell",
+    "source": "bulk_import",
+    "case_reference": null
+  },
+  {
+    "title": "Merchant Aggregator Alert: Task Platform Escrow Laundering",
+    "description": "Payment aggregator compliance flagged merchant UPI account vipmerchant@yesbank receiving ₹1,20,000 in micro-deposits from multiple retail customers directed from task portal https://workportal-ratinghub.com operated by Global Media Marketing.",
+    "reporter_type": "bank",
+    "source": "api",
+    "case_reference": null
+  },
+  {
+    "title": "Affiliate Commission Deposit Scam",
+    "description": "I was approached on Telegram by @TaskSupervisorNeha promising 40 percent returns on promotional rating tasks. I transferred ₹28,000 to UPI ID quicktaskpayout@axl as a mandatory order-matching deposit on https://workportal-ratinghub.com. The supervisor then ceased contact.",
+    "reporter_type": "citizen",
+    "source": "web_portal",
+    "case_reference": null
+  },
+  {
+    "title": "Police Complaint: Part-Time Job Security Deposit Fraud",
+    "description": "A complainant reported being defrauded by recruiters from Global Media Marketing. After joining Telegram @GlobalMediaTasksAdmin, the victim was persuaded to send ₹32,500 to UPI handle quicktaskpayout@axl to release accumulated virtual earnings.",
+    "reporter_type": "police",
+    "source": "web_portal",
+    "case_reference": null
+  }
+]

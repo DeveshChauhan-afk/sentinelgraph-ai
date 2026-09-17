@@ -90,3 +90,4 @@ class IncidentListResponse(BaseModel):
     reporter_type: ReporterType
     risk_score: Optional[float] = None
     graph_node_id: Optional[str] = None
+    case_reference: Optional[str] = Field(None, max_length=100)

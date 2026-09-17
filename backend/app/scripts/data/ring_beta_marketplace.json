@@ -54,5 +54,54 @@
     "reporter_type": "citizen",
     "source": "web_portal",
     "case_reference": null
+  },
+  {
+    "title": "Cyber Cell Complaint: Counterfeit Used Vehicle Marketplace Ring",
+    "description": "A complaint received by the cyber crime division details a fraudulent marketplace listing for a second-hand vehicle. The victim transferred ₹45,000 as advance booking to UPI ID rajeshstore@okaxis after discussing details with Used Deal Shop representative on +91 9988776655.",
+    "reporter_type": "cyber_cell",
+    "source": "web_portal",
+    "case_reference": null
+  },
+  {
+    "title": "Smart TV Online Marketplace Fraud",
+    "description": "I agreed to purchase a 55-inch Smart TV listed online by Used Deal Shop. The seller emailed me from support@useddealshop.com and asked for an advance shipping fee of ₹18,500 to UPI ID dealpay@ybl. The seller contacted me via +91 9988776656 and never shipped the television.",
+    "reporter_type": "citizen",
+    "source": "mobile_app",
+    "case_reference": null
+  },
+  {
+    "title": "Merchant Dispute: Unauthorized Marketplace Pre-payment",
+    "description": "The card issuing bank opened an investigation after a cardholder was duped into initiating a ₹34,000 transfer to rajeshstore@okaxis to reserve computer graphics hardware from Used Deal Shop following calls from +91 9988776655.",
+    "reporter_type": "bank",
+    "source": "api",
+    "case_reference": null
+  },
+  {
+    "title": "Second-hand Refrigerator Advance Deposit Scam",
+    "description": "A seller advertising home appliances on an online marketplace claimed to operate Used Deal Shop. They requested ₹8,500 advance via rajeshstore@okaxis and spoke using phone +91 9988776655. As soon as the money was transferred, the seller blocked my contact.",
+    "reporter_type": "citizen",
+    "source": "web_portal",
+    "case_reference": null
+  },
+  {
+    "title": "Police Station FIR: Electronic Goods Reseller Fraud",
+    "description": "A formal FIR was registered against operators of Used Deal Shop. The victim was defrauded of ₹26,000 sent to UPI ID dealpay@ybl for electronic goods after receiving fake invoices from support@useddealshop.com and calls from +91 9988776656.",
+    "reporter_type": "police",
+    "source": "mobile_app",
+    "case_reference": null
+  },
+  {
+    "title": "iPad Air Marketplace Booking Scam",
+    "description": "I attempted to purchase an iPad Air through a classifieds portal. The seller claiming to represent Used Deal Shop instructed me to pay ₹21,000 to rajeshstore@okaxis. Contact was maintained through support@useddealshop.com and phone +91 9988776655 until the transaction cleared.",
+    "reporter_type": "citizen",
+    "source": "mobile_app",
+    "case_reference": null
+  },
+  {
+    "title": "Marketplace Platform Safety Escalation",
+    "description": "E-commerce platform trust and safety team identified recurring fraudulent seller profiles linked to Used Deal Shop and phone number +91 9988776656, which collected ₹37,500 in fraudulent advance deposits routed to UPI handle dealpay@ybl.",
+    "reporter_type": "other",
+    "source": "web_portal",
+    "case_reference": null
   }
 ]
