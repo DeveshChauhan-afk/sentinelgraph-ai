@@ -2,7 +2,7 @@
 
 ## 1. Executive Summary
 
-**SentinelGraph AI** is an enterprise-grade, full-stack cyber fraud intelligence and risk management platform engineered for digital public safety. Built specifically for hackathon Track 02 (**AI Risk Manager: Defeating Counterfeiting, Fraud & Digital Arrest Scams**), the platform tackles one of the fastest-growing threats to the digital economy: organized cyber fraud syndicates that weaponize digital arrest coercion, UPI payment redirection, phishing portals, and mule banking networks.
+**SentinelGraph AI** is an enterprise-grade, full-stack cyber fraud intelligence and risk management platform engineered for digital public safety. The platform tackles one of the fastest-growing threats to the digital economy: organized cyber fraud syndicates that weaponize digital arrest coercion, UPI payment redirection, phishing portals, and mule banking networks.
 
 Traditional cybercrime record-management systems treat every citizen or bank complaint as an isolated ticket. As a result, critical connections—such as a single mobile number coordinating fifty digital arrest scams across four states, or a single UPI VPA siphoning victim funds across dozens of phishing cases—remain hidden inside unstructured case notes.
 

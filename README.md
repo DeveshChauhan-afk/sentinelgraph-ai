@@ -7,9 +7,6 @@
   <p align="center">
     <strong>Defeating Digital Arrest Coercion, UPI Payment Phishing & Mule Syndicates using Graph-RAG</strong>
   </p>
-  <p align="center">
-    <em>Track 02: AI Risk Manager — AI for Digital Public Safety</em>
-  </p>
 </p>
 
 <p align="center">

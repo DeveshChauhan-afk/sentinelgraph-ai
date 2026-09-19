@@ -56,7 +56,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentPage, onNavigate }) => 
             </span>
           </div>
           <div className="text-[10px] uppercase font-mono tracking-widest text-sentinel-dim">
-            AI Risk Manager
+            Cyber Fraud Intelligence
           </div>
         </div>
       </div>
