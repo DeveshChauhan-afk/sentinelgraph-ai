@@ -210,7 +210,7 @@ class GraphQueryService:
         reasons: list[str] = []
 
         if result.incident_count > 0:
-            score += min(result.incident_count * 25, 50)
+            score += self._calculate_incident_score(result.incident_count)
             reasons.append(f"Linked to {result.incident_count} complaint(s).")
 
         if result.neighbor_count > 3:
@@ -327,12 +327,28 @@ class GraphQueryService:
             organizations=result.organizations,
         )
 
+    @staticmethod
+    def _calculate_incident_score(incident_count: int) -> int:
+        """Calculate progressive risk score contribution from incident count."""
+        if incident_count <= 0:
+            return 0
+        score = 25
+        if incident_count >= 2:
+            score += 15
+        if incident_count > 2:
+            score += min(incident_count - 2, 3) * 5
+        if incident_count > 5:
+            score += min(incident_count - 5, 5) * 3
+        if incident_count > 10:
+            score += (incident_count - 10) * 1
+        return score
+
     def _calculate_risk(
         self,
         incident_count: int,
         neighbor_count: int,
     ) -> tuple[int, str]:
-        score = min(incident_count * 25, 50)
+        score = self._calculate_incident_score(incident_count)
 
         if neighbor_count > 3:
             score += 20

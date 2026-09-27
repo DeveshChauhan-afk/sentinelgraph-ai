@@ -1,175 +1,56 @@
 [
     {
-        "title": "Used Bike Online Fraud",
-        "description": "A seller advertised a used motorcycle at a very attractive price. They asked for ₹15,000 as a booking amount through rajeshstore@okaxis. The seller contacted me using +91 9988776655 and later became unreachable.",
+        "title": "Cyber Crime Cell Advisory: Unlicensed Lending App Syndicate",
+        "description": "State Cyber Cell issued a public advisory regarding an unlicensed digital lending syndicate operating CashNow Finance. Complainants reported extortion calls from +91 9234567890 demanding repetitive payments to UPI ID microloanrepay@hdfc after downloading https://cashnow-instantloan.apk.",
+        "reporter_type": "cyber_cell",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "Express Speed Post Delivery Fee Scam",
+        "description": "A caller from +91 9123456781 representing Express Logistics India told me that an express package could not be dispatched without clearance fees. I verified the tracking number at https://india-speedpost-tracking.org and transferred ₹3,800 to customfees@paytm.",
         "reporter_type": "citizen",
         "source": "web_portal",
         "case_reference": null
     },
     {
-        "title": "Mutual Fund Investment Scam",
-        "description": "A person claiming to work for Prime Wealth Advisory contacted me on +91 9765432109 and offered exclusive mutual fund investments. I transferred ₹84,000 to account 456789XXXX5528 after following instructions from Telegram @PrimeReturnsVIP. I later realized it was fraudulent.",
+        "title": "Phony Pet Adoption Logistics Advance",
+        "description": "I attempted to adopt a rescue golden retriever puppy advertised on social media. The supposed foster home instructed me to pay ₹6,500 for a climate-controlled pet carrier and transit clearance. After sending the payment, the foster profile was deleted.",
+        "reporter_type": "citizen",
+        "source": "mobile_app",
+        "case_reference": null
+    },
+    {
+        "title": "Fake Agricultural Equipment Subsidy Fee",
+        "description": "A rural police outpost forwarded a complaint by a farmer who was persuaded to pay ₹5,500 as an application fee for a subsidized tractor scheme by an imposter claiming to be a district agriculture extension officer.",
+        "reporter_type": "police",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "Overweight Parcel Surcharge Scam",
+        "description": "I received an automated message from Express Logistics India claiming my parcel exceeded weight limits. I visited https://trackparcel-support.in and transferred ₹4,200 to customfees@paytm after confirming with customer service at +91 9123456780. No parcel existed.",
+        "reporter_type": "citizen",
+        "source": "mobile_app",
+        "case_reference": null
+    },
+    {
+        "title": "PlayStation 5 Marketplace Scam",
+        "description": "I attempted to purchase a PlayStation 5 through an online marketplace. The seller instructed me to transfer ₹20,000 to rajeshstore@okaxis before dispatch. The seller claimed to work for Used Deal Shop and used phone number +91 9988776655. The product was never shipped.",
         "reporter_type": "citizen",
         "source": "web_portal",
         "case_reference": null
     },
     {
-        "title": "Fake IPO Investment Advisory Scam",
-        "description": "I joined a Telegram group named @PrimeReturnsVIP after receiving a call from +91 9765432109. The advisor claimed to represent Prime Wealth Advisory and promised guaranteed IPO allotments. I transferred ₹75,000 to bank account 456789XXXX5528 but never received any shares or refund.",
-        "reporter_type": "citizen",
-        "source": "web_portal",
-        "case_reference": null
-    },
-    {
-        "title": "Fake SBI KYC Verification Call",
-        "description": "I received a call from +91 9876543210 from a person claiming to be an executive of State Bank of India. He said my KYC had expired and my account would be frozen unless I completed verification immediately. I was instructed to transfer ₹48,500 to UPI ID securekyc@ibl. After making the payment, the caller disconnected and became unreachable.",
-        "reporter_type": "citizen",
-        "source": "web_portal",
-        "case_reference": null
-    },
-    {
-        "title": "Forex Trading Fraud",
-        "description": "A caller from +91 9765432109 convinced me to invest in forex trading through Prime Wealth Advisory. They directed me to Telegram group @PrimeReturnsVIP and requested ₹90,000 in bank account 456789XXXX5528. My investment vanished within two days.",
-        "reporter_type": "citizen",
-        "source": "web_portal",
-        "case_reference": null
-    },
-    {
-        "title": "Drone Marketplace Fraud",
-        "description": "An online seller advertised a camera drone at half the market price. They instructed me to send ₹27,000 to rajeshstore@okaxis. The seller claimed to belong to Used Deal Shop and contacted me from +91 9988776655.",
-        "reporter_type": "citizen",
-        "source": "web_portal",
-        "case_reference": null
-    },
-    {
-        "title": "Matrimonial Profile Fraud",
-        "description": "I met someone through a matrimonial website who claimed to be working abroad. After several conversations they requested financial assistance for an emergency. I transferred ₹55,000 before realizing the profile was fake.",
-        "reporter_type": "citizen",
-        "source": "web_portal",
-        "case_reference": null
-    },
-    {
-        "title": "Fake Electricity Bill Scam",
-        "description": "I received an SMS stating that my electricity connection would be disconnected unless I paid an overdue bill immediately. The message contained a fraudulent payment link. After making the payment, I discovered the electricity department had not sent the message.",
-        "reporter_type": "citizen",
-        "source": "web_portal",
-        "case_reference": null
-    },
-    {
-        "title": "PAN Verification Fraud in SBI",
-        "description": "Someone called me from +91 9876543210 claiming my PAN was not linked with my State Bank of India account. They asked me to pay ₹12,000 through securekyc@ibl to avoid account suspension. After payment, the number was switched off.",
-        "reporter_type": "citizen",
-        "source": "web_portal",
-        "case_reference": null
-    },
-    {
-        "title": "Job Offer Registration Scam",
-        "description": "A company offered me a work-from-home position but requested a registration fee of ₹4,500 before issuing the appointment letter. After payment, all contact details became inactive.",
-        "reporter_type": "citizen",
-        "source": "web_portal",
-        "case_reference": null
-    },
-    {
-        "title": "Furniture Advance Payment Scam",
-        "description": "I tried buying a sofa set from Used Deal Shop through an online marketplace. I transferred ₹11,000 to rajeshstore@okaxis after speaking with the seller on +91 9988776655. The seller blocked my number after payment.",
-        "reporter_type": "citizen",
-        "source": "web_portal",
-        "case_reference": null
-    },
-    {
-        "title": "Gold Investment Scheme Scam",
-        "description": "Prime Wealth Advisory advertised a gold investment plan with guaranteed monthly returns. I communicated with their representative on +91 9765432109 and Telegram @PrimeReturnsVIP before transferring ₹65,000 to account 456789XXXX5528. The promised returns never arrived.",
-        "reporter_type": "citizen",
-        "source": "web_portal",
+        "title": "ATM Skimming Incident at Commercial Street",
+        "description": "The bank received an alert regarding a customer's debit card cloned using a physical skimmer at an off-site ATM kiosk on Commercial Street. An unauthorized cash withdrawal of ₹10,000 was executed without the cardholder's authorization.",
+        "reporter_type": "bank",
+        "source": "api",
         "case_reference": null
     },
     {
         "title": "Courier GST Collection Fraud",
         "description": "I received an email claiming my imported parcel required GST payment before release. The email directed me to https://trackparcel-support.in and customer support number +91 9123456780. I transferred ₹7,600 to customfees@paytm but never received any shipment.",
-        "reporter_type": "citizen",
-        "source": "web_portal",
-        "case_reference": null
-    },
-    {
-        "title": "Fake Delivery Charge Fraud",
-        "description": "A caller from +91 9123456780 claimed to be from Express Logistics India and informed me that my parcel required an additional delivery charge. I transferred ₹2,500 to customfees@paytm after checking the tracking details on https://trackparcel-support.in. My parcel never arrived.",
-        "reporter_type": "citizen",
-        "source": "web_portal",
-        "case_reference": null
-    },
-    {
-        "title": "Debit Card Block Scam",
-        "description": "A fraudster pretending to be from State Bank of India informed me that my debit card had been blocked due to incomplete KYC. I was instructed to transfer ₹9,500 to securekyc@ibl using phone number +91 9876543210. After payment, there was no response.",
-        "reporter_type": "citizen",
-        "source": "web_portal",
-        "case_reference": null
-    },
-    {
-        "title": "Cryptocurrency Investment Fraud",
-        "description": "A representative of Prime Wealth Advisory contacted me from +91 9765432109 and invited me to join Telegram channel @PrimeReturnsVIP. They convinced me to invest ₹1,20,000 in cryptocurrency through bank account 456789XXXX5528. After the transfer, they stopped responding.",
-        "reporter_type": "citizen",
-        "source": "web_portal",
-        "case_reference": null
-    },
-    {
-        "title": "CKYC Renewal Fraud",
-        "description": "I received a call from +91 9876543210 saying my CKYC registration had expired. The caller claimed to be an SBI officer and directed me to pay ₹18,000 to securekyc@ibl to complete the renewal. Later I realized it was a scam.",
-        "reporter_type": "citizen",
-        "source": "web_portal",
-        "case_reference": null
-    },
-    {
-        "title": "QR Code Payment Scam",
-        "description": "A stranger claimed they needed to send me money and asked me to scan a QR code. After scanning it, ₹9,500 was deducted from my bank account instead of being credited.",
-        "reporter_type": "citizen",
-        "source": "web_portal",
-        "case_reference": null
-    },
-    {
-        "title": "Fake RBI and SBI KYC Update",
-        "description": "A caller claiming to represent RBI and State Bank of India contacted me from +91 9876543210. I was told to complete KYC verification by sending ₹24,000 to securekyc@ibl. They promised the money would be refunded after verification but I lost the amount.",
-        "reporter_type": "citizen",
-        "source": "web_portal",
-        "case_reference": null
-    },
-    {
-        "title": "Guaranteed Stock Returns Fraud",
-        "description": "I was promised 30 percent monthly returns by Prime Wealth Advisory through Telegram @PrimeReturnsVIP. The representative using phone number +91 9765432109 instructed me to deposit ₹1,50,000 into bank account 456789XXXX5528. After payment, all communication channels disappeared.",
-        "reporter_type": "citizen",
-        "source": "web_portal",
-        "case_reference": null
-    },
-    {
-        "title": "Internet Banking Activation Fraud",
-        "description": "I was contacted by a fake SBI customer support executive from +91 9876543210 who claimed my internet banking could only be activated after paying ₹5,000 to securekyc@ibl. After transferring the money, the caller stopped responding.",
-        "reporter_type": "citizen",
-        "source": "web_portal",
-        "case_reference": null
-    },
-    {
-        "title": "Parcel Insurance Payment Scam",
-        "description": "I was told that my shipment required mandatory insurance before delivery. The representative from Express Logistics India instructed me to pay ₹5,400 through customfees@paytm. The communication came from +91 9123456780 and the tracking page was https://trackparcel-support.in. The shipment was fake.",
-        "reporter_type": "citizen",
-        "source": "web_portal",
-        "case_reference": null
-    },
-    {
-        "title": "Laptop Marketplace Fraud",
-        "description": "A marketplace listing offered a gaming laptop at a discounted price. The seller requested ₹29,000 as an advance payment to rajeshstore@okaxis. The seller identified themselves as Used Deal Shop and provided support@useddealshop.com for communication. After payment the listing was removed.",
-        "reporter_type": "citizen",
-        "source": "web_portal",
-        "case_reference": null
-    },
-    {
-        "title": "SBI Account Freeze Threat",
-        "description": "A fraudster using phone number +91 9876543210 claimed my SBI account would be permanently frozen due to expired KYC. I paid ₹31,000 through UPI ID securekyc@ibl hoping to restore my account. The fraudster vanished after receiving the payment.",
-        "reporter_type": "citizen",
-        "source": "web_portal",
-        "case_reference": null
-    },
-    {
-        "title": "iPhone Marketplace Advance Payment Scam",
-        "description": "I found an advertisement for a second-hand iPhone on an online marketplace. The seller from Used Deal Shop asked me to transfer ₹18,000 as an advance to UPI ID rajeshstore@okaxis. The seller communicated through phone number +91 9988776655 and email support@useddealshop.com. After the payment, the advertisement disappeared and the seller stopped responding.",
         "reporter_type": "citizen",
         "source": "web_portal",
         "case_reference": null
@@ -182,10 +63,10 @@
         "case_reference": null
     },
     {
-        "title": "AI Trading Platform Scam",
-        "description": "I was promised daily profits through an AI-powered trading platform operated by Prime Wealth Advisory. The fraudster communicated using +91 9765432109 and Telegram @PrimeReturnsVIP. I deposited ₹58,000 into bank account 456789XXXX5528 and never recovered the money.",
-        "reporter_type": "citizen",
-        "source": "web_portal",
+        "title": "Cyber Cell Multi-Victim Complaint: E-Commerce Rating Syndicate",
+        "description": "State Cyber Cell registered a multi-complainant FIR against Global Media Marketing and the platform https://workportal-ratinghub.com. Victims were directed by Telegram handler @GlobalMediaTasksAdmin to send ₹85,000 to merchant UPI vipmerchant@yesbank for task commissions.",
+        "reporter_type": "cyber_cell",
+        "source": "bulk_import",
         "case_reference": null
     },
     {
@@ -196,36 +77,15 @@
         "case_reference": null
     },
     {
-        "title": "Mobile Number Verification Scam",
-        "description": "The caller from +91 9876543210 informed me that my registered mobile number required urgent verification with State Bank of India. Believing the caller, I transferred ₹8,000 to securekyc@ibl. The phone became unreachable afterwards.",
+        "title": "Mutual Fund Investment Scam",
+        "description": "A person claiming to work for Prime Wealth Advisory contacted me on +91 9765432109 and offered exclusive mutual fund investments. I transferred ₹84,000 to account 456789XXXX5528 after following instructions from Telegram @PrimeReturnsVIP. I later realized it was fraudulent.",
         "reporter_type": "citizen",
         "source": "web_portal",
         "case_reference": null
     },
     {
-        "title": "Courier Holding Charge Scam",
-        "description": "I received a call stating that my parcel was being held at a warehouse. The caller asked me to pay ₹3,200 to customfees@paytm. The caller identified themselves as Express Logistics India using phone number +91 9123456780 and directed me to https://trackparcel-support.in. The parcel never existed.",
-        "reporter_type": "citizen",
-        "source": "web_portal",
-        "case_reference": null
-    },
-    {
-        "title": "Intraday Trading Fraud",
-        "description": "I received stock trading tips from Prime Wealth Advisory after joining Telegram @PrimeReturnsVIP. The advisor instructed me to deposit ₹42,000 into bank account 456789XXXX5528. The contact number used throughout the communication was +91 9765432109. The group disappeared after collecting payments.",
-        "reporter_type": "citizen",
-        "source": "web_portal",
-        "case_reference": null
-    },
-    {
-        "title": "Fake Customer Care Refund Scam",
-        "description": "I searched online for customer care of an e-commerce website and called the first number that appeared. The representative convinced me to install a remote access application to process a refund. Money was transferred from my account without authorization.",
-        "reporter_type": "citizen",
-        "source": "web_portal",
-        "case_reference": null
-    },
-    {
-        "title": "Fake SBI Account Verification Fee",
-        "description": "A caller claiming to be an officer from State Bank of India contacted me from +91 9876543210 and requested ₹27,000 for mandatory account verification through securekyc@ibl. After transferring the money, I was unable to contact the person again.",
+        "title": "Debit Card Block Scam",
+        "description": "A fraudster pretending to be from State Bank of India informed me that my debit card had been blocked due to incomplete KYC. I was instructed to transfer ₹9,500 to securekyc@ibl using phone number +91 9876543210. After payment, there was no response.",
         "reporter_type": "citizen",
         "source": "web_portal",
         "case_reference": null
@@ -238,8 +98,134 @@
         "case_reference": null
     },
     {
-        "title": "Fraudulent Charity Donation Request",
-        "description": "I received a social media message requesting donations for flood relief. The campaign appeared genuine, but after donating ₹15,000 I learned the charity organization did not exist.",
+        "title": "Fake Parcel Detention Fine Scam",
+        "description": "I received an SMS alerting me that an inbound package had been detained at customs by Express Logistics India. I was instructed to visit https://trackparcel-support.in and paid ₹6,200 to customfees@paytm after speaking with an agent at +91 9123456780.",
+        "reporter_type": "citizen",
+        "source": "mobile_app",
+        "case_reference": null
+    },
+    {
+        "title": "Parcel Insurance Payment Scam",
+        "description": "I was told that my shipment required mandatory insurance before delivery. The representative from Express Logistics India instructed me to pay ₹5,400 through customfees@paytm. The communication came from +91 9123456780 and the tracking page was https://trackparcel-support.in. The shipment was fake.",
+        "reporter_type": "citizen",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "State Cyber Cell FIR: High-Yield Forex Ponzi Syndicate",
+        "description": "State Cyber Police registered an FIR against operators of Prime Wealth Advisory. The complainant was lured through Telegram channel @WealthGuruDirect by caller +91 9765432109 and instructed to transfer ₹1,85,000 into bank account 987654XXXX3312.",
+        "reporter_type": "cyber_cell",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "Furniture Advance Payment Scam",
+        "description": "I tried buying a sofa set from Used Deal Shop through an online marketplace. I transferred ₹11,000 to rajeshstore@okaxis after speaking with the seller on +91 9988776655. The seller blocked my number after payment.",
+        "reporter_type": "citizen",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "Cyber Cell Complaint: Counterfeit Used Vehicle Marketplace Ring",
+        "description": "A complaint received by the cyber crime division details a fraudulent marketplace listing for a second-hand vehicle. The victim transferred ₹45,000 as advance booking to UPI ID rajeshstore@okaxis after discussing details with Used Deal Shop representative on +91 9988776655.",
+        "reporter_type": "cyber_cell",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "AI Trading Platform Scam",
+        "description": "I was promised daily profits through an AI-powered trading platform operated by Prime Wealth Advisory. The fraudster communicated using +91 9765432109 and Telegram @PrimeReturnsVIP. I deposited ₹58,000 into bank account 456789XXXX5528 and never recovered the money.",
+        "reporter_type": "citizen",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "Cyber Cell Intelligence: Shared VOIP Gateway for Marketplace and Courier Scams",
+        "description": "Cyber crime branch analysis identified burner phone gateway +91 9988776650 sending coordinated messages for both Used Deal Shop marketplace fraud using support@useddealshop.com and fictitious parcel deliveries claiming to be Express Logistics India.",
+        "reporter_type": "cyber_cell",
+        "source": "bulk_import",
+        "case_reference": null
+    },
+    {
+        "title": "Fake Rooftop Solar Subsidy Scam",
+        "description": "A salesperson claiming to represent GreenSolar Solutions visited my residence promising a 60 percent state solar subsidy. I paid ₹18,000 as a site feasibility survey deposit. The individual disappeared and the company was non-existent.",
+        "reporter_type": "citizen",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "Intraday Trading Fraud",
+        "description": "I received stock trading tips from Prime Wealth Advisory after joining Telegram @PrimeReturnsVIP. The advisor instructed me to deposit ₹42,000 into bank account 456789XXXX5528. The contact number used throughout the communication was +91 9765432109. The group disappeared after collecting payments.",
+        "reporter_type": "citizen",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "Merchant Dispute: Unauthorized Marketplace Pre-payment",
+        "description": "The card issuing bank opened an investigation after a cardholder was duped into initiating a ₹34,000 transfer to rajeshstore@okaxis to reserve computer graphics hardware from Used Deal Shop following calls from +91 9988776655.",
+        "reporter_type": "bank",
+        "source": "api",
+        "case_reference": null
+    },
+    {
+        "title": "Spurious Two-Wheeler Insurance Policy Fraud",
+        "description": "I purchased third-party motorcycle insurance through an unverified discount link for ₹3,200. When I requested verification from the national insurance repository, the policy certificate was identified as completely counterfeit.",
+        "reporter_type": "citizen",
+        "source": "mobile_app",
+        "case_reference": null
+    },
+    {
+        "title": "Bank Anti-Fraud Alert: Coerced Transfers to Lending Entity",
+        "description": "Bank fraud surveillance detected rapid successive payments totaling ₹30,000 sent by an account holder to UPI ID microloanrepay@hdfc under duress, linked to aggressive recovery tactics by CashNow Finance.",
+        "reporter_type": "bank",
+        "source": "api",
+        "case_reference": null
+    },
+    {
+        "title": "Urgent Document Delivery Clearance Fraud",
+        "description": "I was informed by an individual on +91 9123456781 that urgent legal documents were pending delivery from Express Logistics India. I followed the payment portal at https://india-speedpost-tracking.org and sent ₹7,100 to customfees@paytm before the tracking page went offline.",
+        "reporter_type": "citizen",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "Bank AML Alert: Cross-Ring Mule Inflow Between KYC and Crypto Advisory",
+        "description": "An automated anti-money laundering alert flagged bank account 456789XXXX5528 receiving ₹1,10,000 directly from a victim of State Bank of India KYC phishing who had received fraudulent calls from phone number +91 9876543210, linking the KYC scam to the investment syndicate.",
+        "reporter_type": "bank",
+        "source": "api",
+        "case_reference": null
+    },
+    {
+        "title": "Police Complaint: Contraband Parcel Blackmail",
+        "description": "A victim filed a complaint with the police after a caller from +91 9123456780 claiming to be a security inspector with Express Logistics India alleged a parcel sent in the victim's name contained contraband. The victim was coerced into paying ₹28,000 to customfees@paytm via https://trackparcel-support.in.",
+        "reporter_type": "police",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "Automated Banking Alert: Suspicious KYC Impersonation Transfers",
+        "description": "An automated alert from State Bank of India fraud monitoring desk flagged a transaction where an account holder transferred ₹62,000 to UPI ID securekyc@ibl following fraudulent instructions from phone number +91 9876543210 claiming urgent KYC verification was mandatory to unfreeze net banking.",
+        "reporter_type": "bank",
+        "source": "api",
+        "case_reference": null
+    },
+    {
+        "title": "Manipulated Airport Taxi Fare Application",
+        "description": "After hailing a private cab from the international airport, the driver utilized a tampered third-party navigation meter app that charged ₹4,500 instead of standard regulated rates and refused to let me exit until payment was made.",
+        "reporter_type": "citizen",
+        "source": "mobile_app",
+        "case_reference": null
+    },
+    {
+        "title": "Mobile Number Verification Scam",
+        "description": "The caller from +91 9876543210 informed me that my registered mobile number required urgent verification with State Bank of India. Believing the caller, I transferred ₹8,000 to securekyc@ibl. The phone became unreachable afterwards.",
+        "reporter_type": "citizen",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "Fraudulent Domestic Helper Agency Registration Fee",
+        "description": "I contacted an agency calling itself City Domestic Care to hire a full-time elder care assistant. They demanded a registration and police verification fee of ₹7,000. Once paid, the agency disconnected all contact numbers.",
         "reporter_type": "citizen",
         "source": "web_portal",
         "case_reference": null
@@ -252,15 +238,155 @@
         "case_reference": null
     },
     {
-        "title": "Redelivery Fee Scam",
-        "description": "Express Logistics India informed me that my delivery had failed and required a redelivery fee of ₹950. I made the payment to customfees@paytm after speaking with +91 9123456780 and checking the parcel status on https://trackparcel-support.in. It turned out to be fraudulent.",
+        "title": "Cyber Crime Cell Report: Coordinated SBI KYC Phishing",
+        "description": "State Cyber Crime Cell received a formal complaint regarding a coordinated phishing campaign impersonating State Bank of India. The victim reported transferring ₹88,000 to sbihelpdesk@okaxis after receiving calls from +91 9876543211 threatening permanent pan card de-linking.",
+        "reporter_type": "cyber_cell",
+        "source": "bulk_import",
+        "case_reference": null
+    },
+    {
+        "title": "Matrimonial Profile Fraud",
+        "description": "I met someone through a matrimonial website who claimed to be working abroad. After several conversations they requested financial assistance for an emergency. I transferred ₹55,000 before realizing the profile was fake.",
         "reporter_type": "citizen",
         "source": "web_portal",
         "case_reference": null
     },
     {
-        "title": "Aadhaar Linking Scam",
-        "description": "A person claiming to work for State Bank of India called from +91 9876543210 and informed me that my Aadhaar was not linked with my account. I was instructed to transfer ₹15,500 to securekyc@ibl as a verification charge. The fraudster disappeared after receiving the money.",
+        "title": "NetBanking Credential Block Threat",
+        "description": "A caller claiming to represent State Bank of India warned me that my net banking credentials would be blocked permanently within 24 hours. They instructed me from +91 9876543211 to remit ₹22,000 to sbihelpdesk@okaxis. After the transfer, the line was disconnected.",
+        "reporter_type": "citizen",
+        "source": "mobile_app",
+        "case_reference": null
+    },
+    {
+        "title": "iPad Air Marketplace Booking Scam",
+        "description": "I attempted to purchase an iPad Air through a classifieds portal. The seller claiming to represent Used Deal Shop instructed me to pay ₹21,000 to rajeshstore@okaxis. Contact was maintained through support@useddealshop.com and phone +91 9988776655 until the transaction cleared.",
+        "reporter_type": "citizen",
+        "source": "mobile_app",
+        "case_reference": null
+    },
+    {
+        "title": "Bank Risk Advisory: Rapid Mule Inflow from Crypto Scheme",
+        "description": "Bank AML surveillance unit reported rapid inward credits totaling ₹2,80,000 into bank account 456789XXXX5528. Depositors reported being recruited into Telegram group @PrimeReturnsVIP under the pretext of institutional crypto trading by Prime Wealth Advisory.",
+        "reporter_type": "bank",
+        "source": "api",
+        "case_reference": null
+    },
+    {
+        "title": "Bank Account Compromise via Public Charging Kiosk",
+        "description": "A customer reported unauthorized funds transfer of ₹12,000 occurring shortly after connecting a mobile phone to a public USB charging station at a transit terminal, indicating potential juice-jacking malware payload.",
+        "reporter_type": "bank",
+        "source": "api",
+        "case_reference": null
+    },
+    {
+        "title": "Laptop Marketplace Fraud",
+        "description": "A marketplace listing offered a gaming laptop at a discounted price. The seller requested ₹29,000 as an advance payment to rajeshstore@okaxis. The seller identified themselves as Used Deal Shop and provided support@useddealshop.com for communication. After payment the listing was removed.",
+        "reporter_type": "citizen",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "Affiliate Commission Deposit Scam",
+        "description": "I was approached on Telegram by @TaskSupervisorNeha promising 40 percent returns on promotional rating tasks. I transferred ₹28,000 to UPI ID quicktaskpayout@axl as a mandatory order-matching deposit on https://workportal-ratinghub.com. The supervisor then ceased contact.",
+        "reporter_type": "citizen",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "Hotel Review Prepaid Task Scam",
+        "description": "A supervisor named @TaskSupervisorNeha from Global Media Marketing offered daily payments for submitting positive hotel reviews on https://workportal-ratinghub.com. I was instructed to transfer ₹45,000 to UPI ID vipmerchant@yesbank to clear a negative balance, after which my account was blocked.",
+        "reporter_type": "citizen",
+        "source": "mobile_app",
+        "case_reference": null
+    },
+    {
+        "title": "Forex Trading Fraud",
+        "description": "A caller from +91 9765432109 convinced me to invest in forex trading through Prime Wealth Advisory. They directed me to Telegram group @PrimeReturnsVIP and requested ₹90,000 in bank account 456789XXXX5528. My investment vanished within two days.",
+        "reporter_type": "citizen",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "Unauthorized NFC Transit Reader Tap",
+        "description": "A passenger registered a police station complaint after noticing an unauthorized deduction of ₹1,900 from their contactless debit card while commuting on a packed metro train, suspected to be executed via a concealed portable POS terminal.",
+        "reporter_type": "police",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "Police Complaint: Morphed Image Blackmail by Digital Loan App",
+        "description": "A victim filed a police report against CashNow Finance after installing an application from https://cashnow-instantloan.apk. An extortionist contacting from +91 9234567891 sent morphed images to the victim's colleagues and coerced a transfer of ₹18,000 to instantclear@icici.",
+        "reporter_type": "police",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "Marketplace Order Diverted to Courier Impersonation",
+        "description": "After agreeing to buy home electronics from Used Deal Shop on an online marketplace, I received an SMS from +91 9988776650 stating the item was held by Express Logistics India. I followed link https://trackparcel-support.in and was coerced to pay ₹4,500 to customfees@paytm.",
+        "reporter_type": "citizen",
+        "source": "mobile_app",
+        "case_reference": null
+    },
+    {
+        "title": "Institutional Equity Pre-Allotment Fraud",
+        "description": "I was contacted on +91 9765432109 by a person claiming to be a portfolio manager at Prime Wealth Advisory. They directed me to join Telegram @PrimeReturnsVIP and deposit ₹2,10,000 into bank account 456789XXXX5528 for pre-IPO share allotments that never materialized.",
+        "reporter_type": "citizen",
+        "source": "mobile_app",
+        "case_reference": null
+    },
+    {
+        "title": "QR Code Payment Scam",
+        "description": "A stranger claimed they needed to send me money and asked me to scan a QR code. After scanning it, ₹9,500 was deducted from my bank account instead of being credited.",
+        "reporter_type": "citizen",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "Fraudulent Charity Donation Request",
+        "description": "I received a social media message requesting donations for flood relief. The campaign appeared genuine, but after donating ₹15,000 I learned the charity organization did not exist.",
+        "reporter_type": "citizen",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "SBI Reward Points Expiry Trap",
+        "description": "I received an urgent notification claiming that 15,000 SBI reward points were about to expire. The caller from +91 9876543210 directed me to pay ₹14,200 to securekyc@ibl as a refundable conversion fee under State Bank of India rules. The refund never arrived.",
+        "reporter_type": "citizen",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "Independent Seller Reusing Known Marketplace Mule UPI",
+        "description": "I negotiated to purchase a used graphic workstation from a classifieds seller operating under the name Quick Tech Deals. The seller instructed me to transfer ₹22,000 to UPI ID rajeshstore@okaxis, after which the seller ceased all communication.",
+        "reporter_type": "citizen",
+        "source": "mobile_app",
+        "case_reference": null
+    },
+    {
+        "title": "Job Offer Registration Scam",
+        "description": "A company offered me a work-from-home position but requested a registration fee of ₹4,500 before issuing the appointment letter. After payment, all contact details became inactive.",
+        "reporter_type": "citizen",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "Utility Bill Disconnection Threat via Burner Line",
+        "description": "I received an urgent call from +91 9876543210 claiming my domestic electricity bill was overdue and service would be disconnected within hours. I was instructed to transfer ₹13,000 to utility clearing UPI powerpay@ybl.",
+        "reporter_type": "citizen",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "Used Bike Online Fraud",
+        "description": "A seller advertised a used motorcycle at a very attractive price. They asked for ₹15,000 as a booking amount through rajeshstore@okaxis. The seller contacted me using +91 9988776655 and later became unreachable.",
+        "reporter_type": "citizen",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "Redelivery Fee Scam",
+        "description": "Express Logistics India informed me that my delivery had failed and required a redelivery fee of ₹950. I made the payment to customfees@paytm after speaking with +91 9123456780 and checking the parcel status on https://trackparcel-support.in. It turned out to be fraudulent.",
         "reporter_type": "citizen",
         "source": "web_portal",
         "case_reference": null
@@ -273,8 +399,302 @@
         "case_reference": null
     },
     {
-        "title": "PlayStation 5 Marketplace Scam",
-        "description": "I attempted to purchase a PlayStation 5 through an online marketplace. The seller instructed me to transfer ₹20,000 to rajeshstore@okaxis before dispatch. The seller claimed to work for Used Deal Shop and used phone number +91 9988776655. The product was never shipped.",
+        "title": "Zero-FIR Forward: Pension Account KYC Fraud",
+        "description": "A local police station registered and forwarded a Zero-FIR regarding a retired citizen defrauded of ₹35,000. The caller on +91 9876543210 claimed to represent State Bank of India and demanded immediate CKYC renewal payment through UPI ID securekyc@ibl.",
+        "reporter_type": "police",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "Merchant Aggregator Alert: Task Platform Escrow Laundering",
+        "description": "Payment aggregator compliance flagged merchant UPI account vipmerchant@yesbank receiving ₹1,20,000 in micro-deposits from multiple retail customers directed from task portal https://workportal-ratinghub.com operated by Global Media Marketing.",
+        "reporter_type": "bank",
+        "source": "api",
+        "case_reference": null
+    },
+    {
+        "title": "Dormant Salary Account Re-activation Scam",
+        "description": "I was contacted on my mobile phone by an individual claiming to be an officer from SBI. He stated my salary account had been marked dormant and directed me to transfer ₹19,500 to sbihelpdesk@okaxis using contact +91 9876543211 to restore access.",
+        "reporter_type": "citizen",
+        "source": "mobile_app",
+        "case_reference": null
+    },
+    {
+        "title": "PAN Verification Fraud in SBI",
+        "description": "Someone called me from +91 9876543210 claiming my PAN was not linked with my State Bank of India account. They asked me to pay ₹12,000 through securekyc@ibl to avoid account suspension. After payment, the number was switched off.",
+        "reporter_type": "citizen",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "Work-From-Home Video Rating Task Fraud",
+        "description": "I was recruited through WhatsApp to complete video rating tasks on https://workportal-ratinghub.com. A coordinator on Telegram @GlobalMediaTasksAdmin representing Global Media Marketing instructed me to deposit ₹15,000 into UPI ID vipmerchant@yesbank to unlock high-commission VIP tasks.",
+        "reporter_type": "citizen",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "Fake IPO Investment Advisory Scam",
+        "description": "I joined a Telegram group named @PrimeReturnsVIP after receiving a call from +91 9765432109. The advisor claimed to represent Prime Wealth Advisory and promised guaranteed IPO allotments. I transferred ₹75,000 to bank account 456789XXXX5528 but never received any shares or refund.",
+        "reporter_type": "citizen",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "Smart TV Online Marketplace Fraud",
+        "description": "I agreed to purchase a 55-inch Smart TV listed online by Used Deal Shop. The seller emailed me from support@useddealshop.com and asked for an advance shipping fee of ₹18,500 to UPI ID dealpay@ybl. The seller contacted me via +91 9988776656 and never shipped the television.",
+        "reporter_type": "citizen",
+        "source": "mobile_app",
+        "case_reference": null
+    },
+    {
+        "title": "Fake Collateral-Free Loan Sanction Fee Fraud",
+        "description": "A representative from CashNow Finance called me from +91 9234567890 offering a pre-approved personal loan of ₹2,00,000. I was told to pay an upfront processing fee of ₹12,500 to microloanrepay@hdfc. Once the amount was transferred, no loan was disbursed.",
+        "reporter_type": "citizen",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "Marketplace Platform Safety Escalation",
+        "description": "E-commerce platform trust and safety team identified recurring fraudulent seller profiles linked to Used Deal Shop and phone number +91 9988776656, which collected ₹37,500 in fraudulent advance deposits routed to UPI handle dealpay@ybl.",
+        "reporter_type": "other",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "Coerced KYC Verification Routing to Investment Mule",
+        "description": "I received an urgent call from +91 9876543210 impersonating State Bank of India saying my bank account was suspended. Instead of a UPI ID, the caller instructed me to transfer ₹78,000 directly to bank account 456789XXXX5528 for immediate KYC clearance.",
+        "reporter_type": "citizen",
+        "source": "mobile_app",
+        "case_reference": null
+    },
+    {
+        "title": "Aadhaar Linking Scam",
+        "description": "A person claiming to work for State Bank of India called from +91 9876543210 and informed me that my Aadhaar was not linked with my account. I was instructed to transfer ₹15,500 to securekyc@ibl as a verification charge. The fraudster disappeared after receiving the money.",
+        "reporter_type": "citizen",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "Disputed UPI KYC Transfer Chargeback",
+        "description": "The bank received a dispute and chargeback request from a customer who was deceived into sending ₹52,000 to securekyc@ibl. The customer had received fraudulent phone calls from +91 9876543210 claiming to be State Bank of India compliance personnel.",
+        "reporter_type": "bank",
+        "source": "api",
+        "case_reference": null
+    },
+    {
+        "title": "Arbitrage Trading Bot Subscription Fraud",
+        "description": "I was persuaded to subscribe to an automated arbitrage trading robot recommended by @WealthGuruDirect claiming affiliation with Prime Wealth Advisory. I remitted ₹68,000 into bank account 987654XXXX3312 and never received access to the software.",
+        "reporter_type": "citizen",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "Predatory Instant Loan APK Extortion",
+        "description": "I downloaded a short-term micro-lending app from https://cashnow-instantloan.apk operated by CashNow Finance. Although I repaid ₹14,000 to UPI ID microloanrepay@hdfc, recovery agents from +91 9234567890 accessed my contact list and threatened to circulate private photos unless I paid ₹25,000 more.",
+        "reporter_type": "citizen",
+        "source": "mobile_app",
+        "case_reference": null
+    },
+    {
+        "title": "Suspicious Transaction Report: Secondary Burner Routing to Mule Account",
+        "description": "Financial intelligence unit alert indicates that suspect bank account 456789XXXX5528 received ₹92,000 from an individual who reported receiving SMS threats from +91 9876543211 claiming to represent State Bank of India.",
+        "reporter_type": "bank",
+        "source": "api",
+        "case_reference": null
+    },
+    {
+        "title": "Police Station Complaint: Senior Citizen Wealth Advisory Scam",
+        "description": "A retired citizen lodged a complaint stating that after joining Telegram channel @WealthGuruDirect, representatives of Prime Wealth Advisory convinced them to invest their retirement savings of ₹1,15,000 into bank account 987654XXXX3312 with guaranteed 25 percent returns.",
+        "reporter_type": "police",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "Commodity Derivatives Trading Scam",
+        "description": "An investment advisor from Prime Wealth Advisory reached out from +91 9765432109 and invited me to Telegram @PrimeReturnsVIP. I deposited ₹95,000 into bank account 456789XXXX5528 to trade crude oil derivatives. The group was deleted shortly after.",
+        "reporter_type": "citizen",
+        "source": "mobile_app",
+        "case_reference": null
+    },
+    {
+        "title": "Fake SBI Account Verification Fee",
+        "description": "A caller claiming to be an officer from State Bank of India contacted me from +91 9876543210 and requested ₹27,000 for mandatory account verification through securekyc@ibl. After transferring the money, I was unable to contact the person again.",
+        "reporter_type": "citizen",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "Rental Apartment Token Deposit Fraud",
+        "description": "Cyber crime division received a complaint from a prospective tenant who paid ₹25,000 as an advance security token to a fake property owner on a rental listing site. The key handover was scheduled, but the apartment was actually occupied by genuine owners.",
+        "reporter_type": "cyber_cell",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "Bank Suspicious Transaction Report: Courier Impersonation",
+        "description": "A payment intermediary filed an incident report regarding an unauthorized chargeback where a consumer paid ₹8,400 to customfees@paytm after following delivery failure links on https://trackparcel-support.in with SMS headers referencing Express Logistics India and +91 9123456780.",
+        "reporter_type": "bank",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "Fake Delivery Charge Fraud",
+        "description": "A caller from +91 9123456780 claimed to be from Express Logistics India and informed me that my parcel required an additional delivery charge. I transferred ₹2,500 to customfees@paytm after checking the tracking details on https://trackparcel-support.in. My parcel never arrived.",
+        "reporter_type": "citizen",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "iPhone Marketplace Advance Payment Scam",
+        "description": "I found an advertisement for a second-hand iPhone on an online marketplace. The seller from Used Deal Shop asked me to transfer ₹18,000 as an advance to UPI ID rajeshstore@okaxis. The seller communicated through phone number +91 9988776655 and email support@useddealshop.com. After the payment, the advertisement disappeared and the seller stopped responding.",
+        "reporter_type": "citizen",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "Police Station FIR: Electronic Goods Reseller Fraud",
+        "description": "A formal FIR was registered against operators of Used Deal Shop. The victim was defrauded of ₹26,000 sent to UPI ID dealpay@ybl for electronic goods after receiving fake invoices from support@useddealshop.com and calls from +91 9988776656.",
+        "reporter_type": "police",
+        "source": "mobile_app",
+        "case_reference": null
+    },
+    {
+        "title": "Cyber Crime Cell Batch FIR: Phishing SMS for Customs Clearance",
+        "description": "State Cyber Cell registered a consolidated complaint involving automated phishing messages sent from +91 9123456781 directing victims to tracking portal https://india-speedpost-tracking.org. The victim paid ₹11,500 to UPI ID customfees@paytm pretending to clear a parcel from Express Logistics India.",
+        "reporter_type": "cyber_cell",
+        "source": "bulk_import",
+        "case_reference": null
+    },
+    {
+        "title": "Contact List Harassment by Illegal Lending Network",
+        "description": "After installing an app from https://cashnow-instantloan.apk, debt collectors calling from +91 9234567890 and +91 9234567891 began spamming my family members. I was pressured into remitting ₹16,000 to UPI ID instantclear@icici to stop the harassment.",
+        "reporter_type": "citizen",
+        "source": "mobile_app",
+        "case_reference": null
+    },
+    {
+        "title": "Internet Banking Activation Fraud",
+        "description": "I was contacted by a fake SBI customer support executive from +91 9876543210 who claimed my internet banking could only be activated after paying ₹5,000 to securekyc@ibl. After transferring the money, the caller stopped responding.",
+        "reporter_type": "citizen",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "Fake Customer Care Refund Scam",
+        "description": "I searched online for customer care of an e-commerce website and called the first number that appeared. The representative convinced me to install a remote access application to process a refund. Money was transferred from my account without authorization.",
+        "reporter_type": "citizen",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "Gold Investment Scheme Scam",
+        "description": "Prime Wealth Advisory advertised a gold investment plan with guaranteed monthly returns. I communicated with their representative on +91 9765432109 and Telegram @PrimeReturnsVIP before transferring ₹65,000 to account 456789XXXX5528. The promised returns never arrived.",
+        "reporter_type": "citizen",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "Fake RBI and SBI KYC Update",
+        "description": "A caller claiming to represent RBI and State Bank of India contacted me from +91 9876543210. I was told to complete KYC verification by sending ₹24,000 to securekyc@ibl. They promised the money would be refunded after verification but I lost the amount.",
+        "reporter_type": "citizen",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "Fake Electricity Bill Scam",
+        "description": "I received an SMS stating that my electricity connection would be disconnected unless I paid an overdue bill immediately. The message contained a fraudulent payment link. After making the payment, I discovered the electricity department had not sent the message.",
+        "reporter_type": "citizen",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "SBI Account Freeze Threat",
+        "description": "A fraudster using phone number +91 9876543210 claimed my SBI account would be permanently frozen due to expired KYC. I paid ₹31,000 through UPI ID securekyc@ibl hoping to restore my account. The fraudster vanished after receiving the payment.",
+        "reporter_type": "citizen",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "Second-hand Refrigerator Advance Deposit Scam",
+        "description": "A seller advertising home appliances on an online marketplace claimed to operate Used Deal Shop. They requested ₹8,500 advance via rajeshstore@okaxis and spoke using phone +91 9988776655. As soon as the money was transferred, the seller blocked my contact.",
+        "reporter_type": "citizen",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "Fake SBI KYC Verification Call",
+        "description": "I received a call from +91 9876543210 from a person claiming to be an executive of State Bank of India. He said my KYC had expired and my account would be frozen unless I completed verification immediately. I was instructed to transfer ₹48,500 to UPI ID securekyc@ibl. After making the payment, the caller disconnected and became unreachable.",
+        "reporter_type": "citizen",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "Guaranteed Stock Returns Fraud",
+        "description": "I was promised 30 percent monthly returns by Prime Wealth Advisory through Telegram @PrimeReturnsVIP. The representative using phone number +91 9765432109 instructed me to deposit ₹1,50,000 into bank account 456789XXXX5528. After payment, all communication channels disappeared.",
+        "reporter_type": "citizen",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "Cryptocurrency Investment Fraud",
+        "description": "A representative of Prime Wealth Advisory contacted me from +91 9765432109 and invited me to join Telegram channel @PrimeReturnsVIP. They convinced me to invest ₹1,20,000 in cryptocurrency through bank account 456789XXXX5528. After the transfer, they stopped responding.",
+        "reporter_type": "citizen",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "Drone Marketplace Fraud",
+        "description": "An online seller advertised a camera drone at half the market price. They instructed me to send ₹27,000 to rajeshstore@okaxis. The seller claimed to belong to Used Deal Shop and contacted me from +91 9988776655.",
+        "reporter_type": "citizen",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "Bogus Overseas Medical Conference Registration",
+        "description": "I received an invitation to present at a purported international cardiology summit organized by GlobalHealth Summits. I remitted ₹38,000 for delegate registration before discovering the conference venue had no booking under that name.",
+        "reporter_type": "citizen",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "Cyber Cell Joint Investigation: Shared Clearing Desk",
+        "description": "State Cyber Cell intelligence established that intermediate UPI handle clearingdesk@icici was utilized to funnel funds collected from both the State Bank of India phishing victims using securekyc@ibl and investment victims recruited via Telegram @PrimeReturnsVIP.",
+        "reporter_type": "cyber_cell",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "Cyber Cell Multi-Complainant Docket: Prime Returns VIP",
+        "description": "A cyber cell dossier compiles complaints from multiple victims who transferred ₹3,40,000 into bank account 456789XXXX5528. All victims were solicited by Prime Wealth Advisory through Telegram channel @PrimeReturnsVIP.",
+        "reporter_type": "cyber_cell",
+        "source": "bulk_import",
+        "case_reference": null
+    },
+    {
+        "title": "Online Astrological Remedial Gemstone Scam",
+        "description": "A spiritual consultation website charged ₹14,000 for custom energized gemstones promised to resolve personal disputes. The package never arrived and the customer support helpline was terminated.",
+        "reporter_type": "other",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "Police Complaint: Part-Time Job Security Deposit Fraud",
+        "description": "A complainant reported being defrauded by recruiters from Global Media Marketing. After joining Telegram @GlobalMediaTasksAdmin, the victim was persuaded to send ₹32,500 to UPI handle quicktaskpayout@axl to release accumulated virtual earnings.",
+        "reporter_type": "police",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "Courier Holding Charge Scam",
+        "description": "I received a call stating that my parcel was being held at a warehouse. The caller asked me to pay ₹3,200 to customfees@paytm. The caller identified themselves as Express Logistics India using phone number +91 9123456780 and directed me to https://trackparcel-support.in. The parcel never existed.",
+        "reporter_type": "citizen",
+        "source": "web_portal",
+        "case_reference": null
+    },
+    {
+        "title": "CKYC Renewal Fraud",
+        "description": "I received a call from +91 9876543210 saying my CKYC registration had expired. The caller claimed to be an SBI officer and directed me to pay ₹18,000 to securekyc@ibl to complete the renewal. Later I realized it was a scam.",
         "reporter_type": "citizen",
         "source": "web_portal",
         "case_reference": null

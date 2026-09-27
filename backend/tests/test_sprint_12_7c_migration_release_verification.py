@@ -68,6 +68,12 @@ def test_offline_migration_upgrade_generates_valid_sql(capsys: pytest.CaptureFix
     assert "CREATE TYPE reporter_type_enum" in generated_sql
     assert "CREATE TYPE incident_source_enum" in generated_sql
     assert "uq_incidents_case_reference" in generated_sql
+    assert "ALTER TABLE public.incidents ENABLE ROW LEVEL SECURITY;" in generated_sql
+    assert "ALTER TABLE IF EXISTS public.alembic_version ENABLE ROW LEVEL SECURITY;" in generated_sql
+    assert "REVOKE ALL ON TABLE public.incidents FROM anon;" in generated_sql
+    assert "REVOKE ALL ON TABLE public.incidents FROM authenticated;" in generated_sql
+    assert "REVOKE ALL ON TABLE public.alembic_version FROM anon;" in generated_sql
+    assert "REVOKE ALL ON TABLE public.alembic_version FROM authenticated;" in generated_sql
     assert "COMMIT;" in generated_sql
 
 
@@ -86,6 +92,8 @@ def test_offline_migration_downgrade_generates_valid_sql(capsys: pytest.CaptureF
     generated_sql = captured.out
 
     assert "BEGIN;" in generated_sql
+    assert "ALTER TABLE public.incidents DISABLE ROW LEVEL SECURITY;" in generated_sql
+    assert "ALTER TABLE IF EXISTS public.alembic_version DISABLE ROW LEVEL SECURITY;" in generated_sql
     assert "ALTER TABLE incidents DROP CONSTRAINT uq_incidents_case_reference;" in generated_sql
     assert "COMMIT;" in generated_sql
 

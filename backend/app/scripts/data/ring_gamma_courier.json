@@ -54,5 +54,54 @@
     "reporter_type": "citizen",
     "source": "web_portal",
     "case_reference": null
+  },
+  {
+    "title": "Cyber Crime Cell Batch FIR: Phishing SMS for Customs Clearance",
+    "description": "State Cyber Cell registered a consolidated complaint involving automated phishing messages sent from +91 9123456781 directing victims to tracking portal https://india-speedpost-tracking.org. The victim paid ₹11,500 to UPI ID customfees@paytm pretending to clear a parcel from Express Logistics India.",
+    "reporter_type": "cyber_cell",
+    "source": "bulk_import",
+    "case_reference": null
+  },
+  {
+    "title": "Fake Parcel Detention Fine Scam",
+    "description": "I received an SMS alerting me that an inbound package had been detained at customs by Express Logistics India. I was instructed to visit https://trackparcel-support.in and paid ₹6,200 to customfees@paytm after speaking with an agent at +91 9123456780.",
+    "reporter_type": "citizen",
+    "source": "mobile_app",
+    "case_reference": null
+  },
+  {
+    "title": "Bank Suspicious Transaction Report: Courier Impersonation",
+    "description": "A payment intermediary filed an incident report regarding an unauthorized chargeback where a consumer paid ₹8,400 to customfees@paytm after following delivery failure links on https://trackparcel-support.in with SMS headers referencing Express Logistics India and +91 9123456780.",
+    "reporter_type": "bank",
+    "source": "web_portal",
+    "case_reference": null
+  },
+  {
+    "title": "Express Speed Post Delivery Fee Scam",
+    "description": "A caller from +91 9123456781 representing Express Logistics India told me that an express package could not be dispatched without clearance fees. I verified the tracking number at https://india-speedpost-tracking.org and transferred ₹3,800 to customfees@paytm.",
+    "reporter_type": "citizen",
+    "source": "web_portal",
+    "case_reference": null
+  },
+  {
+    "title": "Police Complaint: Contraband Parcel Blackmail",
+    "description": "A victim filed a complaint with the police after a caller from +91 9123456780 claiming to be a security inspector with Express Logistics India alleged a parcel sent in the victim's name contained contraband. The victim was coerced into paying ₹28,000 to customfees@paytm via https://trackparcel-support.in.",
+    "reporter_type": "police",
+    "source": "web_portal",
+    "case_reference": null
+  },
+  {
+    "title": "Overweight Parcel Surcharge Scam",
+    "description": "I received an automated message from Express Logistics India claiming my parcel exceeded weight limits. I visited https://trackparcel-support.in and transferred ₹4,200 to customfees@paytm after confirming with customer service at +91 9123456780. No parcel existed.",
+    "reporter_type": "citizen",
+    "source": "mobile_app",
+    "case_reference": null
+  },
+  {
+    "title": "Urgent Document Delivery Clearance Fraud",
+    "description": "I was informed by an individual on +91 9123456781 that urgent legal documents were pending delivery from Express Logistics India. I followed the payment portal at https://india-speedpost-tracking.org and sent ₹7,100 to customfees@paytm before the tracking page went offline.",
+    "reporter_type": "citizen",
+    "source": "web_portal",
+    "case_reference": null
   }
 ]

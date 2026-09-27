@@ -18,6 +18,9 @@ INPUT_FILES = [
     "ring_beta_marketplace.json",
     "ring_gamma_courier.json",
     "ring_delta_investment.json",
+    "ring_bridges.json",
+    "cluster_loan_app.json",
+    "cluster_task_scam.json",
     "independent_cases.json",
 ]
 

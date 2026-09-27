@@ -1,0 +1,58 @@
+[
+  {
+    "title": "Bank AML Alert: Cross-Ring Mule Inflow Between KYC and Crypto Advisory",
+    "description": "An automated anti-money laundering alert flagged bank account 456789XXXX5528 receiving ₹1,10,000 directly from a victim of State Bank of India KYC phishing who had received fraudulent calls from phone number +91 9876543210, linking the KYC scam to the investment syndicate.",
+    "reporter_type": "bank",
+    "source": "api",
+    "case_reference": null
+  },
+  {
+    "title": "Coerced KYC Verification Routing to Investment Mule",
+    "description": "I received an urgent call from +91 9876543210 impersonating State Bank of India saying my bank account was suspended. Instead of a UPI ID, the caller instructed me to transfer ₹78,000 directly to bank account 456789XXXX5528 for immediate KYC clearance.",
+    "reporter_type": "citizen",
+    "source": "mobile_app",
+    "case_reference": null
+  },
+  {
+    "title": "Cyber Cell Joint Investigation: Shared Clearing Desk",
+    "description": "State Cyber Cell intelligence established that intermediate UPI handle clearingdesk@icici was utilized to funnel funds collected from both the State Bank of India phishing victims using securekyc@ibl and investment victims recruited via Telegram @PrimeReturnsVIP.",
+    "reporter_type": "cyber_cell",
+    "source": "web_portal",
+    "case_reference": null
+  },
+  {
+    "title": "Suspicious Transaction Report: Secondary Burner Routing to Mule Account",
+    "description": "Financial intelligence unit alert indicates that suspect bank account 456789XXXX5528 received ₹92,000 from an individual who reported receiving SMS threats from +91 9876543211 claiming to represent State Bank of India.",
+    "reporter_type": "bank",
+    "source": "api",
+    "case_reference": null
+  },
+  {
+    "title": "Marketplace Order Diverted to Courier Impersonation",
+    "description": "After agreeing to buy home electronics from Used Deal Shop on an online marketplace, I received an SMS from +91 9988776650 stating the item was held by Express Logistics India. I followed link https://trackparcel-support.in and was coerced to pay ₹4,500 to customfees@paytm.",
+    "reporter_type": "citizen",
+    "source": "mobile_app",
+    "case_reference": null
+  },
+  {
+    "title": "Cyber Cell Intelligence: Shared VOIP Gateway for Marketplace and Courier Scams",
+    "description": "Cyber crime branch analysis identified burner phone gateway +91 9988776650 sending coordinated messages for both Used Deal Shop marketplace fraud using support@useddealshop.com and fictitious parcel deliveries claiming to be Express Logistics India.",
+    "reporter_type": "cyber_cell",
+    "source": "bulk_import",
+    "case_reference": null
+  },
+  {
+    "title": "Utility Bill Disconnection Threat via Burner Line",
+    "description": "I received an urgent call from +91 9876543210 claiming my domestic electricity bill was overdue and service would be disconnected within hours. I was instructed to transfer ₹13,000 to utility clearing UPI powerpay@ybl.",
+    "reporter_type": "citizen",
+    "source": "web_portal",
+    "case_reference": null
+  },
+  {
+    "title": "Independent Seller Reusing Known Marketplace Mule UPI",
+    "description": "I negotiated to purchase a used graphic workstation from a classifieds seller operating under the name Quick Tech Deals. The seller instructed me to transfer ₹22,000 to UPI ID rajeshstore@okaxis, after which the seller ceased all communication.",
+    "reporter_type": "citizen",
+    "source": "mobile_app",
+    "case_reference": null
+  }
+]

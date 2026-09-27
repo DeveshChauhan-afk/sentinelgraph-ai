@@ -36,10 +36,6 @@ export const Header: React.FC<HeaderProps> = ({
         <div>
           <h1 className="text-sm font-semibold text-sentinel-text tracking-wide flex items-center gap-2">
             <span>{current.title}</span>
-            <span className="text-sentinel-dim font-mono text-xs font-normal">/</span>
-            <span className="text-[11px] font-mono text-sentinel-dim font-normal">
-              Track 02: AI Risk Manager
-            </span>
           </h1>
           <p className="text-[11px] text-sentinel-muted">{current.subtitle}</p>
         </div>

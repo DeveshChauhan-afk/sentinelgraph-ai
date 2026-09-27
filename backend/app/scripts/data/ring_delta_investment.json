@@ -54,5 +54,54 @@
     "reporter_type": "citizen",
     "source": "web_portal",
     "case_reference": null
+  },
+  {
+    "title": "Bank Risk Advisory: Rapid Mule Inflow from Crypto Scheme",
+    "description": "Bank AML surveillance unit reported rapid inward credits totaling ₹2,80,000 into bank account 456789XXXX5528. Depositors reported being recruited into Telegram group @PrimeReturnsVIP under the pretext of institutional crypto trading by Prime Wealth Advisory.",
+    "reporter_type": "bank",
+    "source": "api",
+    "case_reference": null
+  },
+  {
+    "title": "State Cyber Cell FIR: High-Yield Forex Ponzi Syndicate",
+    "description": "State Cyber Police registered an FIR against operators of Prime Wealth Advisory. The complainant was lured through Telegram channel @WealthGuruDirect by caller +91 9765432109 and instructed to transfer ₹1,85,000 into bank account 987654XXXX3312.",
+    "reporter_type": "cyber_cell",
+    "source": "web_portal",
+    "case_reference": null
+  },
+  {
+    "title": "Institutional Equity Pre-Allotment Fraud",
+    "description": "I was contacted on +91 9765432109 by a person claiming to be a portfolio manager at Prime Wealth Advisory. They directed me to join Telegram @PrimeReturnsVIP and deposit ₹2,10,000 into bank account 456789XXXX5528 for pre-IPO share allotments that never materialized.",
+    "reporter_type": "citizen",
+    "source": "mobile_app",
+    "case_reference": null
+  },
+  {
+    "title": "Police Station Complaint: Senior Citizen Wealth Advisory Scam",
+    "description": "A retired citizen lodged a complaint stating that after joining Telegram channel @WealthGuruDirect, representatives of Prime Wealth Advisory convinced them to invest their retirement savings of ₹1,15,000 into bank account 987654XXXX3312 with guaranteed 25 percent returns.",
+    "reporter_type": "police",
+    "source": "web_portal",
+    "case_reference": null
+  },
+  {
+    "title": "Commodity Derivatives Trading Scam",
+    "description": "An investment advisor from Prime Wealth Advisory reached out from +91 9765432109 and invited me to Telegram @PrimeReturnsVIP. I deposited ₹95,000 into bank account 456789XXXX5528 to trade crude oil derivatives. The group was deleted shortly after.",
+    "reporter_type": "citizen",
+    "source": "mobile_app",
+    "case_reference": null
+  },
+  {
+    "title": "Cyber Cell Multi-Complainant Docket: Prime Returns VIP",
+    "description": "A cyber cell dossier compiles complaints from multiple victims who transferred ₹3,40,000 into bank account 456789XXXX5528. All victims were solicited by Prime Wealth Advisory through Telegram channel @PrimeReturnsVIP.",
+    "reporter_type": "cyber_cell",
+    "source": "bulk_import",
+    "case_reference": null
+  },
+  {
+    "title": "Arbitrage Trading Bot Subscription Fraud",
+    "description": "I was persuaded to subscribe to an automated arbitrage trading robot recommended by @WealthGuruDirect claiming affiliation with Prime Wealth Advisory. I remitted ₹68,000 into bank account 987654XXXX3312 and never received access to the software.",
+    "reporter_type": "citizen",
+    "source": "web_portal",
+    "case_reference": null
   }
 ]
