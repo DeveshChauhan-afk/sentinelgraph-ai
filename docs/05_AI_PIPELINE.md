@@ -192,6 +192,9 @@ Every single provider invocation is metered:
 
 The raw JSON completion emitted by Gemini is validated and parsed by [`ReportParser`](file:///c:/Devesh/DeveshChauhan/Devesh%20Chauhan/sentinelgraph-ai/backend/app/services/investigation/report_parser.py):
 
+![AI Investigation Output Report](../visuals/investigation.png)
+*Structured investigation dossier rendered in the analyst console, featuring evidence-grounded findings, confidence scoring, entity risk breakdowns, and actionable containment steps.*
+
 1. **Markdown Fence Stripping**: Extracts valid JSON content if the model wraps output in ` ```json ... ``` ` blocks.
 2. **Pydantic Validation**: Validates the payload against [`ProfessionalInvestigationReport`](file:///c:/Devesh/DeveshChauhan/Devesh%20Chauhan/sentinelgraph-ai/backend/app/schemas/report.py).
 3. **Citation Verification**: Ensures that every citation in findings maps to real complaint references or entities from the graph context.

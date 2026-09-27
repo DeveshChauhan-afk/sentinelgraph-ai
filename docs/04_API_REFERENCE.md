@@ -11,6 +11,9 @@ SentinelGraph AI exposes an asynchronous HTTP REST API powered by FastAPI. The A
 * **ReDoc Reference**: `http://localhost:8000/redoc`
 * **OpenAPI 3.1 JSON Specification**: `http://localhost:8000/api/v1/openapi.json`
 
+![FastAPI Swagger UI](../visuals/swagger.png)
+*FastAPI Interactive Swagger UI (`/docs`) exposing all complaint, graph, timeline, and investigation API endpoints with interactive schema exploration.*
+
 ### Distributed Tracing Header (`X-Request-ID`)
 Every request accepted by the API is tagged with an `X-Request-ID` correlation identifier:
 * If provided by the client in the request header (`X-Request-ID: <custom-uuid>`), that ID is preserved.

@@ -4,6 +4,9 @@
 
 SentinelGraph AI is structured as a layered, asynchronous full-stack platform designed to process high-throughput fraud complaints, maintain topological intelligence over interconnected fraud networks, and synthesize verifiable investigation dossiers.
 
+![SentinelGraph AI High-Level Architecture](../visuals/hld.png)
+*High-Level Architecture (HLD) diagram illustrating client ingress, API gateway routing, dual-store persistence (PostgreSQL & Neo4j), deterministic explainability services, and Gemini LLM orchestration.*
+
 The platform architecture spans seven distinct execution layers:
 
 ```
