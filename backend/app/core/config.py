@@ -43,6 +43,7 @@ class Settings(BaseSettings):
                 return []
             if clean.startswith("[") and clean.endswith("]"):
                 import json
+
                 try:
                     return json.loads(clean)
                 except Exception:
@@ -91,6 +92,34 @@ class Settings(BaseSettings):
     # =========================
     GEMINI_API_KEY: SecretStr
     GEMINI_MODEL: str = "gemini-3.5-flash-lite"
+    GEMINI_FALLBACK_MODELS: list[str] | str = Field(
+        default_factory=list,
+        description="Ordered list of fallback Gemini model IDs to attempt if the primary model is unavailable.",
+    )
+
+    @field_validator("GEMINI_FALLBACK_MODELS", mode="after")
+    @classmethod
+    def assemble_gemini_fallback_models(cls, v: Any) -> list[str]:
+        if isinstance(v, str):
+            clean = v.strip()
+            if not clean:
+                return []
+            if clean.startswith("[") and clean.endswith("]"):
+                import json
+
+                try:
+                    parsed = json.loads(clean)
+                    if isinstance(parsed, list):
+                        return [
+                            str(item).strip() for item in parsed if str(item).strip()
+                        ]
+                except Exception:
+                    pass
+            return [i.strip() for i in clean.split(",") if i.strip()]
+        elif isinstance(v, (list, tuple, set)):
+            return [str(i).strip() for i in v if str(i).strip()]
+        return []
+
     LLM_TEMPERATURE: float = Field(default=0.2, ge=0.0, le=2.0)
     LLM_MAX_TOKENS: int = Field(default=2048, ge=1)
     GEMINI_TIMEOUT_SECONDS: float = Field(
@@ -135,6 +164,11 @@ class Settings(BaseSettings):
         extra="ignore",
         case_sensitive=False,
     )
+
+    def __init__(self, **values: Any):
+        if "GEMINI_MODEL" in values and "GEMINI_FALLBACK_MODELS" not in values:
+            values["GEMINI_FALLBACK_MODELS"] = []
+        super().__init__(**values)
 
     @computed_field(repr=False)
     @property

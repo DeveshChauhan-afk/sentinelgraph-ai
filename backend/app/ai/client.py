@@ -17,7 +17,7 @@ from google import genai
 from google.genai import types
 from google.genai.errors import APIError, ClientError, ServerError
 from loguru import logger
-from pydantic import BaseModel
+from pydantic import BaseModel, ValidationError
 
 from app.ai.base import AIClient
 from app.ai.exceptions import (
@@ -59,7 +59,9 @@ class GeminiClient(LLMClient, AIClient):
                 api_key=settings.GEMINI_API_KEY.get_secret_value(),
             )
         except Exception as exc:
-            raise AIConfigurationError("Failed to initialize Gemini SDK client.") from exc
+            raise AIConfigurationError(
+                "Failed to initialize Gemini SDK client."
+            ) from exc
 
     def _extract_status_code(self, exc: Exception) -> int | None:
         """
@@ -126,6 +128,146 @@ class GeminiClient(LLMClient, AIClient):
             return True
 
         return False
+
+    def _is_fallback_error(self, exc: Exception) -> bool:
+        """
+        Determine whether an exception represents a model/provider availability failure
+        eligible for falling back to an alternate candidate model.
+
+        Eligible:
+            - HTTP 404 (Model Not Found / Unsupported on endpoint)
+            - HTTP 429 (Rate Limit / Quota / Resource Exhausted after retries exhausted)
+            - HTTP 500, 502, 503, 504 (Provider Server Errors / Gateway / Unavailable)
+            - ServerError instances from Google GenAI SDK
+            - Status strings containing 'RESOURCE_EXHAUSTED' or 'UNAVAILABLE'
+            - ConnectionResetError, ConnectionRefusedError
+
+        Ineligible (Fail Fast):
+            - HTTP 400 (Bad Request / malformed syntax)
+            - HTTP 401, 403 (Unauthorized / Forbidden / Auth failure)
+            - Schema validation / Pydantic errors (ValidationError)
+            - Application bugs (TypeError, ValueError, KeyError, etc.)
+            - Timeout errors (asyncio.TimeoutError)
+        """
+        if isinstance(exc, (AIAuthenticationError, AIConfigurationError)):
+            return False
+
+        if isinstance(
+            exc, (ValidationError, TypeError, ValueError, KeyError, AttributeError)
+        ):
+            return False
+
+        if isinstance(exc, asyncio.TimeoutError):
+            return False
+
+        code = self._extract_status_code(exc)
+        if code is not None:
+            if code in (404, 429, 500, 502, 503, 504):
+                return True
+            if 400 <= code < 500:
+                return False
+
+        if isinstance(exc, ServerError):
+            return True
+
+        status = getattr(exc, "status", None)
+        if isinstance(status, str):
+            status_upper = status.upper()
+            if "RESOURCE_EXHAUSTED" in status_upper or "UNAVAILABLE" in status_upper:
+                return True
+            if "NOT_FOUND" in status_upper:
+                return True
+
+        exc_str = str(exc).upper()
+        if "RESOURCE_EXHAUSTED" in exc_str or "UNAVAILABLE" in exc_str:
+            return True
+
+        if isinstance(exc, (ConnectionResetError, ConnectionRefusedError)):
+            return True
+
+        return False
+
+    def _resolve_candidate_models(
+        self, preferred_model: str | None = None
+    ) -> list[str]:
+        """
+        Resolve an ordered, deduplicated list of candidate models:
+        primary model first, followed by configured fallback models.
+        """
+        primary = (preferred_model or self._settings.GEMINI_MODEL).strip()
+        candidates: list[str] = [primary]
+        seen: set[str] = {primary}
+
+        for fallback in getattr(self._settings, "GEMINI_FALLBACK_MODELS", []):
+            cleaned = (
+                fallback.strip() if isinstance(fallback, str) else str(fallback).strip()
+            )
+            if cleaned and cleaned not in seen:
+                candidates.append(cleaned)
+                seen.add(cleaned)
+
+        return candidates
+
+    async def _execute_with_fallback(
+        self,
+        candidate_models: list[str],
+        contents: Any,
+        config: types.GenerateContentConfig,
+    ) -> tuple[Any, str]:
+        """
+        Execute generate_content across candidate models in priority order.
+        Each candidate model undergoes its own bounded retry/backoff cycle.
+        If a candidate model fails with an availability error (404, 429, 5xx, etc.),
+        the next model in the fallback chain is attempted.
+
+        Args:
+            candidate_models: Ordered, deduplicated list of Gemini model IDs.
+            contents: Prompt contents.
+            config: Generation configuration (including response_schema).
+
+        Returns:
+            Tuple of (raw SDK response, winning model name).
+
+        Raises:
+            Exception: If provider fails permanently (non-availability error)
+                       or all candidate models are exhausted.
+        """
+        last_exception: Exception | None = None
+
+        for idx, model_name in enumerate(candidate_models):
+            try:
+                response = await self._execute_with_retry(
+                    model_name=model_name,
+                    contents=contents,
+                    config=config,
+                )
+                return response, model_name
+            except Exception as exc:
+                last_exception = exc
+                is_availability_err = self._is_fallback_error(exc)
+                has_next_candidate = idx < len(candidate_models) - 1
+
+                if is_availability_err and has_next_candidate:
+                    next_model = candidate_models[idx + 1]
+                    logger.warning(
+                        "Gemini model '{}' failed with availability error ({}). "
+                        "Falling back to candidate model '{}' ({}/{}).",
+                        model_name,
+                        exc,
+                        next_model,
+                        idx + 2,
+                        len(candidate_models),
+                    )
+                    continue
+
+                # Non-availability error (e.g. 400, 401, 403, schema bug) or no fallback models remaining
+                raise exc
+
+        if last_exception is not None:
+            raise last_exception
+        raise AIConfigurationError(
+            "No candidate Gemini models configured for execution."
+        )
 
     async def _execute_with_retry(
         self,
@@ -204,9 +346,17 @@ class GeminiClient(LLMClient, AIClient):
                 usage_meta = getattr(response, "usage_metadata", None)
                 if usage_meta:
                     raw_prompt_tokens = getattr(usage_meta, "prompt_token_count", 0)
-                    prompt_tokens = raw_prompt_tokens if isinstance(raw_prompt_tokens, int) else 0
-                    raw_completion_tokens = getattr(usage_meta, "candidates_token_count", 0)
-                    completion_tokens = raw_completion_tokens if isinstance(raw_completion_tokens, int) else 0
+                    prompt_tokens = (
+                        raw_prompt_tokens if isinstance(raw_prompt_tokens, int) else 0
+                    )
+                    raw_completion_tokens = getattr(
+                        usage_meta, "candidates_token_count", 0
+                    )
+                    completion_tokens = (
+                        raw_completion_tokens
+                        if isinstance(raw_completion_tokens, int)
+                        else 0
+                    )
                     if prompt_tokens > 0:
                         llm_tokens_total.labels(
                             provider="gemini",
@@ -301,13 +451,15 @@ class GeminiClient(LLMClient, AIClient):
         Returns:
             Normalized LLMResponse containing structured JSON completion text and telemetry.
         """
-        model_name = prompt.metadata.model_name or self._settings.GEMINI_MODEL
+        candidate_models = self._resolve_candidate_models(prompt.metadata.model_name)
+        primary_model = candidate_models[0]
         req_id = f"GEM-{uuid4().hex[:12].upper()}"
 
         logger.info(
-            "Executing LLM completion via Gemini (request_id={}, model={}, prompt_hash={}).",
+            "Executing LLM completion via Gemini (request_id={}, primary_model={}, candidates={}, prompt_hash={}).",
             req_id,
-            model_name,
+            primary_model,
+            candidate_models,
             prompt.metadata.prompt_hash[:12],
         )
 
@@ -322,8 +474,8 @@ class GeminiClient(LLMClient, AIClient):
 
         overall_start = time.perf_counter()
         try:
-            response = await self._execute_with_retry(
-                model_name=model_name,
+            response, actual_model = await self._execute_with_fallback(
+                candidate_models=candidate_models,
                 contents=prompt.full_prompt,
                 config=config,
             )
@@ -349,9 +501,13 @@ class GeminiClient(LLMClient, AIClient):
         usage_meta = getattr(response, "usage_metadata", None)
         if usage_meta:
             raw_prompt_tokens = getattr(usage_meta, "prompt_token_count", 0)
-            prompt_tokens = raw_prompt_tokens if isinstance(raw_prompt_tokens, int) else 0
+            prompt_tokens = (
+                raw_prompt_tokens if isinstance(raw_prompt_tokens, int) else 0
+            )
             raw_completion_tokens = getattr(usage_meta, "candidates_token_count", 0)
-            completion_tokens = raw_completion_tokens if isinstance(raw_completion_tokens, int) else 0
+            completion_tokens = (
+                raw_completion_tokens if isinstance(raw_completion_tokens, int) else 0
+            )
             raw_total_tokens = getattr(usage_meta, "total_token_count", 0)
             total_tokens = (
                 raw_total_tokens
@@ -361,11 +517,13 @@ class GeminiClient(LLMClient, AIClient):
 
         finish_reason = "STOP"
         if hasattr(response, "candidates") and response.candidates:
-            finish_reason = str(getattr(response.candidates[0], "finish_reason", "STOP"))
+            finish_reason = str(
+                getattr(response.candidates[0], "finish_reason", "STOP")
+            )
 
         metadata = LLMMetadata(
             provider="Gemini",
-            model=model_name,
+            model=actual_model,
             request_id=req_id,
             latency_ms=duration_ms,
             prompt_hash=prompt.metadata.prompt_hash,
@@ -378,8 +536,9 @@ class GeminiClient(LLMClient, AIClient):
         )
 
         logger.info(
-            "Gemini completion success: request_id={}, latency={:.2f}ms, total_tokens={}.",
+            "Gemini completion success: request_id={}, model={}, latency={:.2f}ms, total_tokens={}.",
             req_id,
+            actual_model,
             duration_ms,
             total_tokens,
         )
@@ -408,15 +567,17 @@ class GeminiClient(LLMClient, AIClient):
         prompt: str,
         response_schema: type[BaseModel] | None = InvestigationReport,
     ) -> str:
-        """Legacy method for Sprint 8 backward compatibility."""
+        """Legacy method for Sprint 8 backward compatibility with model fallback."""
+        candidate_models = self._resolve_candidate_models()
         logger.info(
-            "Sending legacy request to Gemini (model={}, prompt_length={})",
-            self._settings.GEMINI_MODEL,
+            "Sending request to Gemini (primary_model={}, candidates={}, prompt_length={})",
+            candidate_models[0],
+            candidate_models,
             len(prompt),
         )
         try:
-            response = await self._execute_with_retry(
-                model_name=self._settings.GEMINI_MODEL,
+            response, actual_model = await self._execute_with_fallback(
+                candidate_models=candidate_models,
                 contents=prompt,
                 config=self._build_generation_config(response_schema),
             )
@@ -430,7 +591,17 @@ class GeminiClient(LLMClient, AIClient):
     def _translate_exception(self, exc: Exception) -> None:
         """Translate legacy exceptions."""
         logger.exception("Gemini request failed: {}", exc)
-        if isinstance(exc, (AIResponseError, AIAuthenticationError, AIConfigurationError, AIRateLimitError, AIRequestError, AIUnavailableError)):
+        if isinstance(
+            exc,
+            (
+                AIResponseError,
+                AIAuthenticationError,
+                AIConfigurationError,
+                AIRateLimitError,
+                AIRequestError,
+                AIUnavailableError,
+            ),
+        ):
             raise exc
         if isinstance(exc, asyncio.TimeoutError):
             raise AIRequestError("Gemini request timed out.") from exc
